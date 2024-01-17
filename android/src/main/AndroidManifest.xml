@@ -1,0 +1,9 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+  package="org.jerome.pda_scanner">
+    <application
+        android:label="pda_scanner"
+        tools:replace="android:label">
+
+    </application>
+</manifest>

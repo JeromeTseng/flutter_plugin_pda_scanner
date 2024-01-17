@@ -1,0 +1,4 @@
+rootProject.name = 'pda_scanner'
+include ':pda_scanner'
+include ':speedata'
+include ':pda_scanner:speedata'
