@@ -85,7 +85,7 @@ android {
 
     dependencies {
         // 思必拓PDA的扫码插件
-        implementation project(':speedata')
+        implementation project(':pda_scanner:speedata')
 //        implementation (name: 'scandecode-release', ext: 'aar')
 //        implementation files ('libs/speedata/scandecode-release.aar')
 //        implementation fileTree(dir: 'libs/speedata', include: ['*.aar'])
