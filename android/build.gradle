@@ -85,13 +85,11 @@ android {
 
     dependencies {
         // 思必拓PDA的扫码插件
-        implementation project(':pda_scanner:speedata')
-//        implementation (name: 'scandecode-release', ext: 'aar')
-//        implementation files ('libs/speedata/scandecode-release.aar')
-//        implementation fileTree(dir: 'libs/speedata', include: ['*.aar'])
-
+        implementation files ('libs/speedata/classes.jar')
         // 斑马PDA的扫码插件
         implementation files ('libs/zebra/emdk-11.0.129.jar')
+        // 长城PDA的扫码插件
+        implementation 'com.chainway.rscja:com.chainway.rscja.deviceapi:1.1.1'
 
         compileOnly files("$flutterRoot/bin/cache/artifacts/engine/android-arm/flutter.jar")
     }
