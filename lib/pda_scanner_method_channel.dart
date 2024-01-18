@@ -1,9 +1,16 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import 'pda_scanner_platform_interface.dart';
 
 class MethodChannelPdaScanner extends PdaScannerPlatform {
+
+  bool _logTrigger = false;
+
+  // 扫码触发的回调函数
+  static final Map<String,Callback> _callback = {};
 
   @visibleForTesting
   final methodChannel = const MethodChannel("org.jerome/pda_scanner");
@@ -12,19 +19,22 @@ class MethodChannelPdaScanner extends PdaScannerPlatform {
     methodChannel.setMethodCallHandler((call) async{
       switch(call.method){
         case 'sendBarcodeToFlutter':
-          if(this.emitterCallback != null){
-            // 获取到的条码内容
-            String? barcodeContent = call.arguments;
-            emitterCallback!(barcodeContent??'');
+          // 获取到的条码内容
+          String? barcodeContent = call.arguments;
+          if(barcodeContent != null){
+            // 遍历所有回调函数 并进行调用
+            _callback.forEach((tag, callback) {
+              if(_logTrigger){
+                log("tag: $tag    接收到条码内容: $barcodeContent");
+              }
+              callback.call(barcodeContent);
+            });
           }
           break;
       }
       return null;
     });
   }
-
-  // 扫码触发的回调函数
-  late Callback? emitterCallback;
 
   // 获取安卓版本
   @override
@@ -59,15 +69,26 @@ class MethodChannelPdaScanner extends PdaScannerPlatform {
     }
   }
 
-  // 传入扫码回调的函数
+  // 传入Tag 传入扫码回调的函数
   @override
-  void on(Callback emitterCallback) {
-    this.emitterCallback = emitterCallback;
+  void on(String tag,Callback emitterCallback) {
+    _callback[tag] = emitterCallback;
   }
 
-  //
+  // 取消对tag上的监听
   @override
-  void off() {
-    this.emitterCallback = null;
+  void off(String tag) {
+    _callback.remove(tag);
+  }
+
+  // 打开日志
+  @override
+  void openLog() {
+    _logTrigger = true;
+  }
+
+  @override
+  void closeLog() {
+    _logTrigger = false;
   }
 }

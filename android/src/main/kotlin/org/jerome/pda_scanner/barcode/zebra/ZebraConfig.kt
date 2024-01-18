@@ -65,13 +65,8 @@ class ZebraConfig(
          */
         fun isThisDevice(): Boolean {
             // 设备型号名称
-            val modelName = Build.MODEL
-            // 设备产品名称
-            val productName = Build.PRODUCT
-            return SUPPORTED_DEVICE.any {
-                return it.contains(modelName) || it.contains(productName)
-                        || modelName.contains(it) || productName.contains(it)
-            }
+            val modelName = Build.MODEL.uppercase()
+            return SUPPORTED_DEVICE.find { it == modelName } != null
         }
 
     }
@@ -82,10 +77,10 @@ class ZebraConfig(
             this.flag = true
             val emdkResults = EMDKManager.getEMDKManager(context.applicationContext, this)
             if(emdkResults.statusCode != EMDKResults.STATUS_CODE.SUCCESS){
-                this.emitErrorMessage("来自ZEBRA设备，获取EMDK实例失败！")
+                super.emitErrorMessage(methodChannel,"来自ZEBRA设备，获取EMDK实例失败！")
             }
         }catch (ex:Exception){
-            this.emitErrorMessage("来自ZEBRA设备，获取EMDK实例失败: $ex")
+            super.emitErrorMessage(methodChannel,"来自ZEBRA设备，获取EMDK实例失败: $ex")
         }
     }
 
@@ -104,18 +99,6 @@ class ZebraConfig(
         this.emdkManager?.release(EMDKManager.FEATURE_TYPE.BARCODE)
     }
 
-    override fun emitErrorMessageTrace(exception: Exception?) {
-        if(exception != null){
-            methodChannel.invokeMethod(ERROR_EMITTER_METHOD, exception.toString())
-        }
-    }
-
-    override fun emitErrorMessage(errorMessage: String?) {
-        if(errorMessage != null){
-            methodChannel.invokeMethod(ERROR_EMITTER_METHOD, errorMessage)
-        }
-    }
-
     // =======================
 
     // -- 继承自 EMDKListener --
@@ -131,7 +114,7 @@ class ZebraConfig(
             }
         }catch (ex : Exception){
             Log.e("ZEBRA", "EMDKListener.onOpened: $ex")
-            this.emitErrorMessage("来自ZEBRA设备，EMDKListener.onOpened: $ex")
+            super.emitErrorMessage(methodChannel,"来自ZEBRA设备，EMDKListener.onOpened: $ex")
         }
 
     }
@@ -142,7 +125,7 @@ class ZebraConfig(
             this.barcodeManager = null
             this.emdkManager?.release()
         }catch (ex:Exception){
-            this.emitErrorMessage("来自ZEBRA设备，onClosed时发生错误！${ex.message}")
+            super.emitErrorMessage(methodChannel,"来自ZEBRA设备，onClosed时发生错误！${ex.message}")
         }
     }
     // =======================
@@ -159,7 +142,7 @@ class ZebraConfig(
                 }
             }
         }catch (ex:Exception){
-            this.emitErrorMessage("来自ZEBRA设备，触发扫码时发生错误！${ex.message}")
+            super.emitErrorMessage(methodChannel,"来自ZEBRA设备，触发扫码时发生错误！${ex.message}")
         }
     }
 
@@ -179,7 +162,7 @@ class ZebraConfig(
                 }
             }
         }catch (ex:Exception){
-            this.emitErrorMessage("来自ZEBRA设备，onStatus: $ex")
+            super.emitErrorMessage(methodChannel,"来自ZEBRA设备，onStatus: $ex")
         }
     }
     // -- 继承自 ScannerConnectionListener --
@@ -204,7 +187,7 @@ class ZebraConfig(
             }
         }catch (ex:Exception){
             Log.e("ZEBRA", "ScannerConnectionListener.onConnectionChange: $ex" )
-            this.emitErrorMessage("来自ZEBRA设备，ScannerConnectionListener.onConnectionChange: $ex")
+            super.emitErrorMessage(methodChannel,"来自ZEBRA设备，ScannerConnectionListener.onConnectionChange: $ex")
         }
     }
 
@@ -212,7 +195,7 @@ class ZebraConfig(
     private fun initScanner() : Unit{
         if(this.scanner == null){
             if(this.deviceList == null || this.deviceList!!.isEmpty()){
-                this.emitErrorMessage("来自ZEBRA设备，无法获得指定的扫描仪设备，请关闭并重新启动应用程序！")
+                super.emitErrorMessage(methodChannel,"来自ZEBRA设备，无法获得指定的扫描仪设备，请关闭并重新启动应用程序！")
                 return
             }
             this.scanner = this.barcodeManager?.getDevice(this.deviceList!!.get(this.scannerIndex))
@@ -222,7 +205,7 @@ class ZebraConfig(
                 this.scanner?.enable()
             }catch (ex: Exception){
                 Log.e("ZEBRA", "initScanner: ${ex.message}")
-                this.emitErrorMessage("来自ZEBRA设备，initScanner时出错！${ex.message}")
+                super.emitErrorMessage(methodChannel,"来自ZEBRA设备，initScanner时出错！${ex.message}")
             }
         }
     }
@@ -239,7 +222,7 @@ class ZebraConfig(
                 this.scanner = null
             }
         }catch (ex:Exception){
-            this.emitErrorMessage("来自ZEBRA设备，释放扫码器出错！${ex.message}")
+            super.emitErrorMessage(methodChannel,"来自ZEBRA设备，释放扫码器出错！${ex.message}")
         }
     }
 

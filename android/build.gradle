@@ -89,8 +89,9 @@ android {
         // 斑马PDA的扫码插件
         implementation files ('libs/zebra/emdk-11.0.129.jar')
         // 长城PDA的扫码插件
-        implementation 'com.chainway.rscja:com.chainway.rscja.deviceapi:1.1.1'
-
+        // implementation 'com.chainway.rscja:com.chainway.rscja.deviceapi:1.1.1'
+        implementation fileTree(dir: 'libs/chainway', include: ['*.jar'])
+        // flutter 开发时依赖
         compileOnly files("$flutterRoot/bin/cache/artifacts/engine/android-arm/flutter.jar")
     }
 

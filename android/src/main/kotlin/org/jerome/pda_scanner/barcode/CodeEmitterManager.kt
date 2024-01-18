@@ -62,7 +62,7 @@ abstract class CodeEmitterManager {
             methodChannel.setMethodCallHandler { call, result ->
                 when(call.method){
                     IS_PDA_SUPPORTED -> result.success(isPDASupported())
-                    GET_PDA_MODEL -> result.success("${Build.MODEL}[/]${Build.PRODUCT}")
+                    GET_PDA_MODEL -> result.success(Build.MODEL)
                     "getPlatformVersion" -> result.success("Android ${Build.VERSION.RELEASE}")
                 }
             }
@@ -71,6 +71,7 @@ abstract class CodeEmitterManager {
         /**
          * PDA是否支持扫码：
          * SpeedataConfig.isThisDevice() => 是否为 Speedata 设备 ？
+         * ZebraConfig.isThisDevice() => 是否为 Zebra 设备 ？
          * @author 曾兴顺  2024/01/16
          */
         private fun isPDASupported() : Boolean{
@@ -92,8 +93,16 @@ abstract class CodeEmitterManager {
     abstract fun close()
 
     // 发送错误信息
-    abstract fun emitErrorMessageTrace(exception: Exception?)
+    fun emitErrorMessageTrace(methodChannel: MethodChannel?,exception: Exception?){
+        if(exception != null){
+            methodChannel?.invokeMethod(ERROR_EMITTER_METHOD, exception.toString())
+        }
+    }
 
-    abstract fun emitErrorMessage(errorMessage: String?)
+    fun emitErrorMessage(methodChannel: MethodChannel?,errorMessage: String?){
+        if(errorMessage != null){
+            methodChannel?.invokeMethod(ERROR_EMITTER_METHOD, errorMessage)
+        }
+    }
 
 }

@@ -21,7 +21,9 @@ class SpeedataConfig(
     companion object {
         // 支持 Speedata（思必拓）扫码的设备列表
         private val SUPPORTED_DEVICE: MutableList<String> = mutableListOf(
-            "T60"
+            "SC40G", "FG40-4G/5G", "SC55G", "FG50-4G/5G", "HT35", "SD60", "FG60-4G/5G", "ST55G",
+            "FG50RT-4G/5G", "ST55RT", "FG60RT-4G/5G", "KT50-UHF", "SD50RT", "T60","T50","FG40",
+            "FG50RT","SC40G","SC55G"
         )
 
         /**
@@ -30,13 +32,8 @@ class SpeedataConfig(
          */
         fun isThisDevice(): Boolean {
             // 设备型号名称
-            val modelName = Build.MODEL
-            // 设备产品名称
-            val productName = Build.PRODUCT
-           return SUPPORTED_DEVICE.any {
-                return it.contains(modelName) || it.contains(productName)
-                        || modelName.contains(it) || productName.contains(it)
-            }
+            val modelName = Build.MODEL.uppercase()
+           return SUPPORTED_DEVICE.find { it == modelName } != null
         }
 
     }
@@ -56,7 +53,7 @@ class SpeedataConfig(
                         methodChannel.invokeMethod(CODE_EMITTER_METHOD, barcode)
                     }
                 }catch (ex:Exception){
-                    this@SpeedataConfig.emitErrorMessageTrace(ex)
+                    this@SpeedataConfig.emitErrorMessageTrace(methodChannel,ex)
                 }
             }
 
@@ -76,18 +73,6 @@ class SpeedataConfig(
 
     override fun close() {
         this.scanCode.stopScan()
-    }
-
-    override fun emitErrorMessageTrace(exception: Exception?) {
-        if(exception != null){
-            methodChannel.invokeMethod(ERROR_EMITTER_METHOD, exception.toString())
-        }
-    }
-
-    override fun emitErrorMessage(errorMessage: String?) {
-        if(errorMessage != null){
-            methodChannel.invokeMethod(ERROR_EMITTER_METHOD, errorMessage)
-        }
     }
 
 

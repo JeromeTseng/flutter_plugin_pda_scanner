@@ -14,7 +14,11 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  device_info_plus: ^9.1.1
+  # 贝壳组件库
   bruno: ^3.4.3
+  # getwidget 组件库
+  getwidget: ^4.0.0
   flutter:
     sdk: flutter
 

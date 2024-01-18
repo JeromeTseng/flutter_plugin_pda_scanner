@@ -22,10 +22,6 @@ abstract class PdaScannerPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  void init(){
-
-  }
-
   Future<String?> getPlatformVersion() {
     throw UnimplementedError('platformVersion() 方法未实现！');
   }
@@ -38,12 +34,20 @@ abstract class PdaScannerPlatform extends PlatformInterface {
     throw UnimplementedError('getPDAModel() 方法未实现！');
   }
 
-  void on(Callback emitterCallback){
+  void on(String tag,Callback emitterCallback){
     throw UnimplementedError('on 方法未实现！');
   }
 
-  void off(){
+  void off(String tag){
     throw UnimplementedError('off() 方法未实现！');
+  }
+
+  void openLog(){
+    throw UnimplementedError('openLog() 方法未实现！');
+  }
+
+  void closeLog(){
+    throw UnimplementedError('closeLog() 方法未实现！');
   }
 
 }

@@ -2,6 +2,7 @@
 import 'pda_scanner_platform_interface.dart';
 
 class PdaScanner {
+
   // 获取安卓版本
   static Future<String?> getPlatformVersion() {
     return PdaScannerPlatform.instance.getPlatformVersion();
@@ -17,12 +18,23 @@ class PdaScanner {
     return PdaScannerPlatform.instance.getPDAModel();
   }
 
-  static void on (Callback callback){
-    PdaScannerPlatform.instance.on(callback);
+  // 监听函数 以tag进行区分
+  static void on (String tag,Callback callback){
+    PdaScannerPlatform.instance.on(tag,callback);
   }
 
-  static void off(){
-    PdaScannerPlatform.instance.off();
+  // 监听函数 以tag进行区分
+  static void off(String tag){
+    PdaScannerPlatform.instance.off(tag);
   }
 
+  // 打开log
+  static void openLog(){
+    PdaScannerPlatform.instance.openLog();
+  }
+
+  // 关闭log
+  static void closeLog(){
+    PdaScannerPlatform.instance.closeLog();
+  }
 }

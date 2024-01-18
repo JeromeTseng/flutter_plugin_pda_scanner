@@ -1,87 +1,28 @@
-import 'dart:developer';
-
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-
-import 'package:flutter/services.dart';
+import 'package:getwidget/components/avatar/gf_avatar.dart';
+import 'package:getwidget/components/list_tile/gf_list_tile.dart';
 import 'package:pda_scanner/pda_scanner.dart';
+import 'package:pda_scanner_example/pages/device_info_page.dart';
+import 'package:pda_scanner_example/pages/home_page.dart';
 
-void main() {
-  runApp(const MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: MyScaffold(),
-  ));
-}
+void main() => runApp(const MyApp(title: "PDA扫码示例"));
 
-class MyScaffold extends StatefulWidget {
-  const MyScaffold({super.key});
+class MyApp extends StatelessWidget {
+  final String _title;
 
-  @override
-  State<MyScaffold> createState() => _MyScaffoldState();
-}
-
-class _MyScaffoldState extends State<MyScaffold> {
-  String _platformVersion = 'Unknown';
-  String _pdaModel = 'Unknown';
-  bool _isSupported = false;
-  String _barcode = '';
-
-  @override
-  void initState() {
-    super.initState();
-    initPlatformState();
-  }
-
-  Future<void> initPlatformState() async {
-    String platformVersion;
-    String pdaModel;
-    bool isSupported;
-    try {
-      platformVersion =
-          await PdaScanner.getPlatformVersion() ?? 'Unknown platform version';
-      pdaModel = await PdaScanner.getPDAModel() ?? 'UnKnown model';
-      isSupported = await PdaScanner.isThisPDASupported();
-    } on PlatformException {
-      platformVersion = 'Failed to get platform version.';
-      pdaModel = 'Failed to get model';
-      isSupported = false;
-    }
-    if (!mounted) return;
-
-    setState(() {
-      _platformVersion = platformVersion;
-      _pdaModel = pdaModel;
-      _isSupported = isSupported;
-    });
-  }
+  const MyApp({super.key, title}) : _title = title ?? 'Flutter Demo';
 
   @override
   Widget build(BuildContext context) {
-    PdaScanner.on((barcode) {
-      setState(() {
-        this._barcode = barcode;
-      });
-    });
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('PDA示例'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('安卓平台版本: $_platformVersion'),
-            SizedBox(height: 10,),
-            Text('设备型号: $_pdaModel'),
-            SizedBox(height: 10,),
-            Text('该设备是否支持扫码: ${_isSupported?'支持':'不支持'}'),
-            SizedBox(height: 8,),
-            Text("条码内容：$_barcode")
-          ],
-        ),
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: _title,
+      routes: {
+        HomePage.routeName: (_) => const HomePage(),
+        DeviceInfo.routeName: (_) => const DeviceInfo(),
+      },
+      initialRoute: HomePage.routeName,
     );
   }
 }

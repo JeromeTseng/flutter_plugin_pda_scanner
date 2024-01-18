@@ -65,6 +65,22 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.0.6"
+  device_info_plus:
+    dependency: "direct main"
+    description:
+      name: device_info_plus
+      sha256: "0042cb3b2a76413ea5f8a2b40cec2a33e01d0c937e91f0f7c211fde4f7739ba6"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "9.1.1"
+  device_info_plus_platform_interface:
+    dependency: transitive
+    description:
+      name: device_info_plus_platform_interface
+      sha256: d3b01d5868b50ae571cd1dc6e502fc94d956b665756180f7b16ead09e836fd64
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "7.0.0"
   fake_async:
     dependency: transitive
     description:
@@ -73,6 +89,14 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "1.3.1"
+  ffi:
+    dependency: transitive
+    description:
+      name: ffi
+      sha256: "7bf0adc28a23d395f19f3f1eb21dd7cfd1dd9f8e1c50051c069122e6853bc878"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "2.1.0"
   file:
     dependency: transitive
     description:
@@ -112,11 +136,24 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
+  flutter_web_plugins:
+    dependency: transitive
+    description: flutter
+    source: sdk
+    version: "0.0.0"
   fuchsia_remote_debug_protocol:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
+  getwidget:
+    dependency: "direct main"
+    description:
+      name: getwidget
+      sha256: "91df14a8d80e21f3ec02759295b90cc8badb8a872b90d34ad4aeb4085d833b5c"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "4.0.0"
   integration_test:
     dependency: "direct dev"
     description: flutter
@@ -334,6 +371,22 @@ packages:
       url: "https://pub.flutter-io.cn"
     source: hosted
     version: "3.0.2"
+  win32:
+    dependency: transitive
+    description:
+      name: win32
+      sha256: "464f5674532865248444b4c3daca12bd9bf2d7c47f759ce2617986e7229494a8"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "5.2.0"
+  win32_registry:
+    dependency: transitive
+    description:
+      name: win32_registry
+      sha256: "41fd8a189940d8696b1b810efb9abcf60827b6cbfab90b0c43e8439e3a39d85a"
+      url: "https://pub.flutter-io.cn"
+    source: hosted
+    version: "1.1.2"
   xml:
     dependency: transitive
     description:
