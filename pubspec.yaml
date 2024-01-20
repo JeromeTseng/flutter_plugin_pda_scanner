@@ -1,7 +1,6 @@
 name: pda_scanner
-description: "A new Flutter plugin project."
-version: 0.0.1
-homepage:
+description: "A plugin which can support lots of PDA to scan"
+version: 1.0.0
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
