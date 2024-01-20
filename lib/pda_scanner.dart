@@ -1,7 +1,11 @@
-
 import 'pda_scanner_platform_interface.dart';
 
 class PdaScanner {
+
+  // 初始化扫码器
+  static Future<void> initScanner() async {
+    PdaScannerPlatform.instance.initScanner();
+  }
 
   // 获取安卓版本
   static Future<String?> getPlatformVersion() {
@@ -19,22 +23,17 @@ class PdaScanner {
   }
 
   // 监听函数 以tag进行区分
-  static void on (String tag,Callback callback){
-    PdaScannerPlatform.instance.on(tag,callback);
+  static void on(String tag, Callback callback) {
+    PdaScannerPlatform.instance.on(tag, callback);
   }
 
   // 监听函数 以tag进行区分
-  static void off(String tag){
+  static void off(String tag) {
     PdaScannerPlatform.instance.off(tag);
   }
 
-  // 打开log
-  static void openLog(){
-    PdaScannerPlatform.instance.openLog();
-  }
-
-  // 关闭log
-  static void closeLog(){
-    PdaScannerPlatform.instance.closeLog();
+  // 获取扫码器初始化日志
+  static Future<List<Map<String,dynamic>>> getPDAInitLog() async{
+    return PdaScannerPlatform.instance.getPDAInitLogs();
   }
 }

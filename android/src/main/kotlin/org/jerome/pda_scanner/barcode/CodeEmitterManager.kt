@@ -16,14 +16,18 @@ abstract class CodeEmitterManager {
     companion object{
         // 与 flutter 通信的管道
         const val CODE_EMITTER_CHANNEL = "org.jerome/pda_scanner"
-        // 与 flutte 通信的方法 发送接收到的条码数据
+        // 与 flutter 通信的方法 发送接收到的条码数据
         const val CODE_EMITTER_METHOD = "sendBarcodeToFlutter"
-        // 与 flutte 通信的方法 发送错误
-        const val ERROR_EMITTER_METHOD = "sendERRORToFlutter"
+        // 与 flutter 通信的方法 发送日志
+        const val CODE_LOG_METHOD = "sendLogToFlutter"
         // 查询 PDA 是否支持扫码
-        private const val IS_PDA_SUPPORTED = "isPDASupported"
+        const val IS_PDA_SUPPORTED = "isPDASupported"
         // 查询设备型号
-        private const val GET_PDA_MODEL = "getPDAMoodel"
+        const val GET_PDA_MODEL = "getPDAModel"
+        // 初始化扫码器
+        const val INIT_SCANNER = "initScanner"
+        // 设置日志标识
+        const val LOG_TAG = "JEROME#"
 
         /**
          * 初始化扫描管理器
@@ -74,10 +78,9 @@ abstract class CodeEmitterManager {
          * ZebraConfig.isThisDevice() => 是否为 Zebra 设备 ？
          * @author 曾兴顺  2024/01/16
          */
-        private fun isPDASupported() : Boolean{
+        fun isPDASupported() : Boolean{
             return SpeedataConfig.isThisDevice() || ZebraConfig.isThisDevice()
         }
-
     }
 
     // 打开扫码器 一开始调用
@@ -92,17 +95,8 @@ abstract class CodeEmitterManager {
     // 关闭扫码器 释放资源
     abstract fun close()
 
-    // 发送错误信息
-    fun emitErrorMessageTrace(methodChannel: MethodChannel?,exception: Exception?){
-        if(exception != null){
-            methodChannel?.invokeMethod(ERROR_EMITTER_METHOD, exception.toString())
-        }
-    }
-
-    fun emitErrorMessage(methodChannel: MethodChannel?,errorMessage: String?){
-        if(errorMessage != null){
-            methodChannel?.invokeMethod(ERROR_EMITTER_METHOD, errorMessage)
-        }
+    fun sendLogMessage(methodChannel: MethodChannel,logDesc:String){
+        methodChannel.invokeMethod(CODE_LOG_METHOD,logDesc)
     }
 
 }

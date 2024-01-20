@@ -1,10 +1,11 @@
-import 'dart:developer';
-
+import 'package:get/get.dart';
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:pda_scanner/pda_scanner.dart';
+import 'package:pda_scanner_example/model/device_log.dart';
 import 'package:pda_scanner_example/pages/device_info_page.dart';
+import 'package:pda_scanner_example/pages/device_log_page.dart';
 
 class HomePage extends StatelessWidget {
   static const String routeName = "/HomePage";
@@ -13,13 +14,15 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    PdaScanner.initScanner();
+    PdaScanner.initScanner();
     return Scaffold(
       appBar: buildHomeAppBar(),
       body: const HomeBody(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blueGrey[900],
         onPressed: () {
-          Navigator.of(context).pushNamed(DeviceInfo.routeName);
+          Get.toNamed(DeviceInfoPage.routeName);
         },
         child: const Icon(
           Icons.fingerprint_rounded,
@@ -36,6 +39,11 @@ class HomePage extends StatelessWidget {
       themeData: BrnAppBarConfig.dark(),
       //文本title
       title: 'PDA扫码示例',
+      actions: [
+        IconButton(onPressed: (){
+          Get.toNamed(DeviceLogPage.routeName);
+        }, icon: const Icon(Icons.error,color: Colors.white,))
+      ],
     );
   }
 }
@@ -52,20 +60,25 @@ class _HomeBodyState extends State<HomeBody> {
   String? _modelName = "unknown";
   bool? _isScanSupported = false;
 
-
   @override
   void initState() {
-
     super.initState();
     initEquipmentInfo();
-    PdaScanner.on(HomePage.routeName,(barcode) {
+    PdaScanner.on(HomePage.routeName, (barcode) {
       // 展示条码
-      BrnToast.show(
-        "接收到条码：$barcode",
-        context,
-        duration: BrnDuration.long,
-        background: Colors.red,
-        textStyle: const TextStyle(color: Colors.white),
+      Get.closeAllSnackbars();
+      Get.snackbar(
+        '接收到条码信息',
+        barcode,
+        backgroundColor: Colors.white,
+        messageText: Text(
+          barcode,
+          style: const TextStyle(
+            color: Colors.red,
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       );
     });
   }
@@ -150,7 +163,7 @@ class _HomeBodyState extends State<HomeBody> {
       ),
       titleText: '是否支持扫码',
       subTitleText:
-          (_isScanSupported != null && _isScanSupported!) ? '支持' : '不支持',
+          (_isScanSupported != null && _isScanSupported!) ? '支持' : '未知，请测试。',
     );
   }
 

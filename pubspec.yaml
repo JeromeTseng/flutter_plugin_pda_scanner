@@ -8,6 +8,8 @@ environment:
   flutter: '>=3.3.0'
 
 dependencies:
+  # shared_preferences
+  shared_preferences: ^2.2.2
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2

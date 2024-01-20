@@ -1,9 +1,7 @@
-import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
-import 'package:getwidget/components/avatar/gf_avatar.dart';
-import 'package:getwidget/components/list_tile/gf_list_tile.dart';
-import 'package:pda_scanner/pda_scanner.dart';
+import 'package:get/get.dart';
 import 'package:pda_scanner_example/pages/device_info_page.dart';
+import 'package:pda_scanner_example/pages/device_log_page.dart';
 import 'package:pda_scanner_example/pages/home_page.dart';
 
 void main() => runApp(const MyApp(title: "PDA扫码示例"));
@@ -15,13 +13,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: _title,
-      routes: {
-        HomePage.routeName: (_) => const HomePage(),
-        DeviceInfo.routeName: (_) => const DeviceInfo(),
-      },
+      defaultTransition: Transition.rightToLeft,
+      transitionDuration: const Duration(milliseconds: 200),
+      getPages: [
+        GetPage(name: HomePage.routeName, page: () =>  const HomePage()),
+        GetPage(name: DeviceInfoPage.routeName, page: () => const DeviceInfoPage()),
+        GetPage(name: DeviceLogPage.routeName, page: ()=> const DeviceLogPage())
+      ],
       initialRoute: HomePage.routeName,
     );
   }

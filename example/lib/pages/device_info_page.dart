@@ -6,15 +6,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class DeviceInfo extends StatefulWidget {
-  static const routeName = "/deviceInfo";
-  const DeviceInfo({super.key});
+class DeviceInfoPage extends StatefulWidget {
+  static const routeName = "/DeviceInfo";
+  const DeviceInfoPage({super.key});
 
   @override
-  State<DeviceInfo> createState() => _DeviceInfoState();
+  State<DeviceInfoPage> createState() => _DeviceInfoPageState();
 }
 
-class _DeviceInfoState extends State<DeviceInfo> {
+class _DeviceInfoPageState extends State<DeviceInfoPage> {
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   Map<String, dynamic> _deviceData = <String, dynamic>{};
 
@@ -23,6 +23,7 @@ class _DeviceInfoState extends State<DeviceInfo> {
     super.initState();
     initPlatformState();
   }
+
 
 
   Future<void> initPlatformState() async {

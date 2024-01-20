@@ -5,6 +5,7 @@ import 'pda_scanner_method_channel.dart';
 
 // 扫码回调的参数
 typedef Callback = void Function(String barcode);
+typedef LogCallback = void Function(String logType,String message);
 
 abstract class PdaScannerPlatform extends PlatformInterface {
 
@@ -20,6 +21,14 @@ abstract class PdaScannerPlatform extends PlatformInterface {
   static set instance(PdaScannerPlatform instance) {
     PlatformInterface.verifyToken(instance, _token);
     _instance = instance;
+  }
+
+  void initScanner(){
+    throw UnimplementedError('initScanner() 方法未实现！');
+  }
+
+  Future<List<Map<String, dynamic>>> getPDAInitLogs(){
+    throw UnimplementedError('getPDAInitLogs() 方法未实现！');
   }
 
   Future<String?> getPlatformVersion() {
@@ -41,13 +50,4 @@ abstract class PdaScannerPlatform extends PlatformInterface {
   void off(String tag){
     throw UnimplementedError('off() 方法未实现！');
   }
-
-  void openLog(){
-    throw UnimplementedError('openLog() 方法未实现！');
-  }
-
-  void closeLog(){
-    throw UnimplementedError('closeLog() 方法未实现！');
-  }
-
 }

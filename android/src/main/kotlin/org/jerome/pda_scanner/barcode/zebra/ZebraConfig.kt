@@ -16,6 +16,7 @@ import com.symbol.emdk.barcode.ScannerResults
 import com.symbol.emdk.barcode.StatusData
 import io.flutter.plugin.common.MethodChannel
 import org.jerome.pda_scanner.barcode.CodeEmitterManager
+import java.util.Date
 
 class ZebraConfig(
     // 上下文
@@ -27,36 +28,88 @@ class ZebraConfig(
     EMDKManager.EMDKListener,
     Scanner.DataListener,
     Scanner.StatusListener,
-    ScannerConnectionListener  {
+    ScannerConnectionListener {
 
-        // emdk 管理器
-        private var emdkManager : EMDKManager? = null
-        // 条码管理器
-        private var barcodeManager : BarcodeManager? = null
-        // 扫码器
-        private var scanner : Scanner? = null
-        // 设备集合
-        private var deviceList : List<ScannerInfo>? = null
-        // 扫码器索引
-        private var scannerIndex : Int = 0
-        // 是否继续
-        private var continuousMode : Boolean = false
-        // 是否要触发扫码 / 当前程序是否正在前台运行 后台运行的话设置false
-        var flag : Boolean = false
+    private val TAG = "ZEBRA"
+
+    // emdk 管理器
+    private var emdkManager: EMDKManager? = null
+
+    // 条码管理器
+    private var barcodeManager: BarcodeManager? = null
+
+    // 扫码器
+    private var scanner: Scanner? = null
+
+    // 设备集合
+    private var deviceList: List<ScannerInfo>? = null
+
+    // 扫码器索引
+    private var scannerIndex: Int = 0
+
+    // 是否继续
+    private var continuousMode: Boolean = false
 
     // 静态方法
     companion object {
         // 支持 Speedata（思必拓）扫码的设备列表
         private val SUPPORTED_DEVICE: MutableList<String> = mutableListOf(
-            "CC5000-10","CC600/CC6000",
-            "EC30","EC50/EC55","ET40","ET45","ET51","ET56","ET5X",
-            "MC18","MC20","MC2200","MC27","MC32","MC33","MC33ax","MC3300x","MC3330 RFID",
-            "MC40","MC67","MC92","MC9300",
-            "TC15","TC20","TC21","TC22","TC25","TC26","TC27","TC51","TC52","TC52ax","TC52x",
-            "TC53","TC55","TC56","TC57","TC57x","TC58","TC70","TC70x","TC72","TC73","TC75",
-            "TC75x","TC77","TC78","TC8000","TC8300",
-            "VC8300","VC80x","WS50","WT6000","WT6300",
-            "L10A","PS20"
+            "CC5000-10",
+            "CC600/CC6000",
+            "EC30",
+            "EC50/EC55",
+            "ET40",
+            "ET45",
+            "ET51",
+            "ET56",
+            "ET5X",
+            "MC18",
+            "MC20",
+            "MC2200",
+            "MC27",
+            "MC32",
+            "MC33",
+            "MC33ax",
+            "MC3300x",
+            "MC3330 RFID",
+            "MC40",
+            "MC67",
+            "MC92",
+            "MC9300",
+            "TC15",
+            "TC20",
+            "TC21",
+            "TC22",
+            "TC25",
+            "TC26",
+            "TC27",
+            "TC51",
+            "TC52",
+            "TC52ax",
+            "TC52x",
+            "TC53",
+            "TC55",
+            "TC56",
+            "TC57",
+            "TC57x",
+            "TC58",
+            "TC70",
+            "TC70x",
+            "TC72",
+            "TC73",
+            "TC75",
+            "TC75x",
+            "TC77",
+            "TC78",
+            "TC8000",
+            "TC8300",
+            "VC8300",
+            "VC80x",
+            "WS50",
+            "WT6000",
+            "WT6300",
+            "L10A",
+            "PS20"
         )
 
         /**
@@ -66,30 +119,28 @@ class ZebraConfig(
         fun isThisDevice(): Boolean {
             // 设备型号名称
             val modelName = Build.MODEL.uppercase()
-            return SUPPORTED_DEVICE.find { it == modelName } != null
+            return SUPPORTED_DEVICE.find { it.uppercase() == modelName } != null
         }
 
     }
 
     // -- 继承自 CodeEmitterManager --
     override fun open() {
-        try{
-            this.flag = true
+        try {
             val emdkResults = EMDKManager.getEMDKManager(context.applicationContext, this)
-            if(emdkResults.statusCode != EMDKResults.STATUS_CODE.SUCCESS){
-                super.emitErrorMessage(methodChannel,"来自ZEBRA设备，获取EMDK实例失败！")
+            if (emdkResults.statusCode != EMDKResults.STATUS_CODE.SUCCESS) {
+                logError("${TAG}：获取EMDK实例失败！")
             }
-        }catch (ex:Exception){
-            super.emitErrorMessage(methodChannel,"来自ZEBRA设备，获取EMDK实例失败: $ex")
+            logInfo("${TAG}：EMDK实例获取成功...")
+        } catch (ex: Exception) {
+            logError("${TAG}：获取EMDK实例失败: $ex")
         }
     }
 
     override fun detach() {
-        this.flag = false
     }
 
     override fun reConnect() {
-        this.flag = true
     }
 
     override fun close() {
@@ -97,6 +148,7 @@ class ZebraConfig(
         this.barcodeManager?.removeConnectionListener(this)
         this.barcodeManager = null
         this.emdkManager?.release(EMDKManager.FEATURE_TYPE.BARCODE)
+        log("info","$TAG：扫码事件已停止...")
     }
 
     // =======================
@@ -105,16 +157,17 @@ class ZebraConfig(
     override fun onOpened(emdkManager: EMDKManager?) {
         try {
             this.emdkManager = emdkManager
-            this.barcodeManager = emdkManager?.getInstance(EMDKManager.FEATURE_TYPE.BARCODE) as BarcodeManager
+            this.barcodeManager =
+                emdkManager?.getInstance(EMDKManager.FEATURE_TYPE.BARCODE) as BarcodeManager
             this.barcodeManager?.addConnectionListener(this)
             this.deviceList = this.barcodeManager?.supportedDevicesInfo
-            if(this.scanner != null && this.scanner!!.isEnabled){
+            if (this.scanner != null && this.scanner!!.isEnabled) {
                 this.scanner!!.read()
                 this.continuousMode = true
             }
-        }catch (ex : Exception){
-            Log.e("ZEBRA", "EMDKListener.onOpened: $ex")
-            super.emitErrorMessage(methodChannel,"来自ZEBRA设备，EMDKListener.onOpened: $ex")
+            logInfo("${TAG}：监听器已添加...")
+        } catch (ex: Exception) {
+            logError("${TAG}：EMDKListener.onOpened: $ex")
         }
 
     }
@@ -124,60 +177,61 @@ class ZebraConfig(
             this.barcodeManager?.removeConnectionListener(this)
             this.barcodeManager = null
             this.emdkManager?.release()
-        }catch (ex:Exception){
-            super.emitErrorMessage(methodChannel,"来自ZEBRA设备，onClosed时发生错误！${ex.message}")
+            logInfo("${TAG}：资源已释放")
+        } catch (ex: Exception) {
+            logError("${TAG}：onClosed时发生错误！${ex.message}")
         }
     }
     // =======================
 
     // -- 继承自 DataListener --
     override fun onData(scanDataCollection: ScanDataCollection?) {
-        try{
-            if (scanDataCollection != null && scanDataCollection.result == ScannerResults.SUCCESS){
-                val scanData : MutableList<ScanData> = scanDataCollection.scanData
+        try {
+            if (scanDataCollection != null && scanDataCollection.result == ScannerResults.SUCCESS) {
+                val scanData: MutableList<ScanData> = scanDataCollection.scanData
                 scanData.forEach {
-                    if(this.flag){
-                        methodChannel.invokeMethod(CODE_EMITTER_METHOD, it.data)
-                    }
+                    methodChannel.invokeMethod(CODE_EMITTER_METHOD, it.data)
                 }
             }
-        }catch (ex:Exception){
-            super.emitErrorMessage(methodChannel,"来自ZEBRA设备，触发扫码时发生错误！${ex.message}")
+        } catch (ex: Exception) {
+            logError(ex.toString())
         }
     }
 
     // -- 继承自 StatusListener --
     override fun onStatus(statusData: StatusData?) {
         try {
-            if(statusData != null){
+            if (statusData != null) {
                 val state = statusData.state
-                when(state){
+                when (state) {
                     StatusData.ScannerStates.IDLE -> {
-                        if(this.continuousMode){
+                        if (this.continuousMode) {
                             Thread.sleep(100)
                             this.scanner?.read()
                         }
                     }
+
                     else -> {}
                 }
             }
-        }catch (ex:Exception){
-            super.emitErrorMessage(methodChannel,"来自ZEBRA设备，onStatus: $ex")
+        } catch (ex: Exception) {
+            logError(ex.toString())
         }
     }
+
     // -- 继承自 ScannerConnectionListener --
-    override fun onConnectionChange(scannerInfo: ScannerInfo?, connectionState: BarcodeManager.ConnectionState?) {
-        try{
-            if(scannerInfo == null){
+    override fun onConnectionChange(scannerInfo: ScannerInfo?, connectionState: ConnectionState?) {
+        try {
+            if (scannerInfo == null) {
                 return
             }
-            if (this.deviceList != null && this.deviceList!!.isNotEmpty()){
+            if (this.deviceList != null && this.deviceList!!.isNotEmpty()) {
                 this.deviceList!!
                     .map { it.friendlyName }
                     .contains(scannerInfo.friendlyName)
                     .apply {
-                        if(this && connectionState != null){
-                            when(connectionState){
+                        if (this && connectionState != null) {
+                            when (connectionState) {
                                 ConnectionState.CONNECTED -> this@ZebraConfig.initScanner()
                                 else -> this@ZebraConfig.disposeScanner()
                             }
@@ -185,44 +239,60 @@ class ZebraConfig(
                     }
 
             }
-        }catch (ex:Exception){
-            Log.e("ZEBRA", "ScannerConnectionListener.onConnectionChange: $ex" )
-            super.emitErrorMessage(methodChannel,"来自ZEBRA设备，ScannerConnectionListener.onConnectionChange: $ex")
+        } catch (ex: Exception) {
+            logError("ScannerConnectionListener.onConnectionChange: $ex")
         }
     }
 
     // 初始化扫码器
-    private fun initScanner() : Unit{
-        if(this.scanner == null){
-            if(this.deviceList == null || this.deviceList!!.isEmpty()){
-                super.emitErrorMessage(methodChannel,"来自ZEBRA设备，无法获得指定的扫描仪设备，请关闭并重新启动应用程序！")
+    private fun initScanner() {
+        if (this.scanner == null) {
+            if (this.deviceList == null || this.deviceList!!.isEmpty()) {
                 return
             }
-            this.scanner = this.barcodeManager?.getDevice(this.deviceList!!.get(this.scannerIndex))
+            this.scanner = this.barcodeManager?.getDevice(this.deviceList!![this.scannerIndex])
             this.scanner?.addDataListener(this)
             this.scanner?.addStatusListener(this)
             try {
                 this.scanner?.enable()
-            }catch (ex: Exception){
-                Log.e("ZEBRA", "initScanner: ${ex.message}")
-                super.emitErrorMessage(methodChannel,"来自ZEBRA设备，initScanner时出错！${ex.message}")
+                logInfo("${TAG}：扫描器获取成功...")
+            } catch (ex: Exception) {
+                logError("${TAG}：initScanner时出错！${ex.message}")
             }
         }
     }
 
     // 释放扫码器
-    private fun disposeScanner(){
-        try{
-            if(this.scanner != null){
-                this.scanner?.cancelRead();
-                this.scanner?.disable();
+    private fun disposeScanner() {
+        try {
+            if (this.scanner != null) {
+                this.scanner?.cancelRead()
+                this.scanner?.disable()
                 this.scanner?.removeDataListener(this)
                 this.scanner?.removeStatusListener(this)
                 this.scanner?.release()
                 this.scanner = null
+                log("info","$TAG：扫码器资源已释放...")
             }
-        }catch (ex:Exception){
-            super.emitErrorMessage(methodChannel,"来自ZEBRA设备，释放扫码器出错！${ex.message}")
+        } catch (ex: Exception) {
+            logError(ex.toString())
+        }
+    }
+
+    private fun logInfo(infoMessage: String) {
+        log("info", infoMessage)
+    }
+
+    private fun logError(infoMessage: String) {
+        log("error", infoMessage)
+    }
+
+    private fun log(logType: String, infoMessage: String) {
+        sendLogMessage(methodChannel,"${logType}###&&&***${Date().time}###&&&***$infoMessage")
+        if(logType=="info"){
+            Log.i(LOG_TAG,infoMessage)
+        }else{
+            Log.e(LOG_TAG,infoMessage)
         }
     }
 

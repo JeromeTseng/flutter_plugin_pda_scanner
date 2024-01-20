@@ -1,16 +1,18 @@
 import 'dart:developer';
+import 'dart:ffi';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'pda_scanner_platform_interface.dart';
 
 class MethodChannelPdaScanner extends PdaScannerPlatform {
 
-  bool _logTrigger = false;
 
   // 扫码触发的回调函数
   static final Map<String,Callback> _callback = {};
+  static final String LOG_KEY = "PDAScanner_log";
 
   @visibleForTesting
   final methodChannel = const MethodChannel("org.jerome/pda_scanner");
@@ -24,16 +26,66 @@ class MethodChannelPdaScanner extends PdaScannerPlatform {
           if(barcodeContent != null){
             // 遍历所有回调函数 并进行调用
             _callback.forEach((tag, callback) {
-              if(_logTrigger){
-                log("tag: $tag    接收到条码内容: $barcodeContent");
+              if(kDebugMode){
+                log("tag: $tag\t接收到条码内容: $barcodeContent\t${DateTime.now()}");
               }
               callback.call(barcodeContent);
             });
           }
           break;
+        case 'sendLogToFlutter':
+          if(kDebugMode){
+            log(call.arguments);
+          }
+          // 获取到sharedpreference实例
+          final SharedPreferences prefs = await SharedPreferences.getInstance();
+          // 获取到日志列表
+          var logList = prefs.getStringList(LOG_KEY);
+          // 为空则创建新数组
+          logList??=[];
+          // 添加
+          logList.add(call.arguments);
+          // 持久化
+          prefs.setStringList(LOG_KEY, logList);
       }
       return null;
     });
+  }
+
+  @override
+  void initScanner()async{
+    // 每次初始化扫码器之前都先把日志给清空
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove(LOG_KEY);
+    await methodChannel.invokeMethod<String>('initScanner');
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getPDAInitLogs() async{
+    try{
+      // 获取到sharedpreference实例
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      // 获取到日志列表
+      return (prefs.getStringList(LOG_KEY)??[])
+          .map((e){
+        var array = e.split("###&&&***");
+        if(array.length == 3){
+          return <String,dynamic>{
+            "type" : array[0],
+            "time" : array[1],
+            "content" : array[2]
+          };
+        }
+        return <String,dynamic>{};
+      }
+      ).where((element)=>element.length == 3).toList();
+    }catch(e){
+      return [{
+        "type":"error",
+        "time":DateTime.now(),
+        "content": "$e"
+      }];
+    }
   }
 
   // 获取安卓版本
@@ -62,7 +114,7 @@ class MethodChannelPdaScanner extends PdaScannerPlatform {
   @override
   Future<String?> getPDAModel() async {
     try{
-      final model = await methodChannel.invokeMethod('getPDAMoodel');
+      final model = await methodChannel.invokeMethod('getPDAModel');
       return model ?? "null";
     }catch(e){
       return e.toString();
@@ -81,14 +133,4 @@ class MethodChannelPdaScanner extends PdaScannerPlatform {
     _callback.remove(tag);
   }
 
-  // 打开日志
-  @override
-  void openLog() {
-    _logTrigger = true;
-  }
-
-  @override
-  void closeLog() {
-    _logTrigger = false;
-  }
 }
