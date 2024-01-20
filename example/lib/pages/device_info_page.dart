@@ -18,13 +18,12 @@ class _DeviceInfoPageState extends State<DeviceInfoPage> {
   static final DeviceInfoPlugin deviceInfoPlugin = DeviceInfoPlugin();
   Map<String, dynamic> _deviceData = <String, dynamic>{};
 
+
   @override
   void initState() {
     super.initState();
     initPlatformState();
   }
-
-
 
   Future<void> initPlatformState() async {
     var deviceData = <String, dynamic>{};

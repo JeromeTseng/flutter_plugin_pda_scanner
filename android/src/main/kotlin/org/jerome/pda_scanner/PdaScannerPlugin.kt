@@ -21,8 +21,6 @@ import org.jerome.pda_scanner.barcode.CodeEmitterManager.Companion.LOG_TAG
 import org.jerome.pda_scanner.barcode.chainway.ChainwayConfig
 import org.jerome.pda_scanner.barcode.hikivision.HikvisionConfig
 import org.jerome.pda_scanner.barcode.invengo.InvengoConfig
-import org.jerome.pda_scanner.barcode.speedata.SpeedataConfig
-import org.jerome.pda_scanner.barcode.zebra.ZebraConfig
 
 class PdaScannerPlugin : FlutterPlugin, ActivityAware {
 

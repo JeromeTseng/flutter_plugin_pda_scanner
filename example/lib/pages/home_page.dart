@@ -3,7 +3,6 @@ import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:pda_scanner/pda_scanner.dart';
-import 'package:pda_scanner_example/model/device_log.dart';
 import 'package:pda_scanner_example/pages/device_info_page.dart';
 import 'package:pda_scanner_example/pages/device_log_page.dart';
 
@@ -15,14 +14,16 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     PdaScanner.initScanner();
-    PdaScanner.initScanner();
     return Scaffold(
       appBar: buildHomeAppBar(),
       body: const HomeBody(),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blueGrey[900],
         onPressed: () {
-          Get.toNamed(DeviceInfoPage.routeName);
+          // 如果是跟路由 跳转页面时取消监听扫码事件 在该回调函数中重新监听事件
+          Get.toNamed(DeviceInfoPage.routeName)?.then((value) {
+            print("监听到返回首页...");
+          });
         },
         child: const Icon(
           Icons.fingerprint_rounded,
@@ -40,9 +41,17 @@ class HomePage extends StatelessWidget {
       //文本title
       title: 'PDA扫码示例',
       actions: [
-        IconButton(onPressed: (){
-          Get.toNamed(DeviceLogPage.routeName);
-        }, icon: const Icon(Icons.error,color: Colors.white,))
+        IconButton(
+            onPressed: () {
+              Get.toNamed(DeviceLogPage.routeName)?.then((value) {
+                // 这里重新监听扫码事件
+                print("监听到返回首页...");
+              });
+            },
+            icon: const Icon(
+              Icons.error,
+              color: Colors.white,
+            ))
       ],
     );
   }
@@ -64,23 +73,6 @@ class _HomeBodyState extends State<HomeBody> {
   void initState() {
     super.initState();
     initEquipmentInfo();
-    PdaScanner.on(HomePage.routeName, (barcode) {
-      // 展示条码
-      Get.closeAllSnackbars();
-      Get.snackbar(
-        '接收到条码信息',
-        barcode,
-        backgroundColor: Colors.white,
-        messageText: Text(
-          barcode,
-          style: const TextStyle(
-            color: Colors.red,
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      );
-    });
   }
 
   @override
@@ -92,18 +84,17 @@ class _HomeBodyState extends State<HomeBody> {
             Icons.notifications_active_outlined,
             color: Color(0xFFFF7F00),
           ),
-          content: '请进行扫码看是否会弹窗显示条码内容',
+          content: '请扫码看底部是否显示条码内容',
           noticeStyle: NoticeStyles.runningWithArrow,
           showRightIcon: false,
           backgroundColor: const Color(0xFFFDFBEC),
           textColor: const Color(0xFFFF7F00),
         ),
-        Expanded(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
           child: SizedBox(
-            width: 250,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+            height: 190,
+            child: ListView(
               children: [
                 buildAndroidVersion(), // 安卓版本
                 buildModelName(), // 设备型号
@@ -112,6 +103,9 @@ class _HomeBodyState extends State<HomeBody> {
             ),
           ),
         ),
+        const Expanded(
+          child: BarcodeListView(),
+        )
       ],
     );
   }
@@ -119,13 +113,14 @@ class _HomeBodyState extends State<HomeBody> {
   // 安卓版本
   Widget buildAndroidVersion() {
     return GFListTile(
+        margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
         avatar: GFAvatar(
-          size: 32,
+          size: 25,
           backgroundColor: Colors.blueGrey[900],
           child: const Icon(
             Icons.android,
             color: Colors.white,
-            size: 27,
+            size: 22,
           ),
         ),
         titleText: '安卓版本',
@@ -135,13 +130,14 @@ class _HomeBodyState extends State<HomeBody> {
   //设备型号
   Widget buildModelName() {
     return GFListTile(
+      margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
       avatar: GFAvatar(
-        size: 32,
+        size: 25,
         backgroundColor: Colors.blueGrey[900],
         child: const Icon(
           Icons.phone_android_rounded,
           color: Colors.white,
-          size: 28,
+          size: 22,
         ),
       ),
       titleText: '设备型号',
@@ -152,13 +148,14 @@ class _HomeBodyState extends State<HomeBody> {
   // 是否支持扫码
   Widget buildScanSupported() {
     return GFListTile(
+      margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
       avatar: GFAvatar(
-        size: 32,
+        size: 25,
         backgroundColor: Colors.blueGrey[900],
         child: const Icon(
           Icons.document_scanner_rounded,
           color: Colors.white,
-          size: 26,
+          size: 20,
         ),
       ),
       titleText: '是否支持扫码',
@@ -176,5 +173,108 @@ class _HomeBodyState extends State<HomeBody> {
       _modelName = modelName;
       _isScanSupported = isScanSupported;
     });
+  }
+}
+
+class BarcodeListView extends StatefulWidget {
+  const BarcodeListView({super.key});
+
+  @override
+  State<BarcodeListView> createState() => _BarcodeListViewState();
+}
+
+class _BarcodeListViewState extends State<BarcodeListView> {
+  final List<Map<String, String>> barcodes = [];
+  final controller = ScrollController();
+
+  @override
+  void initState() {
+    super.initState();
+    // 监听扫码
+    listen();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        buildBarcodeList(),
+        buildDeleteAllButton()
+      ],
+    );
+  }
+
+
+  Widget buildBarcodeList(){
+    return barcodes.isEmpty
+        ? BrnAbnormalStateWidget(
+      title: '', // 给个空字符串撑开距离
+      content: '目前没有扫描过的条码',
+    )
+        : ListView.builder(
+      controller: controller,
+      itemCount: barcodes.length,
+      itemExtent: 60,
+      itemBuilder: (ctx, index) {
+        Map<String, String> barcode = barcodes[index];
+        return ListTile(
+          title: Text(
+            "条码：${barcode['barcode']}",
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          subtitle: Text("扫码时间：${barcode['time']}"),
+        );
+      },
+    );
+  }
+
+  // 清空已扫条码的按钮
+  Widget buildDeleteAllButton() {
+    return Positioned(
+      right: 5,
+      top: -5,
+      child: Visibility(
+        visible: barcodes.isNotEmpty,
+        child: IconButton(
+          onPressed: () {
+            setState(() {
+              barcodes.clear();
+            });
+          },
+          icon: const Icon(
+            Icons.delete_forever_outlined,
+            color: Colors.red,
+          ),
+          tooltip: '清空条码',
+        ),
+      ),
+    );
+  }
+
+  // 监听扫码事件
+  void listen() {
+    PdaScanner.on(
+      HomePage.routeName,
+      (barcode) {
+        // 展示条码
+        setState(() {
+          barcodes.add({
+            'barcode': barcode,
+            'time': DateTime.now().toString().split('.')[0]
+          });
+        });
+        Future.delayed(
+          const Duration(milliseconds: 120),
+          () {
+            controller.animateTo(
+              controller.position.maxScrollExtent,
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.ease,
+            );
+          },
+        );
+      },
+    );
   }
 }

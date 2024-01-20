@@ -37,8 +37,6 @@ abstract class CodeEmitterManager {
             context: Context,
             methodChannel: MethodChannel,
         ): CodeEmitterManager? {
-            // 设置 flutter 界面调用的方法
-            setMethodCall(methodChannel)
             // 初始化扫码器
             try{
                 if(SpeedataConfig.isThisDevice()){
@@ -58,19 +56,6 @@ abstract class CodeEmitterManager {
             return null
         }
 
-        /**
-         * 设置 flutter 界面调用的方法 即 flutter 调用android
-         * @author 曾兴顺  2024/01/16
-         */
-        private fun setMethodCall(methodChannel : MethodChannel){
-            methodChannel.setMethodCallHandler { call, result ->
-                when(call.method){
-                    IS_PDA_SUPPORTED -> result.success(isPDASupported())
-                    GET_PDA_MODEL -> result.success(Build.MODEL)
-                    "getPlatformVersion" -> result.success("Android ${Build.VERSION.RELEASE}")
-                }
-            }
-        }
 
         /**
          * PDA是否支持扫码：
