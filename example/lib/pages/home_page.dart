@@ -13,6 +13,7 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('初始化咯');
     PdaScanner.initScanner();
     return Scaffold(
       appBar: buildHomeAppBar(),
