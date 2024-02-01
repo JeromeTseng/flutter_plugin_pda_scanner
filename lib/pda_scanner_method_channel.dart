@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:ffi';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -12,7 +11,7 @@ class MethodChannelPdaScanner extends PdaScannerPlatform {
 
   // 扫码触发的回调函数
   static final Map<String,Callback> _callback = {};
-  static final String LOG_KEY = "PDAScanner_log";
+  static const String LOG_KEY = "PDAScanner_log";
 
   @visibleForTesting
   final methodChannel = const MethodChannel("org.jerome/pda_scanner");
@@ -34,9 +33,6 @@ class MethodChannelPdaScanner extends PdaScannerPlatform {
           }
           break;
         case 'sendLogToFlutter':
-          if(kDebugMode){
-            log(call.arguments);
-          }
           // 获取到sharedpreference实例
           final SharedPreferences prefs = await SharedPreferences.getInstance();
           // 获取到日志列表

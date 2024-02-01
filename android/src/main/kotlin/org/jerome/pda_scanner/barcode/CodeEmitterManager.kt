@@ -1,7 +1,6 @@
 package org.jerome.pda_scanner.barcode
 
 import android.content.Context
-import android.os.Build
 import android.util.Log
 import io.flutter.plugin.common.MethodChannel
 import org.jerome.pda_scanner.barcode.speedata.SpeedataConfig

@@ -94,7 +94,7 @@ class SpeedataConfig(
         log("error", infoMessage)
     }
 
-    fun log(logType: String, infoMessage: String) {
+    private fun log(logType: String, infoMessage: String) {
         sendLogMessage(methodChannel,"${logType}###&&&***${Date().time}###&&&***$infoMessage")
         if(logType=="info"){
             Log.i(LOG_TAG,infoMessage)

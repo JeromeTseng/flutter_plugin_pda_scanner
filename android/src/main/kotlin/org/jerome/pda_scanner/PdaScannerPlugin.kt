@@ -168,9 +168,9 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
     }
 
     // 初始化扫码器
-    fun initScanner(){
+    private fun initScanner(){
         if (activity!!.applicationContext != null) {
-            if(initFlag) return;
+            if(initFlag) return
             // 初始化扫码管理器
             try {
                 codeEmitterManager = CodeEmitterManager.initCodeEmitterManager(

@@ -1,9 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
   package="org.jerome.pda_scanner">
+    <uses-permission android:name="com.symbol.emdk.permission.EMDK"/>
+    <queries>
+        <package android:name="com.symbol.emdk.emdkservice" />
+    </queries>
     <application
         android:label="pda_scanner"
         tools:replace="android:label">
-
     </application>
 </manifest>

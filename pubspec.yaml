@@ -1,6 +1,6 @@
 name: pda_scanner
-description: "A plugin which can support lots of PDA to scan"
-version: 1.0.0
+description: "一个能支持多种PDA扫码的Flutter插件"
+version: 1.0.1
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
