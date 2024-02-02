@@ -3,8 +3,11 @@ package org.jerome.pda_scanner.barcode
 import android.content.Context
 import android.util.Log
 import io.flutter.plugin.common.MethodChannel
+import org.jerome.pda_scanner.barcode.invengo.InvengoConfig
 import org.jerome.pda_scanner.barcode.speedata.SpeedataConfig
+import org.jerome.pda_scanner.barcode.zebra.ZebraBroadcastReceiver
 import org.jerome.pda_scanner.barcode.zebra.ZebraConfig
+import org.jerome.pda_scanner.barcode.zebra.ZebraIntentConfig
 
 /**
  * 扫码管理器
@@ -47,7 +50,7 @@ abstract class CodeEmitterManager {
 
             try {
                 if(ZebraConfig.isThisDevice()){
-                    return ZebraConfig(context,methodChannel)
+                    return ZebraIntentConfig(context,methodChannel)
                 }
             }catch (ex:Exception){
                 Log.i("ZEBRA","斑马(ZEBRA)扫码设备初始化失败。")
@@ -64,6 +67,7 @@ abstract class CodeEmitterManager {
          */
         fun isPDASupported() : Boolean{
             return SpeedataConfig.isThisDevice() || ZebraConfig.isThisDevice()
+                    || InvengoConfig.isThisDevice()
         }
     }
 

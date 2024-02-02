@@ -21,6 +21,8 @@ import org.jerome.pda_scanner.barcode.CodeEmitterManager.Companion.LOG_TAG
 import org.jerome.pda_scanner.barcode.chainway.ChainwayConfig
 import org.jerome.pda_scanner.barcode.hikivision.HikvisionConfig
 import org.jerome.pda_scanner.barcode.invengo.InvengoConfig
+import org.jerome.pda_scanner.barcode.zebra.ZebraConfig
+import org.jerome.pda_scanner.barcode.zebra.ZebraIntentConfig
 
 class PdaScannerPlugin : FlutterPlugin, ActivityAware {
 
@@ -174,7 +176,7 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
             // 初始化扫码管理器
             try {
                 codeEmitterManager = CodeEmitterManager.initCodeEmitterManager(
-                    activity!!.applicationContext,
+                    activity!!,
                     methodChannel
                 )
                 // 开启扫码器

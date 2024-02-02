@@ -87,7 +87,8 @@ android {
         // 思必拓PDA的扫码插件
         implementation files ('libs/speedata/classes.jar')
         // 斑马PDA的扫码插件
-        implementation files ('libs/zebra/emdk-11.0.129.jar')
+//        implementation files ('libs/zebra/emdk-11.0.129.jar')
+        implementation files ('libs/zebra/com.zebar.scan-1.1.2.jar')
         // 长城PDA的扫码插件
         // implementation 'com.chainway.rscja:com.chainway.rscja.deviceapi:1.1.1'
         implementation fileTree(dir: 'libs/chainway', include: ['*.jar'])

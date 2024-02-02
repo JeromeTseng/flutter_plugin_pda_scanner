@@ -8,6 +8,7 @@ import android.os.Build
 import android.util.Log
 import io.flutter.plugin.common.MethodChannel
 import org.jerome.pda_scanner.barcode.CodeEmitterManager
+import org.jerome.pda_scanner.barcode.zebra.ZebraConfig
 import java.util.Date
 
 class InvengoConfig(
@@ -21,6 +22,21 @@ class InvengoConfig(
     private val TAG = "INVENGO"
 
     private var broadcastReceiver: BroadcastReceiver? = null
+
+    companion object{
+
+        private val SUPPORTED_DEVICE: MutableList<String> = mutableListOf("K71V1_64_bsp")
+
+        /**
+         * 判断是否为 ZEBRA 类型的设备
+         * @author 曾兴顺  2024/01/16
+         */
+        fun isThisDevice(): Boolean {
+            // 设备型号名称
+            val modelName = Build.MODEL.uppercase()
+            return SUPPORTED_DEVICE.find { it.uppercase() == modelName } != null
+        }
+    }
 
     @TargetApi(Build.VERSION_CODES.TIRAMISU)
     override fun open() {
