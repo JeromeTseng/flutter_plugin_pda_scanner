@@ -16,6 +16,11 @@ import com.symbol.emdk.barcode.ScannerInfo
 import com.symbol.emdk.barcode.ScannerResults
 import com.symbol.emdk.barcode.StatusData
 import io.flutter.plugin.common.MethodChannel
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.jerome.pda_scanner.barcode.CodeEmitterManager
 import java.util.Date
 
@@ -138,13 +143,17 @@ class ZebraConfig (
     // =======================
 
     // -- 继承自 DataListener --
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onData(scanDataCollection: ScanDataCollection?) {
         try {
-            logInfo("扫码事件触发")
-            if (scanDataCollection != null && scanDataCollection.result == ScannerResults.SUCCESS) {
-                val scanData: MutableList<ScanData> = scanDataCollection.scanData
-                scanData.forEach {
-                    methodChannel.invokeMethod(CODE_EMITTER_METHOD, it.data)
+            GlobalScope.launch {
+                withContext(Dispatchers.Main){
+                    if (scanDataCollection != null && scanDataCollection.result == ScannerResults.SUCCESS) {
+                        val scanData: MutableList<ScanData> = scanDataCollection.scanData
+                        scanData.forEach {
+                            methodChannel.invokeMethod(CODE_EMITTER_METHOD, it.data)
+                        }
+                    }
                 }
             }
         } catch (ex: Exception) {
@@ -159,20 +168,10 @@ class ZebraConfig (
                 val state = statusData.state
                 when (state) {
                     StatusData.ScannerStates.IDLE -> {
-                        logInfo(statusData.friendlyName +"空闲中...")
                         if (this.continuousMode) {
                             Thread.sleep(100)
                             this.scanner!!.read()
                         }
-                    }
-                    StatusData.ScannerStates.SCANNING ->{
-                        logInfo("扫码中....")
-                    }
-                    StatusData.ScannerStates.WAITING ->{
-                        logInfo("等待中...")
-                    }
-                    StatusData.ScannerStates.ERROR -> {
-                        logInfo("错误...")
                     }
                     else -> {}
                 }
@@ -185,7 +184,6 @@ class ZebraConfig (
     // -- 继承自 ScannerConnectionListener --
     override fun onConnectionChange(scannerInfo: ScannerInfo?, connectionState: ConnectionState?) {
         try {
-            logInfo("链接改变！")
             var scannerName = ""
             val scannerNameExtScanner = scannerInfo?.friendlyName
             if(deviceList != null && deviceList!!.isNotEmpty()){
@@ -208,20 +206,17 @@ class ZebraConfig (
         try {
             scanner?.cancelRead()
             scanner?.disable()
-            logInfo("ZEBRA：deInitScanner 01:取消扫码")
         }catch (e:Exception){
             logError("ZEBRA：deInitScanner 01:${e.message}")
         }
         try{
             scanner?.removeDataListener(this)
             scanner?.removeStatusListener(this)
-            logInfo("ZEBRA：deInitScanner 01:移除监听")
         }catch (e:Exception){
             logError("ZEBRA：deInitScanner 02:${e.message}")
         }
         try{
             scanner?.release()
-            logInfo("ZEBRA：deInitScanner 01:释放资源")
         }catch (e:Exception){
             logError("ZEBRA：deInitScanner 03:${e.message}")
         }
@@ -233,15 +228,6 @@ class ZebraConfig (
         if (this.scanner == null) {
             initScanner()
         }
-        try {
-            if(scanner != null && scanner!!.isEnabled){
-                scanner!!.read()
-                continuousMode = true
-                logInfo("准备读取条码...${scanner!!.scannerInfo.friendlyName}")
-            }
-        }catch (e:ScannerException){
-            logError("ZEBRA：startScan:${e.message}")
-        }
     }
 
     // 初始化扫描
@@ -249,7 +235,6 @@ class ZebraConfig (
         if(scanner == null){
             if (deviceList != null && deviceList!!.isNotEmpty()){
                 scanner = barcodeManager!!.getDevice(BarcodeManager.DeviceIdentifier.DEFAULT)
-//                scanner = barcodeManager!!.getDevice(deviceList!!.get(scannerIndex))
                 if(scanner == null){
                     logInfo("扫描仪获取失败！！！")
                 }else{
@@ -280,12 +265,17 @@ class ZebraConfig (
         log("error", infoMessage)
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     private fun log(logType: String, infoMessage: String) {
-        sendLogMessage(methodChannel,"${logType}###&&&***${Date().time}###&&&***$infoMessage")
-        if(logType=="info"){
-            Log.i(LOG_TAG,infoMessage)
-        }else{
-            Log.e(LOG_TAG,infoMessage)
+        GlobalScope.launch {
+            withContext(Dispatchers.Main){
+                sendLogMessage(methodChannel,"${logType}###&&&***${Date().time}###&&&***$infoMessage")
+                if(logType=="info"){
+                    Log.i(LOG_TAG,infoMessage)
+                }else{
+                    Log.e(LOG_TAG,infoMessage)
+                }
+            }
         }
     }
 

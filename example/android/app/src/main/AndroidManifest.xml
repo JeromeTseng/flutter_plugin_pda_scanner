@@ -1,18 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     >
-    <uses-permission android:name="com.symbol.emdk.permission.EMDK"/>
-    <queries>
-        <package android:name="com.symbol.emdk.emdkservice" />
-    </queries>
     <application
         android:label="PDA扫码示例"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         tools:replace="android:label"
         >
-        <uses-library android:name="com.symbol.emdk" android:required="false"/>
-        <uses-library android:name="com.rscja.scanner" android:required="false"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"

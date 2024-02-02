@@ -50,7 +50,7 @@ abstract class CodeEmitterManager {
 
             try {
                 if(ZebraConfig.isThisDevice()){
-                    return ZebraIntentConfig(context,methodChannel)
+                    return ZebraConfig(context,methodChannel)
                 }
             }catch (ex:Exception){
                 Log.i("ZEBRA","斑马(ZEBRA)扫码设备初始化失败。")
