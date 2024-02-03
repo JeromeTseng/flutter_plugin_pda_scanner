@@ -1,8 +1,18 @@
 buildscript {
     ext.kotlin_version = '1.7.10'
     repositories {
-        google()
-        mavenCentral()
+        maven {
+            allowInsecureProtocol = true
+            url 'http://43.254.3.211:8081/nexus/repository/androidRepostory/'
+            credentials {
+                username 'zxs'
+                password 'china@1234'
+            }
+        }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
     }
 
     dependencies {
@@ -12,8 +22,18 @@ buildscript {
 
 allprojects {
     repositories {
-        google()
-        mavenCentral()
+        maven {
+            allowInsecureProtocol = true
+            url 'http://43.254.3.211:8081/nexus/repository/androidRepostory/'
+            credentials {
+                username 'zxs'
+                password 'china@1234'
+            }
+        }
+        maven { url 'https://maven.aliyun.com/repository/central' }
+        maven { url 'https://maven.aliyun.com/repository/public' }
+        maven { url 'https://maven.aliyun.com/repository/google' }
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
     }
 }
 

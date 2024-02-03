@@ -78,5 +78,6 @@ flutter {
 }
 
 dependencies {
-    implementation files ('lib/com.zebar.scan-1.1.2.jar')
+    // 斑马PDA的扫码插件
+    compileOnly files ('libs/zebra/emdk-11.0.129.jar')
 }

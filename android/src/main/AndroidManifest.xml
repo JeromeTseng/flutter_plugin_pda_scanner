@@ -2,9 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
   package="org.jerome.pda_scanner">
     <uses-permission android:name="com.symbol.emdk.permission.EMDK"/>
-    <uses-permission android:name="com.zebra.provider.READ"/>
     <queries>
-        <package android:name="com.zebra.zebracontentprovider" />
         <package android:name="com.symbol.emdk.emdkservice" />
     </queries>
     <application

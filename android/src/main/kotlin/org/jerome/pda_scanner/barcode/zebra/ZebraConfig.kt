@@ -44,14 +44,6 @@ class ZebraConfig (
     // 扫码器
     private var scanner: Scanner? = null
 
-    // 设备集合
-    private var deviceList: List<ScannerInfo>? = null
-
-    // 扫码器索引
-    private var scannerIndex: Int = 0
-
-    // 是否继续
-    private var continuousMode: Boolean = true
 
     // 静态方法
     companion object {
@@ -104,10 +96,9 @@ class ZebraConfig (
                 emdkManager?.getInstance(EMDKManager.FEATURE_TYPE.BARCODE) as BarcodeManager
             if(this.barcodeManager != null){
                 this.barcodeManager?.addConnectionListener(this)
-                this.deviceList = this.barcodeManager?.supportedDevicesInfo
                 logInfo("ZEBRA：barcodeManager连接器添加（EMDK服务打开成功）")
+                this.startScan()
             }
-            this.startScan()
         } catch (ex: Exception) {
             logError("${TAG}：EMDKListener.onOpened: $ex")
         }
@@ -168,10 +159,8 @@ class ZebraConfig (
                 val state = statusData.state
                 when (state) {
                     StatusData.ScannerStates.IDLE -> {
-                        if (this.continuousMode) {
-                            Thread.sleep(100)
-                            this.scanner!!.read()
-                        }
+                        Thread.sleep(100)
+                        this.scanner!!.read()
                     }
                     else -> {}
                 }
@@ -184,17 +173,10 @@ class ZebraConfig (
     // -- 继承自 ScannerConnectionListener --
     override fun onConnectionChange(scannerInfo: ScannerInfo?, connectionState: ConnectionState?) {
         try {
-            var scannerName = ""
-            val scannerNameExtScanner = scannerInfo?.friendlyName
-            if(deviceList != null && deviceList!!.isNotEmpty()){
-                scannerName = deviceList!!.get(scannerIndex).friendlyName
-            }
-            if(scannerName.equals(scannerNameExtScanner,true)){
-                when(connectionState){
-                    ConnectionState.CONNECTED -> initScanner()
-                    ConnectionState.DISCONNECTED -> deInitScanner()
-                    else -> {}
-                }
+            when(connectionState){
+                ConnectionState.CONNECTED -> initScanner()
+                ConnectionState.DISCONNECTED -> deInitScanner()
+                else -> {}
             }
         } catch (ex: Exception) {
             logError("ScannerConnectionListener.onConnectionChange: $ex")
@@ -225,35 +207,38 @@ class ZebraConfig (
 
     // 启动扫描
     private fun startScan() {
-        if (this.scanner == null) {
-            initScanner()
+        try{
+            if (this.scanner == null) {
+                initScanner()
+            }
+        }catch (e:Exception){
+            logError("startScan：${e}")
         }
     }
 
     // 初始化扫描
     private fun initScanner(){
-        if(scanner == null){
-            if (deviceList != null && deviceList!!.isNotEmpty()){
+        try {
+            if(scanner == null){
                 scanner = barcodeManager!!.getDevice(BarcodeManager.DeviceIdentifier.DEFAULT)
                 if(scanner == null){
                     logInfo("扫描仪获取失败！！！")
                 }else{
                     logInfo("扫描仪获取成功！！！")
                 }
-            }else{
-                logError("ZEBRA：无法获取指定的扫描仪设备，请关闭并重新启动应用程序！")
-                return
-            }
-            if(scanner != null){
-                scanner!!.addDataListener(this)
-                scanner!!.addStatusListener(this)
-                try{
-                    scanner!!.enable()
-                    logInfo("ZEBRA：数据监听器和状态监听器添加成功！")
-                }catch (e:ScannerException){
-                    logError("ZEBRA：initScanner ${e.message}")
+                if(scanner != null){
+                    scanner!!.addDataListener(this)
+                    scanner!!.addStatusListener(this)
+                    try{
+                        scanner!!.enable()
+                        logInfo("ZEBRA：数据监听器和状态监听器添加成功！")
+                    }catch (e:ScannerException){
+                        logError("ZEBRA：initScanner ${e.message}")
+                    }
                 }
             }
+        }catch (e:Exception){
+            logError("initScanner：$e")
         }
     }
 
