@@ -1,9 +1,14 @@
+import 'package:pda_scanner/scan_gun.dart';
+
 import 'pda_scanner_platform_interface.dart';
 
 class PdaScanner {
 
   // 初始化扫码器
   static Future<void> initScanner() async {
+    // 初始化扫码枪扫码
+    TextInputBinding();
+    // 初始化PDA扫码
     PdaScannerPlatform.instance.initScanner();
   }
 

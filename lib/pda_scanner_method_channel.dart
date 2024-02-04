@@ -11,7 +11,7 @@ class MethodChannelPdaScanner extends PdaScannerPlatform {
 
   // 扫码触发的回调函数
   static final Map<String,Callback> _callback = {};
-  static const String LOG_KEY = "PDAScanner_log";
+  static const String logKey = "PDAScanner_log";
 
   @visibleForTesting
   final methodChannel = const MethodChannel("org.jerome/pda_scanner");
@@ -26,7 +26,7 @@ class MethodChannelPdaScanner extends PdaScannerPlatform {
             // 遍历所有回调函数 并进行调用
             _callback.forEach((tag, callback) {
               if(kDebugMode){
-                log("tag: $tag\t接收到条码内容: $barcodeContent\t${DateTime.now()}");
+                log("tag: $tag\t接收到条码内容: $barcodeContent\t${DateTime.now()}",name: "pda_scanner");
               }
               callback.call(barcodeContent);
             });
@@ -36,13 +36,13 @@ class MethodChannelPdaScanner extends PdaScannerPlatform {
           // 获取到sharedpreference实例
           final SharedPreferences prefs = await SharedPreferences.getInstance();
           // 获取到日志列表
-          var logList = prefs.getStringList(LOG_KEY);
+          var logList = prefs.getStringList(logKey);
           // 为空则创建新数组
           logList??=[];
           // 添加
           logList.add(call.arguments);
           // 持久化
-          prefs.setStringList(LOG_KEY, logList);
+          prefs.setStringList(logKey, logList);
       }
       return null;
     });
@@ -52,7 +52,7 @@ class MethodChannelPdaScanner extends PdaScannerPlatform {
   void initScanner()async{
     // 每次初始化扫码器之前都先把日志给清空
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove(LOG_KEY);
+    prefs.remove(logKey);
     await methodChannel.invokeMethod<String>('initScanner');
   }
 
@@ -62,7 +62,7 @@ class MethodChannelPdaScanner extends PdaScannerPlatform {
       // 获取到sharedpreference实例
       final SharedPreferences prefs = await SharedPreferences.getInstance();
       // 获取到日志列表
-      return (prefs.getStringList(LOG_KEY)??[])
+      return (prefs.getStringList(logKey)??[])
           .map((e){
         var array = e.split("###&&&***");
         if(array.length == 3){

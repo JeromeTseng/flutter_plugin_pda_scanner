@@ -3,6 +3,7 @@ import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:pda_scanner/pda_scanner.dart';
+import 'package:pda_scanner/scan_gun.dart';
 import 'package:pda_scanner_example/pages/device_info_page.dart';
 import 'package:pda_scanner_example/pages/device_log_page.dart';
 
@@ -13,7 +14,6 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PdaScanner.initScanner();
     return Scaffold(
       appBar: buildHomeAppBar(),
       body: const HomeBody(),
@@ -186,6 +186,7 @@ class BarcodeListView extends StatefulWidget {
 class _BarcodeListViewState extends State<BarcodeListView> {
   final List<Map<String, String>> barcodes = [];
   final controller = ScrollController();
+  final scanKey = GlobalKey<EditableTextState>();
 
   @override
   void initState() {
@@ -196,37 +197,42 @@ class _BarcodeListViewState extends State<BarcodeListView> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        buildBarcodeList(),
-        buildDeleteAllButton()
-      ],
+    return ScanMonitorWidget(
+      childBuilder: (_){
+        return Stack(
+          children: [buildBarcodeList(), buildDeleteAllButton()],
+        );
+      },
+      scanKey: scanKey,
+      onSubmit: (barcode){
+        addCode(barcode);
+        print("接受到扫码枪内容$barcode");
+      },
     );
   }
 
-
-  Widget buildBarcodeList(){
+  Widget buildBarcodeList() {
     return barcodes.isEmpty
         ? BrnAbnormalStateWidget(
-      title: '', // 给个空字符串撑开距离
-      content: '目前没有扫描过的条码',
-    )
+            title: '', // 给个空字符串撑开距离
+            content: '目前没有扫描过的条码',
+          )
         : ListView.builder(
-      controller: controller,
-      itemCount: barcodes.length,
-      itemExtent: 70,
-      itemBuilder: (ctx, index) {
-        Map<String, String> barcode = barcodes[index];
-        return ListTile(
-          title: Text(
-            "条码：${barcode['barcode']}",
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
-          subtitle: Text("扫码时间：${barcode['time']}"),
-        );
-      },
-    );
+            controller: controller,
+            itemCount: barcodes.length,
+            itemExtent: 70,
+            itemBuilder: (ctx, index) {
+              Map<String, String> barcode = barcodes[index];
+              return ListTile(
+                title: Text(
+                  "条码：${barcode['barcode']}",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                subtitle: Text("扫码时间：${barcode['time']}"),
+              );
+            },
+          );
   }
 
   // 清空已扫条码的按钮
@@ -241,6 +247,7 @@ class _BarcodeListViewState extends State<BarcodeListView> {
             setState(() {
               barcodes.clear();
             });
+            scanKey.currentState?.requestKeyboard();
           },
           icon: const Icon(
             Icons.delete_forever_outlined,
@@ -257,22 +264,26 @@ class _BarcodeListViewState extends State<BarcodeListView> {
     PdaScanner.on(
       HomePage.routeName,
       (barcode) {
-        // 展示条码
-        setState(() {
-          barcodes.add({
-            'barcode': barcode,
-            'time': DateTime.now().toString().split('.')[0]
-          });
-        });
-        Future.delayed(
-          const Duration(milliseconds: 120),
+        addCode(barcode);
+      },
+    );
+  }
+
+  void addCode(String barcode){
+    // 展示条码
+    setState(() {
+      barcodes.add({
+        'barcode': barcode,
+        'time': DateTime.now().toString().split('.')[0]
+      });
+    });
+    Future.delayed(
+      const Duration(milliseconds: 120),
           () {
-            controller.animateTo(
-              controller.position.maxScrollExtent,
-              duration: const Duration(milliseconds: 200),
-              curve: Curves.ease,
-            );
-          },
+        controller.animateTo(
+          controller.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 200),
+          curve: Curves.ease,
         );
       },
     );
