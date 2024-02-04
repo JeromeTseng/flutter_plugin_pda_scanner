@@ -18,21 +18,25 @@ class ZebraIntentConfig(
 ) : CodeEmitterManager(){
 
     private val TAG = "ZEBRA"
-    private val broadcastTag = "com.yunjin.pda"
+    private val broadcastTag = "org.jerome.pda"
 
     private var broadcastReceiver: BroadcastReceiver? = null
 
     @TargetApi(Build.VERSION_CODES.TIRAMISU)
     override fun open() {
-        if (this.broadcastReceiver == null) {
-            val intentFilter = IntentFilter()
-            intentFilter.addAction(broadcastTag)
-            this.broadcastReceiver = ZebraBroadcastReceiver(methodChannel)
-            context.registerReceiver(
-                this.broadcastReceiver, intentFilter,
-                Context.RECEIVER_EXPORTED,
-            )
-            logInfo("${TAG}：扫码事件广播已监听...")
+        try{
+            if (this.broadcastReceiver == null) {
+                val intentFilter = IntentFilter()
+                intentFilter.addAction(broadcastTag)
+                this.broadcastReceiver = ZebraBroadcastReceiver(methodChannel)
+                context.registerReceiver(
+                    this.broadcastReceiver, intentFilter,
+                    Context.RECEIVER_EXPORTED,
+                )
+                logInfo("${TAG}：扫码事件广播已监听...")
+            }
+        }catch (e:Exception){
+            logError("$TAG：扫码事件广播开启失败！")
         }
     }
 
@@ -45,10 +49,14 @@ class ZebraIntentConfig(
     }
 
     override fun close() {
-        if (this.broadcastReceiver != null) {
-            context.unregisterReceiver(this.broadcastReceiver)
-            this.broadcastReceiver = null
-            logInfo("${TAG}：广播已移除...${broadcastTag}")
+        try{
+            if (this.broadcastReceiver != null) {
+                context.unregisterReceiver(this.broadcastReceiver)
+                this.broadcastReceiver = null
+                logInfo("${TAG}：广播已移除...${broadcastTag}")
+            }
+        }catch (e:Exception){
+            logError("$TAG：广播已移除！${broadcastTag}")
         }
     }
 

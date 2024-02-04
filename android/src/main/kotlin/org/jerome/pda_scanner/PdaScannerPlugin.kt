@@ -20,8 +20,6 @@ import org.jerome.pda_scanner.barcode.CodeEmitterManager.Companion.IS_PDA_SUPPOR
 import org.jerome.pda_scanner.barcode.CodeEmitterManager.Companion.LOG_TAG
 import org.jerome.pda_scanner.barcode.chainway.ChainwayConfig
 import org.jerome.pda_scanner.barcode.hikivision.HikvisionConfig
-import org.jerome.pda_scanner.barcode.invengo.InvengoConfig
-import org.jerome.pda_scanner.barcode.zebra.ZebraConfig
 import org.jerome.pda_scanner.barcode.zebra.ZebraIntentConfig
 
 class PdaScannerPlugin : FlutterPlugin, ActivityAware {
@@ -179,6 +177,13 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
                     activity!!,
                     methodChannel
                 )
+                // 默认把斑马的广播Intent Action加上 如果斑马native scan未生效 可以增加配置文件扫码
+                codeEmitterManagerList.add(
+                    ZebraIntentConfig(
+                        activity!!.applicationContext,
+                        methodChannel
+                    )
+                )
                 // 开启扫码器
                 codeEmitterManager?.open()
             }catch (ex:Exception){
@@ -201,7 +206,8 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
                             methodChannel
                         )
                     )
-
+                }
+                if(codeEmitterManagerList.isNotEmpty()){
                     codeEmitterManagerList.forEach {
                         it.open()
                     }

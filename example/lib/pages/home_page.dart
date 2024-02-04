@@ -214,7 +214,7 @@ class _BarcodeListViewState extends State<BarcodeListView> {
         : ListView.builder(
       controller: controller,
       itemCount: barcodes.length,
-      itemExtent: 60,
+      itemExtent: 70,
       itemBuilder: (ctx, index) {
         Map<String, String> barcode = barcodes[index];
         return ListTile(
