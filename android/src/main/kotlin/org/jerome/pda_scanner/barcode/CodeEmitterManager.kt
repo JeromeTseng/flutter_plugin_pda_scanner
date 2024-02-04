@@ -5,9 +5,7 @@ import android.util.Log
 import io.flutter.plugin.common.MethodChannel
 import org.jerome.pda_scanner.barcode.invengo.InvengoConfig
 import org.jerome.pda_scanner.barcode.speedata.SpeedataConfig
-import org.jerome.pda_scanner.barcode.zebra.ZebraBroadcastReceiver
 import org.jerome.pda_scanner.barcode.zebra.ZebraConfig
-import org.jerome.pda_scanner.barcode.zebra.ZebraIntentConfig
 
 /**
  * 扫码管理器
@@ -41,7 +39,7 @@ abstract class CodeEmitterManager {
         ): CodeEmitterManager? {
             // 初始化扫码器
             try{
-                if(SpeedataConfig.isThisDevice()){
+                if(DeviceDetect.isSpeedataDevice()){
                     return SpeedataConfig(context,methodChannel)
                 }
             }catch (ex:Exception){
@@ -49,11 +47,19 @@ abstract class CodeEmitterManager {
             }
 
             try {
-                if(ZebraConfig.isThisDevice()){
+                if(DeviceDetect.isZebraDevice()){
                     return ZebraConfig(context,methodChannel)
                 }
             }catch (ex:Exception){
                 Log.i("ZEBRA","斑马(ZEBRA)扫码设备初始化失败。")
+            }
+
+            try{
+                if(DeviceDetect.isInvengoDevice()){
+                    return InvengoConfig(context,methodChannel)
+                }
+            }catch (ex:Exception){
+                Log.i("ZEBRA","远望谷(INVENGO)扫码设备初始化失败。")
             }
             return null
         }
@@ -61,13 +67,10 @@ abstract class CodeEmitterManager {
 
         /**
          * PDA是否支持扫码：
-         * SpeedataConfig.isThisDevice() => 是否为 Speedata 设备 ？
-         * ZebraConfig.isThisDevice() => 是否为 Zebra 设备 ？
          * @author 曾兴顺  2024/01/16
          */
         fun isPDASupported() : Boolean{
-            return SpeedataConfig.isThisDevice() || ZebraConfig.isThisDevice()
-                    || InvengoConfig.isThisDevice()
+            return DeviceDetect.isThisDeviceSupport()
         }
     }
 

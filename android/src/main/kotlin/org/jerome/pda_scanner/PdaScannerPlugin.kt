@@ -194,13 +194,6 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
                             methodChannel
                         )
                     )
-                    // 增加远望谷广播进行扫码
-                    codeEmitterManagerList.add(
-                        InvengoConfig(
-                            activity!!.applicationContext,
-                            methodChannel
-                        )
-                    )
                     // 增加chainway广播接收扫码
                     codeEmitterManagerList.add(
                         ChainwayConfig(

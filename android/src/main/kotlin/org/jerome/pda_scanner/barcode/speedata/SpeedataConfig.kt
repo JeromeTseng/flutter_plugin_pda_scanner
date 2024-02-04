@@ -22,26 +22,6 @@ class SpeedataConfig(
     // 是否要触发扫码
     var flag: Boolean = false
 
-    // 静态方法
-    companion object {
-        // 支持 Speedata（思必拓）扫码的设备列表
-        private val SUPPORTED_DEVICE: MutableList<String> = mutableListOf(
-            "SC40G", "FG40-4G/5G", "SC55G", "FG50-4G/5G", "HT35", "SD60", "FG60-4G/5G", "ST55G",
-            "FG50RT-4G/5G", "ST55RT", "FG60RT-4G/5G", "KT50-UHF", "SD50RT", "T60", "T50", "FG40",
-            "FG50RT", "SC40G", "SC55G"
-        )
-
-        /**
-         * 判断是否为 Speedata 类型的设备
-         * @author 曾兴顺  2024/01/16
-         */
-        fun isThisDevice(): Boolean {
-            // 设备型号名称
-            val modelName = Build.MODEL.uppercase()
-            return SUPPORTED_DEVICE.find { it.uppercase() == modelName } != null
-        }
-
-    }
 
     // Speedata扫码器
     private lateinit var scanCode: ScanDecode
