@@ -1,5 +1,6 @@
 
-import 'package:audioplayers/audioplayers.dart';
+import 'dart:developer';
+
 import 'package:pda_scanner/scan_gun.dart';
 
 import 'pda_scanner_platform_interface.dart';
@@ -7,11 +8,21 @@ import 'pda_scanner_platform_interface.dart';
 class PdaScanner {
 
   // 初始化扫码器
-  static Future<void> initScanner() async {
-    // 初始化扫码枪扫码
-    TextInputBinding();
-    // 初始化PDA扫码
-    PdaScannerPlatform.instance.initScanner();
+  static Future<void> initScanner({bool initScanGun = true}) async {
+    try{
+      if(initScanGun){
+        // 初始化扫码枪扫码
+        TextInputBinding();
+      }
+    }catch(e){
+      log("初始化蓝牙扫码器出错！$e",name: "PdaScanner");
+    }
+    try{
+      // 初始化PDA扫码
+      PdaScannerPlatform.instance.initScanner();
+    }catch(e){
+      log("初始化PDA扫码器出错！$e",name: "PdaScanner");
+    }
   }
 
   // 获取安卓版本
