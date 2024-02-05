@@ -50,4 +50,9 @@ abstract class PdaScannerPlatform extends PlatformInterface {
   void off(String tag){
     throw UnimplementedError('off() 方法未实现！');
   }
+
+  void errorSound(){
+    throw UnimplementedError('errorSound() 方法未实现！');
+  }
+
 }

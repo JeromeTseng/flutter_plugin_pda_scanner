@@ -21,10 +21,12 @@ import org.jerome.pda_scanner.barcode.CodeEmitterManager.Companion.LOG_TAG
 import org.jerome.pda_scanner.barcode.chainway.ChainwayConfig
 import org.jerome.pda_scanner.barcode.hikivision.HikvisionConfig
 import org.jerome.pda_scanner.barcode.zebra.ZebraIntentConfig
+import org.jerome.pda_scanner.util.NotificationUtil
 
 class PdaScannerPlugin : FlutterPlugin, ActivityAware {
 
-    private lateinit var methodChannel: MethodChannel
+    private var methodChannel: MethodChannel? = null
+    private var notificationUtil:NotificationUtil? = null
 
     // 是否初始化过扫码器
     private var initFlag = false
@@ -51,13 +53,13 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
             // 设置通道 与 flutter ui 进行通信
             methodChannel =
                 MethodChannel(flutterPluginBinding.binaryMessenger, CODE_EMITTER_CHANNEL)
-
-            methodChannel.setMethodCallHandler { methodCall, result ->
+            methodChannel?.setMethodCallHandler { methodCall, result ->
                 when(methodCall.method){
                     IS_PDA_SUPPORTED -> result.success(CodeEmitterManager.isPDASupported())
                     GET_PDA_MODEL -> result.success(Build.MODEL)
                     "getPlatformVersion" -> result.success("Android ${Build.VERSION.RELEASE}")
                     INIT_SCANNER -> initScanner()
+                    "errorSound" -> notificationUtil?.errorSound()
                 }
             }
 
@@ -125,7 +127,7 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         try {
             activity = binding.activity as FlutterActivity
-            // 1、设置扫码管理器
+            notificationUtil = NotificationUtil(binding.activity)
         } catch (ex: Exception) {
             Log.e(LOG_TAG, "onAttachedToActivity: $ex")
         }
@@ -136,7 +138,7 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
      * @author 曾兴顺  2024/01/17
      */
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
-        methodChannel.setMethodCallHandler(null)
+        methodChannel?.setMethodCallHandler(null)
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
@@ -175,13 +177,13 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
             try {
                 codeEmitterManager = CodeEmitterManager.initCodeEmitterManager(
                     activity!!,
-                    methodChannel
+                    methodChannel!!
                 )
                 // 默认把斑马的广播Intent Action加上 如果斑马native scan未生效 可以增加配置文件扫码
                 codeEmitterManagerList.add(
                     ZebraIntentConfig(
                         activity!!.applicationContext,
-                        methodChannel
+                        methodChannel!!
                     )
                 )
                 // 开启扫码器
@@ -196,14 +198,14 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
                     codeEmitterManagerList.add(
                         HikvisionConfig(
                             activity!!.applicationContext,
-                            methodChannel
+                            methodChannel!!
                         )
                     )
                     // 增加chainway广播接收扫码
                     codeEmitterManagerList.add(
                         ChainwayConfig(
                             activity!!.applicationContext,
-                            methodChannel
+                            methodChannel!!
                         )
                     )
                 }

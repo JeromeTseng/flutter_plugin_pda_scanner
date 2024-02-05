@@ -130,6 +130,8 @@ class _HomeBodyState extends State<HomeBody> {
   //设备型号
   Widget buildModelName() {
     return GFListTile(
+      onTap: (){
+      },
       margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
       avatar: GFAvatar(
         size: 25,
@@ -148,6 +150,9 @@ class _HomeBodyState extends State<HomeBody> {
   // 是否支持扫码
   Widget buildScanSupported() {
     return GFListTile(
+      onTap: (){
+        PdaScanner.errorSound();
+      },
       margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
       avatar: GFAvatar(
         size: 25,

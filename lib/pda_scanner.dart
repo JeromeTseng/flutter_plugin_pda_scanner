@@ -1,3 +1,5 @@
+
+import 'package:audioplayers/audioplayers.dart';
 import 'package:pda_scanner/scan_gun.dart';
 
 import 'pda_scanner_platform_interface.dart';
@@ -41,4 +43,10 @@ class PdaScanner {
   static Future<List<Map<String,dynamic>>> getPDAInitLog() async{
     return PdaScannerPlatform.instance.getPDAInitLogs();
   }
+
+  // 错误提示音 做一个简单的同步 其实这里是有问题的
+  static void errorSound() {
+    PdaScannerPlatform.instance.errorSound();
+  }
+
 }

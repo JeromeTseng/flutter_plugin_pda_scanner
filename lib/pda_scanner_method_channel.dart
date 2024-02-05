@@ -129,4 +129,9 @@ class MethodChannelPdaScanner extends PdaScannerPlatform {
     _callback.remove(tag);
   }
 
+  @override
+  void errorSound() {
+    methodChannel.invokeMethod('errorSound');
+  }
+
 }
