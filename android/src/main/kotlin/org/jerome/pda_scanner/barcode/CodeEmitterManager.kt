@@ -70,7 +70,7 @@ abstract class CodeEmitterManager {
          * @author 曾兴顺  2024/01/16
          */
         fun isPDASupported() : Boolean{
-            return DeviceDetect.isThisDeviceSupport()
+            return DeviceDetect.isThisDeviceSupported()
         }
     }
 

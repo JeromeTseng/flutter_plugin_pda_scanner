@@ -29,7 +29,7 @@ class DeviceDetect {
                 "MC40", "MC67","MC92","MC9300","TC15","TC20","TC21","TC22","TC25",
                 "TC26","TC27","TC51","TC52","TC52AX","TC52X","TC53","TC55",
                 "TC56","TC57","TC57X","TC58","TC70","TC70X",
-                "TC72","TC73","TC75","TC75X",
+                "TC72","TC73","TC75","TC75X","TN28",
                 "TC77","TC78","TC8000","TC8300","VC8300",
                 "VC80X","WS50","WT6000","WT6300","L10A","PS20"
             ).contains(Build.MODEL.uppercase())
@@ -47,7 +47,7 @@ class DeviceDetect {
          * 判断设备是否支持扫码
          * @author 曾兴顺  2024/02/04
          */
-        fun isThisDeviceSupport():Boolean{
+        fun isThisDeviceSupported():Boolean{
             return isSpeedataDevice() || isZebraDevice() || isInvengoDevice()
         }
     }
