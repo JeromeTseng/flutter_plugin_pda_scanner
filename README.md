@@ -9,15 +9,7 @@
   海康威视(Hikivision)：DS-MDT201
   远望谷：不明确
   思必拓：T60
-  蓝牙扫码枪、USB扫码枪
   ```
-
-==本项目中涉及蓝牙扫码枪和USB扫码枪的代码和文档引用了==
-
-[scan_gun | Flutter Package (flutter-io.cn)](https://pub-web.flutter-io.cn/packages/scan_gun)
-
-[liyufengrex/flutter_scan_gun: flutter：usb 即插款扫码枪通用方案。（不会触发键盘唤起，不会触发中文乱码） (github.com)](https://github.com/liyufengrex/flutter_scan_gun)
-
 ## 安装
 
 将以下内容添加到你的pubspec.yaml文件中
@@ -27,7 +19,6 @@ dependencies:
   pda_scanner:
    git:
     url: https://gitee.com/zengxingshun/flutter_plugin_pda_scanner.git
-    ref: "def728d" # 改成最新的hash版本
 ```
 
 ## 导入
@@ -41,30 +32,28 @@ import 'package:pda_scanner/pda_scanner.dart';
 ```dart
 // 请在main函数的runApp调用之前初始化
 void main(){
-  PdaScanner.initScanner();
+  PdaUtils.instance().init();
   runApp(const MyApp());
 }
-
-......
     
 // 监听事件 可以监听多个事件 用tag进行区分
-PdaScanner.on("tag", (barcode) {
+PdaUtils.instance().on("tag", (barcode) {
   // 接收回调的条码...
 });
 
 // 取消tag上的监听
-PdaScanner.off("tag");
+PdaUtils.instance().off("tag");
 ```
 
 ### PDA扫码示例
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:pda_scanner/pda_scanner.dart';
+import 'package:pda_scanner/pda_utils.dart';
 
 void main() {
   // 初始化PDA扫码
-  PdaScanner.initScanner();
+  PdaUtils.instance().initScanner();
   runApp(MaterialApp(
     title: 'PDA扫码示例',
     theme: ThemeData(
@@ -101,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 // 监听事件 可以监听多个事件 用tag进行区分
-                PdaScanner.on("tag", (barcode) {
+                PdaUtils.instance().on("tag", (barcode) {
                   showDialogFunction(context, barcode);
                 });
               },
@@ -110,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 // 取消监听
-                PdaScanner.off("tag");
+                PdaUtils.instance().off("tag");
               },
               child: const Text("取消监听扫码事件"),
             )
@@ -139,108 +128,6 @@ class _MyHomePageState extends State<MyHomePage> {
     _dialogShow = false;
   }
 }
-
-```
-
-## 二、使用扫码枪进行扫码
-
-在这之前您依旧需要在main函数的runApp调用之前初始化
-
-```dart
-void main(){
-  // 初始化PDA/扫码枪
-  PdaScanner.initScanner();
-  runApp(const MyApp());
-}
-```
-
-
-
-提供 `ScanMonitorWidget` 作为父节点，嵌套使用
-
-```dart
-ScanMonitorWidget({
-    Key? key,
-    required ChildBuilder childBuilder,
-    FocusNode? scanNode,
-    FocusNode? textFiledNode,
-    required void Function(String) onSubmit,
-  })
-```
-
-参数说明:
-
-- childBuilder :
-
-`typedef ChildBuilder = Widget Function(BuildContext context)`，使用者自己UI作为子节点
-
-- scanNode:
-
-非必传，如果传，可通过 `scanNode` 监听获取当前扫码可用状态，`hasFocus` 时为获取焦点
-
-- key
-
-非必传，如果传，传入GlobalKey\<EditableTextState>()，可通过 'scanKey' 强制获取获取焦点，保证扫码可用，如下 `scanKey.currentState?.requestKeyboard()`
-
-- textFiledNode:
-
-提供外部存在输入框键盘输入与扫码输入同时存在的场景。内部做了焦点切换能力，保证输入框焦点取消后，能马上切换成扫码枪的焦点
-
-- focusLooper：
-
-非必传，传true可开启轮询保活扫码焦点，但需要保证当前页面堆栈只存在一个 ScanMonitorWidget
-
-- onSubmit:
-
-接收扫码枪返回的结果
-
-### 适用场景及Demo演示： 
-
-#### 1. 无输入框交互，获取扫码结果：
-
-```dart
-@override
-  Widget build(BuildContext context) {
-    return ScanMonitorWidget(
-      childBuilder: (context) {
-        return body();
-      },
-      onSubmit: (String result) {
-        print(result); //接收到扫码结果
-      },
-    );
-  }
-```
-
-#### 2. 带输入框交互，获取扫码结果：
-
-```dart
-FocusNode textFiledNode = FocusNode();
-TextEditingController controller = TextEditingController();
-
- Widget body() {
-  return TextField(
-     focusNode: textFiledNode,
-     controller: controller,
-   );
- }
-
-@override
-Widget build(BuildContext context) {
-    return ScanMonitorWidget(
-      textFiledNode: textFiledNode,
-      childBuilder: (context) {
-        return body();
-      },
-      onSubmit: (String result) {
-        print(result); //接收到扫码结果
-      },
-    );
-}
-```
-
-
-
 
 
 # 说明：

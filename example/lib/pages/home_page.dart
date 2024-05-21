@@ -2,10 +2,8 @@ import 'package:get/get.dart';
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:pda_scanner/pda_scanner.dart';
-import 'package:pda_scanner/scan_gun.dart';
+import 'package:pda_scanner/pda_utils.dart';
 import 'package:pda_scanner_example/pages/device_info_page.dart';
-import 'package:pda_scanner_example/pages/device_log_page.dart';
 
 class HomePage extends StatelessWidget {
   static const String routeName = "/HomePage";
@@ -40,19 +38,6 @@ class HomePage extends StatelessWidget {
       themeData: BrnAppBarConfig.dark(),
       //文本title
       title: 'PDA扫码示例',
-      actions: [
-        IconButton(
-            onPressed: () {
-              Get.toNamed(DeviceLogPage.routeName)?.then((value) {
-                // 这里重新监听扫码事件
-                print("监听到返回首页...");
-              });
-            },
-            icon: const Icon(
-              Icons.error,
-              color: Colors.white,
-            ))
-      ],
     );
   }
 }
@@ -151,7 +136,7 @@ class _HomeBodyState extends State<HomeBody> {
   Widget buildScanSupported() {
     return GFListTile(
       onTap: (){
-        PdaScanner.errorSound();
+        PdaUtils.instance().errorSound();
       },
       margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
       avatar: GFAvatar(
@@ -170,9 +155,9 @@ class _HomeBodyState extends State<HomeBody> {
   }
 
   Future<void> initEquipmentInfo() async {
-    String? androidVersion = await PdaScanner.getPlatformVersion();
-    String? modelName = await PdaScanner.getPDAModel();
-    bool isScanSupported = await PdaScanner.isThisPDASupported();
+    String androidVersion = await PdaUtils.instance().getPlatformVersion();
+    String modelName = await PdaUtils.instance().getPDAModel();
+    bool isScanSupported = await PdaUtils.instance().isThisPDASupported();
     setState(() {
       _androidVersion = androidVersion;
       _modelName = modelName;
@@ -202,17 +187,8 @@ class _BarcodeListViewState extends State<BarcodeListView> {
 
   @override
   Widget build(BuildContext context) {
-    return ScanMonitorWidget(
-      childBuilder: (_){
-        return Stack(
-          children: [buildBarcodeList(), buildDeleteAllButton()],
-        );
-      },
-      scanKey: scanKey,
-      onSubmit: (barcode){
-        addCode(barcode);
-        print("接受到扫码枪内容$barcode");
-      },
+    return Stack(
+      children: [buildBarcodeList(), buildDeleteAllButton()],
     );
   }
 
@@ -266,7 +242,7 @@ class _BarcodeListViewState extends State<BarcodeListView> {
 
   // 监听扫码事件
   void listen() {
-    PdaScanner.on(
+    PdaUtils.instance().on(
       HomePage.routeName,
       (barcode) {
         addCode(barcode);

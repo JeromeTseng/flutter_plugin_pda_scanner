@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pda_scanner/pda_scanner.dart';
+import 'package:pda_scanner/pda_utils.dart';
 import 'package:pda_scanner_example/pages/device_info_page.dart';
-import 'package:pda_scanner_example/pages/device_log_page.dart';
 import 'package:pda_scanner_example/pages/home_page.dart';
 
 void main(){
-  PdaScanner.initScanner();
+  PdaUtils.instance().init();
   runApp(const MyApp(title: "PDA扫码示例"));
 }
 
@@ -25,7 +24,6 @@ class MyApp extends StatelessWidget {
       getPages: [
         GetPage(name: HomePage.routeName, page: () =>  const HomePage()),
         GetPage(name: DeviceInfoPage.routeName, page: () => const DeviceInfoPage()),
-        GetPage(name: DeviceLogPage.routeName, page: ()=> const DeviceLogPage())
       ],
       initialRoute: HomePage.routeName,
     );

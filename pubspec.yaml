@@ -8,8 +8,6 @@ environment:
   flutter: '>=3.3.0'
 
 dependencies:
-  # shared_preferences
-  shared_preferences: ^2.2.2
   visibility_detector: ^0.4.0+2
   flutter:
     sdk: flutter
