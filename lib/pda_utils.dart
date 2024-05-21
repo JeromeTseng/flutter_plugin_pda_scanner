@@ -16,13 +16,13 @@ class PdaUtils {
   bool _initFlag = false;
 
   // 日志标签
-  String tag = "PdaUtils";
+  final String tag = "PdaUtils";
 
   // 扫码触发的回调函数
   static final Map<String, Callback> _callback = {};
 
   // 日志集合
-  List<String> logList = [];
+  final List<InitLogModel> _logList = [];
 
   /// 私有化构造器
   PdaUtils._() {
@@ -45,7 +45,14 @@ class PdaUtils {
           break;
         case 'sendLogToFlutter':
           // 添加
-          logList.add(call.arguments);
+          List<String> logs = (call.arguments as String).split('###&&&***');
+          if (logs.length == 3) {
+            _logList.add(InitLogModel(
+              type: logs[0],
+              time: int.tryParse(logs[1]),
+              content: logs[2],
+            ));
+          }
           break;
       }
       return null;
@@ -68,6 +75,7 @@ class PdaUtils {
       return;
     }
     await _methodChannel.invokeMethod<String>('initScanner');
+
     /// 标记PDA已进行过初始化
     _initFlag = true;
   }
@@ -105,5 +113,31 @@ class PdaUtils {
   /// 获取订阅的tag列表
   List<String> getOnTagList() {
     return _callback.keys.toList();
+  }
+
+  /// 获取初始化日志
+  List<InitLogModel> getInitLogList() {
+    return _logList;
+  }
+}
+
+class InitLogModel {
+  InitLogModel({
+    String? type,
+    int? time,
+    String? content,
+  }) {
+    _type = type;
+    _time = time;
+    _content = content;
+  }
+
+  String? _type;
+  int? _time;
+  String? _content;
+
+  @override
+  String toString() {
+    return '\n类型：$_type\n内容：$_content\n时间：${DateTime.fromMillisecondsSinceEpoch(_time ?? 0)}';
   }
 }

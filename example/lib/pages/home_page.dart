@@ -1,9 +1,9 @@
-import 'package:get/get.dart';
+import 'dart:developer';
+
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:pda_scanner/pda_utils.dart';
-import 'package:pda_scanner_example/pages/device_info_page.dart';
 
 class HomePage extends StatelessWidget {
   static const String routeName = "/HomePage";
@@ -18,10 +18,13 @@ class HomePage extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.blueGrey[900],
         onPressed: () {
-          // 如果是跟路由 跳转页面时取消监听扫码事件 在该回调函数中重新监听事件
-          Get.toNamed(DeviceInfoPage.routeName)?.then((value) {
-            print("监听到返回首页...");
+          PdaUtils.instance().getInitLogList().forEach((element) {
+            log('$element');
           });
+          // 如果是跟路由 跳转页面时取消监听扫码事件 在该回调函数中重新监听事件
+          // Get.toNamed(DeviceInfoPage.routeName)?.then((value) {
+          //   print("监听到返回首页...");
+          // });
         },
         child: const Icon(
           Icons.fingerprint_rounded,

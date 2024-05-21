@@ -1,7 +1,6 @@
 package org.jerome.pda_scanner.barcode.zebra
 
 import android.content.Context
-import android.os.Build
 import android.util.Log
 import com.symbol.emdk.EMDKManager
 import com.symbol.emdk.EMDKResults

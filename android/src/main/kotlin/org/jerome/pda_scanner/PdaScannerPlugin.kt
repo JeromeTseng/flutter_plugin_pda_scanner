@@ -1,6 +1,5 @@
 package org.jerome.pda_scanner
 
-
 import android.app.Activity
 import android.app.Application
 import android.os.Build
@@ -18,9 +17,6 @@ import org.jerome.pda_scanner.barcode.CodeEmitterManager.Companion.GET_PDA_MODEL
 import org.jerome.pda_scanner.barcode.CodeEmitterManager.Companion.INIT_SCANNER
 import org.jerome.pda_scanner.barcode.CodeEmitterManager.Companion.IS_PDA_SUPPORTED
 import org.jerome.pda_scanner.barcode.CodeEmitterManager.Companion.LOG_TAG
-import org.jerome.pda_scanner.barcode.chainway.ChainwayConfig
-import org.jerome.pda_scanner.barcode.hikivision.HikvisionConfig
-import org.jerome.pda_scanner.barcode.zebra.ZebraIntentConfig
 import org.jerome.pda_scanner.util.NotificationUtil
 
 class PdaScannerPlugin : FlutterPlugin, ActivityAware {
@@ -28,16 +24,12 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
     private var methodChannel: MethodChannel? = null
     private var notificationUtil:NotificationUtil? = null
 
-    // 是否初始化过扫码器
-    private var initFlag = false
-
     // 扫码触发管理器
     private var codeEmitterManager: CodeEmitterManager? = null
-
-    // 存放广播触发管理器的集合
-    private var codeEmitterManagerList: MutableList<CodeEmitterManager> = mutableListOf()
     private var binaryMessenger: BinaryMessenger? = null
 
+    // 是否进行了初始化操作
+    private var initFlag:Boolean = false
 
     // Activity
     private var activity: Activity? = null
@@ -80,11 +72,6 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
                     override fun onActivityResumed(activity: Activity) {
                         try {
                             codeEmitterManager?.reConnect()
-                            if (codeEmitterManagerList.isNotEmpty()) {
-                                codeEmitterManagerList.forEach {
-                                    it.reConnect()
-                                }
-                            }
                         } catch (ex: Exception) {
                             Log.e("onActivityResumed", ex.toString())
                         }
@@ -94,11 +81,6 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
                     override fun onActivityPaused(activity: Activity) {
                         try {
                             codeEmitterManager?.detach()
-                            if (codeEmitterManagerList.isNotEmpty()) {
-                                codeEmitterManagerList.forEach {
-                                    it.detach()
-                                }
-                            }
                         } catch (ex: Exception) {
                             Log.e("onActivityPaused", ex.toString())
                         }
@@ -157,11 +139,6 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
         try {
             // 关闭扫码管理器
             codeEmitterManager?.close()
-            if (codeEmitterManagerList.isNotEmpty()) {
-                codeEmitterManagerList.forEach {
-                    it.close()
-                }
-            }
             Log.i(LOG_TAG, "onDetachedFromActivity方法：已断开与Activity的连接...")
             activity = null
         } catch (ex: Exception) {
@@ -171,52 +148,21 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
 
     // 初始化扫码器
     private fun initScanner(){
+        if(initFlag){
+            return
+        }
         if (activity!!.applicationContext != null) {
-            if(initFlag) return
             // 初始化扫码管理器
             try {
                 codeEmitterManager = CodeEmitterManager.initCodeEmitterManager(
                     activity!!,
                     methodChannel!!
                 )
-                // 默认把斑马的广播Intent Action加上 如果斑马native scan未生效 可以增加配置文件扫码
-                codeEmitterManagerList.add(
-                    ZebraIntentConfig(
-                        activity!!.applicationContext,
-                        methodChannel!!
-                    )
-                )
                 // 开启扫码器
                 codeEmitterManager?.open()
-            }catch (ex:Exception){
-                Log.e(LOG_TAG, "初始化ZEBRA/SPEEDATA扫码器出错：$ex" )
-            }
-            // 如果扫码器为空 则代表不是斑马或思必拓的扫码器
-            try{
-                if (codeEmitterManager == null) {
-                    // 添加海康威视广播接受条码
-                    codeEmitterManagerList.add(
-                        HikvisionConfig(
-                            activity!!.applicationContext,
-                            methodChannel!!
-                        )
-                    )
-                    // 增加chainway广播接收扫码
-                    codeEmitterManagerList.add(
-                        ChainwayConfig(
-                            activity!!.applicationContext,
-                            methodChannel!!
-                        )
-                    )
-                }
-                if(codeEmitterManagerList.isNotEmpty()){
-                    codeEmitterManagerList.forEach {
-                        it.open()
-                    }
-                }
                 initFlag = true
             }catch (ex:Exception){
-                Log.e(LOG_TAG,"初始化广播扫码器时出错：$ex")
+                Log.e(LOG_TAG, "初始化扫码器出错：$ex" )
             }
         }
     }
