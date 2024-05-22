@@ -24,7 +24,7 @@ dependencies:
 ## 导入
 
 ```dart
-import 'package:pda_scanner/pda_scanner.dart';
+import 'package:pda_scanner/pda_utils.dart';
 ```
 
 ## 一、使用PDA进行扫码
@@ -53,7 +53,7 @@ import 'package:pda_scanner/pda_utils.dart';
 
 void main() {
   // 初始化PDA扫码
-  PdaUtils.instance().initScanner();
+  PdaUtils.instance().init();
   runApp(MaterialApp(
     title: 'PDA扫码示例',
     theme: ThemeData(

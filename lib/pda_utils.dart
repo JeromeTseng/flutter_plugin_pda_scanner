@@ -17,7 +17,7 @@ class PdaUtils {
   bool _initFlag = false;
 
   // 日志标签
-  final String tag = "PdaUtils";
+  final String logTag = "PdaUtils";
 
   // 扫码触发的回调函数
   static final Map<String, Callback> _callback = {};
@@ -36,7 +36,7 @@ class PdaUtils {
           if (barcodeContent != null) {
             // 开发模式下打印接受条码的内容
             if (kDebugMode) {
-              log("接收到条码内容: $barcodeContent\t时间：${DateTime.now()}", name: tag);
+              log("接收到条码内容: $barcodeContent\t时间：${DateTime.now()}", name: logTag);
             }
             // 遍历所有回调函数 并进行调用
             _callback.forEach((tag, callback) {
@@ -75,7 +75,7 @@ class PdaUtils {
   /// 初始化PDA扫码枪
   void init() async {
     if (_initFlag) {
-      log('PdaUtils已经进行过初始化操作。', name: tag);
+      log('PdaUtils已经进行过初始化操作。', name: logTag);
       return;
     }
     await _methodChannel.invokeMethod<String>('initScanner');
@@ -107,6 +107,11 @@ class PdaUtils {
   /// 根据tag取消扫码订阅
   void off(String tag) {
     _callback.remove(tag);
+  }
+
+  /// 取消全部扫码订阅
+  void offAll() {
+    _callback.clear();
   }
 
   /// 错误提示音
