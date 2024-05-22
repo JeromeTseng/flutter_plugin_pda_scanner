@@ -2,8 +2,11 @@ package org.jerome.pda_scanner
 
 import android.app.Activity
 import android.app.Application
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -11,25 +14,30 @@ import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodChannel
-import org.jerome.pda_scanner.barcode.CodeEmitterManager
-import org.jerome.pda_scanner.barcode.CodeEmitterManager.Companion.CODE_EMITTER_CHANNEL
-import org.jerome.pda_scanner.barcode.CodeEmitterManager.Companion.GET_PDA_MODEL
-import org.jerome.pda_scanner.barcode.CodeEmitterManager.Companion.INIT_SCANNER
-import org.jerome.pda_scanner.barcode.CodeEmitterManager.Companion.IS_PDA_SUPPORTED
-import org.jerome.pda_scanner.barcode.CodeEmitterManager.Companion.LOG_TAG
+import org.jerome.pda_scanner.pda_type.CodeEmitterManager
+import org.jerome.pda_scanner.pda_type.CodeEmitterManager.Companion.CODE_EMITTER_CHANNEL
+import org.jerome.pda_scanner.pda_type.CodeEmitterManager.Companion.GET_PDA_MODEL
+import org.jerome.pda_scanner.pda_type.CodeEmitterManager.Companion.INIT_SCANNER
+import org.jerome.pda_scanner.pda_type.CodeEmitterManager.Companion.IS_PDA_SUPPORTED
+import org.jerome.pda_scanner.pda_type.CodeEmitterManager.Companion.LOG_TAG
 import org.jerome.pda_scanner.util.NotificationUtil
 
+
+/**
+ * PDA 扫码插件
+ * @author 曾兴顺
+ */
 class PdaScannerPlugin : FlutterPlugin, ActivityAware {
 
     private var methodChannel: MethodChannel? = null
-    private var notificationUtil:NotificationUtil? = null
+    private var notificationUtil: NotificationUtil? = null
 
     // 扫码触发管理器
     private var codeEmitterManager: CodeEmitterManager? = null
     private var binaryMessenger: BinaryMessenger? = null
 
     // 是否进行了初始化操作
-    private var initFlag:Boolean = false
+    private var initFlag: Boolean = false
 
     // Activity
     private var activity: Activity? = null
@@ -40,62 +48,20 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
      */
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         try {
-
             binaryMessenger = flutterPluginBinding.binaryMessenger
             // 设置通道 与 flutter ui 进行通信
             methodChannel =
                 MethodChannel(flutterPluginBinding.binaryMessenger, CODE_EMITTER_CHANNEL)
             methodChannel?.setMethodCallHandler { methodCall, result ->
-                when(methodCall.method){
+                when (methodCall.method) {
                     IS_PDA_SUPPORTED -> result.success(CodeEmitterManager.isPDASupported())
                     GET_PDA_MODEL -> result.success(Build.MODEL)
                     "getPlatformVersion" -> result.success("Android ${Build.VERSION.RELEASE}")
                     INIT_SCANNER -> initScanner()
+                    "navigateToSystemHome" -> navigateToSystemHome()
                     "errorSound" -> notificationUtil?.errorSound()
                 }
             }
-
-
-            (flutterPluginBinding.applicationContext as Application).registerActivityLifecycleCallbacks(
-                object : Application.ActivityLifecycleCallbacks {
-                    override fun onActivityCreated(
-                        activity: Activity,
-                        savedInstanceState: Bundle?
-                    ) {
-                    }
-
-                    override fun onActivityStarted(activity: Activity) {
-
-                    }
-
-                    // 当程序被唤醒 前台运行时 重新打开触发扫码的事件
-                    override fun onActivityResumed(activity: Activity) {
-                        try {
-                            codeEmitterManager?.reConnect()
-                        } catch (ex: Exception) {
-                            Log.e("onActivityResumed", ex.toString())
-                        }
-                    }
-
-                    // 当程序后台运行时 暂时关闭扫码器触发的扫码事件 避免误操作
-                    override fun onActivityPaused(activity: Activity) {
-                        try {
-                            codeEmitterManager?.detach()
-                        } catch (ex: Exception) {
-                            Log.e("onActivityPaused", ex.toString())
-                        }
-                    }
-
-                    override fun onActivityStopped(activity: Activity) {
-                    }
-
-                    override fun onActivitySaveInstanceState(activity: Activity, outState: Bundle) {
-                    }
-
-                    override fun onActivityDestroyed(activity: Activity) {
-                    }
-
-                })
         } catch (ex: Exception) {
             Log.e("pda_scanner", ex.toString())
         }
@@ -109,7 +75,8 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         try {
             activity = binding.activity as FlutterActivity
-            notificationUtil = NotificationUtil(binding.activity)
+            notificationUtil = NotificationUtil()
+            Log.i(LOG_TAG, "onAttachedToActivity")
         } catch (ex: Exception) {
             Log.e(LOG_TAG, "onAttachedToActivity: $ex")
         }
@@ -147,11 +114,11 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
     }
 
     // 初始化扫码器
-    private fun initScanner(){
-        if(initFlag){
+    private fun initScanner() {
+        if (initFlag) {
             return
         }
-        if (activity!!.applicationContext != null) {
+        if (activity?.applicationContext != null) {
             // 初始化扫码管理器
             try {
                 codeEmitterManager = CodeEmitterManager.initCodeEmitterManager(
@@ -161,10 +128,28 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
                 // 开启扫码器
                 codeEmitterManager?.open()
                 initFlag = true
-            }catch (ex:Exception){
-                Log.e(LOG_TAG, "初始化扫码器出错：$ex" )
+            } catch (ex: Throwable) {
+                Log.e(LOG_TAG, "初始化扫码器出错：$ex")
             }
+        } else {
+            Log.e(LOG_TAG, "activity对象为空！")
         }
+    }
+
+    /**
+     * 返回系统桌面 而不退出程序
+     * @author 曾兴顺
+     */
+    private fun navigateToSystemHome() {
+        // 创建Intent对象
+        val intent = Intent()
+        // 设置Intent动作
+        intent.setAction(Intent.ACTION_MAIN)
+        // 设置Intent种类
+        intent.addCategory(Intent.CATEGORY_HOME)
+        //标记
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        activity?.startActivity(intent)
     }
 
 }

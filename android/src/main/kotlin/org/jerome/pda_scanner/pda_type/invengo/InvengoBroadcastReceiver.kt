@@ -1,11 +1,11 @@
-package org.jerome.pda_scanner.barcode.invengo
+package org.jerome.pda_scanner.pda_type.invengo
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
 import io.flutter.plugin.common.MethodChannel
-import org.jerome.pda_scanner.barcode.CodeEmitterManager
+import org.jerome.pda_scanner.pda_type.CodeEmitterManager
 import java.nio.charset.Charset
 
 class InvengoBroadcastReceiver (

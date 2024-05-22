@@ -1,22 +1,20 @@
-package org.jerome.pda_scanner.barcode.chainway
+package org.jerome.pda_scanner.pda_type.chainway
 
 import android.annotation.TargetApi
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
 import android.os.Build
-import android.util.Log
 import com.rscja.scanner.utility.ScannerUtility
 import io.flutter.plugin.common.MethodChannel
-import org.jerome.pda_scanner.barcode.CodeEmitterManager
-import java.util.Date
+import org.jerome.pda_scanner.pda_type.CodeEmitterManager
 
 class ChainwayConfig(
     // 上下文
-    private var context: Context,
+    private val context: Context,
     // 与flutter通信的通道
-    private var methodChannel: MethodChannel
-) : CodeEmitterManager() {
+    private val methodChannel: MethodChannel
+) : CodeEmitterManager(context,methodChannel) {
     private val TAG = "CHAINWAY";
 
 
@@ -76,20 +74,4 @@ class ChainwayConfig(
         log("info","$TAG：广播已移除")
     }
 
-    private fun logInfo(infoMessage: String) {
-        log("info", infoMessage)
-    }
-
-    private fun logError(infoMessage: String) {
-        log("error", infoMessage)
-    }
-
-    private fun log(logType: String, infoMessage: String) {
-        sendLogMessage(methodChannel, "${logType}###&&&***${Date().time}###&&&***$infoMessage")
-        if(logType=="info"){
-            Log.i(LOG_TAG,infoMessage)
-        }else{
-            Log.e(LOG_TAG,infoMessage)
-        }
-    }
 }

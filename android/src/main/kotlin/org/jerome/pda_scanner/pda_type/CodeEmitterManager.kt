@@ -1,17 +1,26 @@
-package org.jerome.pda_scanner.barcode
+package org.jerome.pda_scanner.pda_type
 
 import android.content.Context
+import android.util.Log
+import com.symbol.emdk.barcode.ScanDataCollection
+import com.symbol.emdk.barcode.ScannerResults
 import io.flutter.plugin.common.MethodChannel
-import org.jerome.pda_scanner.barcode.hikivision.HikvisionConfig
-import org.jerome.pda_scanner.barcode.invengo.InvengoConfig
-import org.jerome.pda_scanner.barcode.speedata.SpeedataConfig
-import org.jerome.pda_scanner.barcode.zebra.ZebraConfig
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.jerome.pda_scanner.pda_type.hikivision.HikvisionConfig
+import org.jerome.pda_scanner.pda_type.invengo.InvengoConfig
+import org.jerome.pda_scanner.pda_type.speedata.SpeedataConfig
+import org.jerome.pda_scanner.pda_type.zebra.ZebraConfig
+import java.util.Date
 
 /**
  * 扫码管理器
  * @author 曾兴顺  2024/01/16
  */
-abstract class CodeEmitterManager {
+abstract class CodeEmitterManager(private val context: Context,private val methodChannel: MethodChannel) {
 
     companion object {
         // 与 flutter 通信的管道
@@ -83,7 +92,30 @@ abstract class CodeEmitterManager {
     // 关闭扫码器 释放资源
     abstract fun close()
 
-    fun sendLogMessage(methodChannel: MethodChannel, logDesc: String) {
+    fun logInfo(infoMessage: String) {
+        log("info", infoMessage)
+    }
+
+    fun logError(infoMessage: String) {
+        log("error", infoMessage)
+    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun log(logType: String, infoMessage: String) {
+        GlobalScope.launch {
+            withContext(Dispatchers.Main){
+                sendLogMessage("${logType}###&&&***${Date().time}###&&&***$infoMessage")
+            }
+        }
+        if(logType=="info"){
+            Log.i(LOG_TAG,infoMessage)
+        }else{
+            Log.e(LOG_TAG,infoMessage)
+        }
+    }
+
+    // 发送初始化日志给flutter
+    fun sendLogMessage(logDesc: String) {
         methodChannel.invokeMethod(CODE_LOG_METHOD, logDesc)
     }
 

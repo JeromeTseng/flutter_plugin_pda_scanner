@@ -1,7 +1,6 @@
-package org.jerome.pda_scanner.barcode.zebra
+package org.jerome.pda_scanner.pda_type.zebra
 
 import android.content.Context
-import android.util.Log
 import com.symbol.emdk.EMDKManager
 import com.symbol.emdk.EMDKResults
 import com.symbol.emdk.barcode.BarcodeManager
@@ -20,19 +19,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.jerome.pda_scanner.barcode.CodeEmitterManager
-import java.util.Date
+import org.jerome.pda_scanner.pda_type.CodeEmitterManager
 
 class ZebraConfig (
-    private var context: Context,
-    private var methodChannel: MethodChannel
-): CodeEmitterManager(),
+    private val context: Context,
+    private val methodChannel: MethodChannel
+): CodeEmitterManager(context,methodChannel),
     EMDKManager.EMDKListener,
     Scanner.DataListener,
     Scanner.StatusListener,
     ScannerConnectionListener {
 
-    private val TAG = "ZEBRA"
+
+    private val tag = "ZEBRA"
 
     // emdk 管理器
     private var emdkManager: EMDKManager? = null
@@ -48,12 +47,12 @@ class ZebraConfig (
         try {
             val emdkResults = EMDKManager.getEMDKManager(context, this)
             if (emdkResults.statusCode == EMDKResults.STATUS_CODE.SUCCESS) {
-                logInfo("${TAG}：EMDK实例获取成功...")
+                logInfo("${tag}：EMDK实例获取成功！")
             }else{
-                logError("${TAG}：获取EMDK实例失败!！")
+                logError("${tag}：获取EMDK实例失败！")
             }
         } catch (ex: Exception) {
-            logError("${TAG}：获取EMDK实例失败: $ex")
+            logError("${tag}：获取EMDK实例错误: $ex")
         }
     }
 
@@ -71,7 +70,7 @@ class ZebraConfig (
                 this.startScan()
             }
         } catch (ex: Exception) {
-            logError("${TAG}：EMDKListener.onOpened: $ex")
+            logError("${tag}：EMDKListener.onOpened: $ex")
         }
 
     }
@@ -87,7 +86,7 @@ class ZebraConfig (
         this.barcodeManager?.removeConnectionListener(this)
         this.barcodeManager = null
         this.emdkManager?.release(EMDKManager.FEATURE_TYPE.BARCODE)
-        log("info","$TAG：扫码事件已停止...")
+        log("info","$tag：扫码事件已停止...")
     }
 
 
@@ -95,11 +94,11 @@ class ZebraConfig (
         try {
             this.barcodeManager?.removeConnectionListener(this)
             this.barcodeManager = null
-            this.emdkManager?.release()
+            this.emdkManager?.release(EMDKManager.FEATURE_TYPE.BARCODE)
             this.emdkManager = null
-            logInfo("${TAG}：资源已释放")
+            logInfo("${tag}：资源已释放")
         } catch (ex: Exception) {
-            logError("${TAG}：onClosed时发生错误！${ex.message}")
+            logError("${tag}：onClosed时发生错误！${ex.message}")
         }
     }
     // =======================
@@ -127,8 +126,7 @@ class ZebraConfig (
     override fun onStatus(statusData: StatusData?) {
         try {
             if (statusData != null) {
-                val state = statusData.state
-                when (state) {
+                when (statusData.state) {
                     StatusData.ScannerStates.IDLE -> {
                         Thread.sleep(100)
                         this.scanner!!.read()
@@ -212,27 +210,4 @@ class ZebraConfig (
             logError("initScanner：$e")
         }
     }
-
-    private fun logInfo(infoMessage: String) {
-        log("info", infoMessage)
-    }
-
-    private fun logError(infoMessage: String) {
-        log("error", infoMessage)
-    }
-
-    @OptIn(DelicateCoroutinesApi::class)
-    private fun log(logType: String, infoMessage: String) {
-        GlobalScope.launch {
-            withContext(Dispatchers.Main){
-                sendLogMessage(methodChannel,"${logType}###&&&***${Date().time}###&&&***$infoMessage")
-                if(logType=="info"){
-                    Log.i(LOG_TAG,infoMessage)
-                }else{
-                    Log.e(LOG_TAG,infoMessage)
-                }
-            }
-        }
-    }
-
 }

@@ -1,4 +1,4 @@
-package org.jerome.pda_scanner.barcode.hikivision
+package org.jerome.pda_scanner.pda_type.hikivision
 
 import android.content.ComponentName
 import android.content.Context

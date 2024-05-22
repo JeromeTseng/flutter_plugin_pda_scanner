@@ -1,23 +1,20 @@
-package org.jerome.pda_scanner.barcode.invengo
+package org.jerome.pda_scanner.pda_type.invengo
 
 import android.annotation.TargetApi
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
 import android.os.Build
-import android.util.Log
 import io.flutter.plugin.common.MethodChannel
-import org.jerome.pda_scanner.barcode.CodeEmitterManager
-import org.jerome.pda_scanner.barcode.zebra.ZebraConfig
-import java.util.Date
+import org.jerome.pda_scanner.pda_type.CodeEmitterManager
 
 class InvengoConfig(
     // 上下文
-    private var context: Context,
+    private val context: Context,
     // 与flutter通信的通道
-    private var methodChannel: MethodChannel
+    private val methodChannel: MethodChannel
 
-) : CodeEmitterManager() {
+) : CodeEmitterManager(context,methodChannel) {
 
     private val TAG = "INVENGO"
 
@@ -56,23 +53,6 @@ class InvengoConfig(
             context.unregisterReceiver(this.broadcastReceiver)
             this.broadcastReceiver = null
             logInfo("${TAG}：广播已移除...[android.rfid.FUN_KEY]，[android.intent.action.FUN_KEY]，[com.rfid.SCAN]")
-        }
-    }
-
-    fun logInfo(infoMessage: String) {
-        log("info", infoMessage)
-    }
-
-    fun logError(infoMessage: String) {
-        log("error", infoMessage)
-    }
-
-    fun log(logType: String, infoMessage: String) {
-        sendLogMessage(methodChannel,"${logType}###&&&***${Date().time}###&&&***$infoMessage")
-        if(logType=="info"){
-            Log.i(LOG_TAG,infoMessage)
-        }else{
-            Log.e(LOG_TAG,infoMessage)
         }
     }
 

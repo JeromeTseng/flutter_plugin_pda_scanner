@@ -1,10 +1,10 @@
-package org.jerome.pda_scanner.barcode.hikivision
+package org.jerome.pda_scanner.pda_type.hikivision
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import io.flutter.plugin.common.MethodChannel
-import org.jerome.pda_scanner.barcode.CodeEmitterManager
+import org.jerome.pda_scanner.pda_type.CodeEmitterManager
 
 class HikvisionBroadcastReceiver(
     private val methodChannel: MethodChannel

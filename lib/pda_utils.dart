@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -64,6 +65,9 @@ class PdaUtils {
 
   /// 获取单例
   static PdaUtils instance() {
+    if(!Platform.isAndroid){
+      throw Exception(['PDA插件只支持安卓系统设备！']);
+    }
     _instance ??= PdaUtils._();
     return _instance!;
   }
@@ -118,6 +122,11 @@ class PdaUtils {
   /// 获取初始化日志
   List<InitLogModel> getInitLogList() {
     return _logList;
+  }
+
+  /// 返回系统桌面
+  void navigateToSystemHome(){
+    _methodChannel.invokeMethod('navigateToSystemHome');
   }
 }
 

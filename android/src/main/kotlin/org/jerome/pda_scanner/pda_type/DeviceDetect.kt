@@ -1,4 +1,4 @@
-package org.jerome.pda_scanner.barcode
+package org.jerome.pda_scanner.pda_type
 
 import android.os.Build
 
