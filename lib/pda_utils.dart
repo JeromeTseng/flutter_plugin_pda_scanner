@@ -64,7 +64,7 @@ class PdaUtils {
   static PdaUtils? _instance;
 
   /// 获取单例
-  static PdaUtils instance() {
+  static PdaUtils get instance {
     if(!Platform.isAndroid){
       throw Exception(['PDA插件只支持安卓系统设备！']);
     }
@@ -79,7 +79,6 @@ class PdaUtils {
       return;
     }
     await _methodChannel.invokeMethod<String>('initScanner');
-
     /// 标记PDA已进行过初始化
     _initFlag = true;
   }
@@ -107,11 +106,13 @@ class PdaUtils {
   /// 根据tag取消扫码订阅
   void off(String tag) {
     _callback.remove(tag);
+    log("取消监听tag: $tag", name: logTag);
   }
 
   /// 取消全部扫码订阅
   void offAll() {
     _callback.clear();
+    log('取消所有tag监听',name: logTag);
   }
 
   /// 错误提示音

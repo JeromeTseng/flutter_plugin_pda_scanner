@@ -32,17 +32,17 @@ import 'package:pda_scanner/pda_utils.dart';
 ```dart
 // 请在main函数的runApp调用之前初始化
 void main(){
-  PdaUtils.instance().init();
+  PdaUtils.instance.init();
   runApp(const MyApp());
 }
     
 // 监听事件 可以监听多个事件 用tag进行区分
-PdaUtils.instance().on("tag", (barcode) {
+PdaUtils.instance.on("tag", (barcode) {
   // 接收回调的条码...
 });
 
 // 取消tag上的监听
-PdaUtils.instance().off("tag");
+PdaUtils.instance.off("tag");
 ```
 
 ### PDA扫码示例
@@ -53,7 +53,7 @@ import 'package:pda_scanner/pda_utils.dart';
 
 void main() {
   // 初始化PDA扫码
-  PdaUtils.instance().init();
+  PdaUtils.instance.init();
   runApp(MaterialApp(
     title: 'PDA扫码示例',
     theme: ThemeData(
@@ -90,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 // 监听事件 可以监听多个事件 用tag进行区分
-                PdaUtils.instance().on("tag", (barcode) {
+                PdaUtils.instance.on("tag", (barcode) {
                   showDialogFunction(context, barcode);
                 });
               },
@@ -99,7 +99,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ElevatedButton(
               onPressed: () {
                 // 取消监听
-                PdaUtils.instance().off("tag");
+                PdaUtils.instance.off("tag");
               },
               child: const Text("取消监听扫码事件"),
             )

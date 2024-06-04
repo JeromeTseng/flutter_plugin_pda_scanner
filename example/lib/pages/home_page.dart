@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
     return PopScope(
       canPop: false,
       onPopInvoked: (_){
-        PdaUtils.instance().navigateToSystemHome();
+        PdaUtils.instance.navigateToSystemHome();
       },
       child: Scaffold(
         appBar: buildHomeAppBar(),
@@ -23,7 +23,7 @@ class HomePage extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.blueGrey[900],
           onPressed: () {
-            PdaUtils.instance().getInitLogList().forEach((element) {
+            PdaUtils.instance.getInitLogList().forEach((element) {
               log('$element');
             });
             // 如果是跟路由 跳转页面时取消监听扫码事件 在该回调函数中重新监听事件
@@ -145,7 +145,7 @@ class _HomeBodyState extends State<HomeBody> {
   Widget buildScanSupported() {
     return GFListTile(
       onTap: (){
-        PdaUtils.instance().errorSound();
+        PdaUtils.instance.errorSound();
       },
       margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
       avatar: GFAvatar(
@@ -164,9 +164,9 @@ class _HomeBodyState extends State<HomeBody> {
   }
 
   Future<void> initEquipmentInfo() async {
-    String androidVersion = await PdaUtils.instance().getPlatformVersion();
-    String modelName = await PdaUtils.instance().getPDAModel();
-    bool isScanSupported = await PdaUtils.instance().isThisPDASupported();
+    String androidVersion = await PdaUtils.instance.getPlatformVersion();
+    String modelName = await PdaUtils.instance.getPDAModel();
+    bool isScanSupported = await PdaUtils.instance.isThisPDASupported();
     setState(() {
       _androidVersion = androidVersion;
       _modelName = modelName;
@@ -251,7 +251,7 @@ class _BarcodeListViewState extends State<BarcodeListView> {
 
   // 监听扫码事件
   void listen() {
-    PdaUtils.instance().on(
+    PdaUtils.instance.on(
       HomePage.routeName,
       (barcode) {
         addCode(barcode);
