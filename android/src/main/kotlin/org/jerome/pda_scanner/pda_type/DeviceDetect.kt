@@ -12,9 +12,9 @@ class DeviceDetect {
         fun isSpeedataDevice(): Boolean {
             return mutableListOf(
                 "SC40G", "FG40-4G/5G", "SC55G", "FG50-4G/5G",
-                "HT35","SD60","FG60-4G/5G","ST55G","FG50RT-4G/5G",
-                "ST55RT","FG60RT-4G/5G","KT50-UHF","SD50RT","T60",
-                "T50","FG40","FG50RT","SC40G","SC55G"
+                "HT35", "SD60", "FG60-4G/5G", "ST55G", "FG50RT-4G/5G",
+                "ST55RT", "FG60RT-4G/5G", "KT50-UHF", "SD50RT", "T60",
+                "T50", "FG40", "FG50RT", "SC40G", "SC55G"
             ).contains(Build.MODEL.uppercase())
         }
 
@@ -52,7 +52,7 @@ class DeviceDetect {
          */
         fun isHikvisionDevice(): Boolean {
             return mutableListOf(
-                "DS-MDT201-5G-YC","DS-MDT201","DSMDT201"
+                "DS-MDT201-5G-YC", "DS-MDT201", "DSMDT201"
             ).contains(Build.MODEL.uppercase())
         }
 
@@ -61,7 +61,10 @@ class DeviceDetect {
          * @author 曾兴顺  2024/02/04
          */
         fun isThisDeviceSupported(): Boolean {
-            return isSpeedataDevice() || isZebraDevice() || isInvengoDevice()
+            return isSpeedataDevice() ||
+                    isZebraDevice() ||
+                    isInvengoDevice() ||
+                    isHikvisionDevice()
         }
     }
 }
