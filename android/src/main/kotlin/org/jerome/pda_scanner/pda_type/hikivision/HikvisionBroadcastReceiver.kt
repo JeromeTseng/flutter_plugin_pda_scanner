@@ -15,7 +15,8 @@ class HikvisionBroadcastReceiver(
          * android.intent.ACTION_DECODE_DATA
          */
         const val action_01 = "android.intent.ACTION_DECODE_DATA"
-        const val action_01_label = "barcode"
+        const val action_01_label01 = "barcode"
+        const val action_01_label02 = "barcode_string"
 
         /**
          * com.service.scanner.data
@@ -29,7 +30,12 @@ class HikvisionBroadcastReceiver(
             var barcode : String? = null
             val action : String? = intent.action
             if(action_01.equals(action,true)){
-                barcode = intent.extras?.getString(action_01_label)
+                barcode = intent.extras?.getString(action_01_label01)
+                barcode = barcode?:""
+                barcode = barcode.replace("\\s*|\r|\n|\t".toRegex(),"")
+                if(barcode == ""){
+                    barcode = intent.extras?.getString(action_01_label02)
+                }
             }else if(action_02.equals(action_02_label)){
                 barcode = intent.getStringExtra(action_02_label)
             }

@@ -41,7 +41,9 @@ class DeviceDetect {
          * @author 曾兴顺  2024/02/24
          */
         fun isInvengoDevice(): Boolean {
-            return mutableListOf("K71V1_64_BSP").contains(Build.MODEL.uppercase())
+            return mutableListOf(
+                "K71V1_64_BSP"
+            ).contains(Build.MODEL.uppercase())
         }
 
         /**
@@ -49,7 +51,9 @@ class DeviceDetect {
          * @author 曾兴顺  2024/02/24
          */
         fun isHikvisionDevice(): Boolean {
-            return mutableListOf("").contains(Build.MODEL.uppercase())
+            return mutableListOf(
+                "DS-MDT201-5G-YC","DS-MDT201","DSMDT201"
+            ).contains(Build.MODEL.uppercase())
         }
 
         /**
