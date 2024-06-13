@@ -57,7 +57,7 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
                     IS_PDA_SUPPORTED -> result.success(CodeEmitterManager.isPDASupported())
                     GET_PDA_MODEL -> result.success(Build.MODEL)
                     "getPlatformVersion" -> result.success("Android ${Build.VERSION.RELEASE}")
-                    INIT_SCANNER -> initScanner()
+                    INIT_SCANNER -> result.success(initScanner())
                     "navigateToSystemHome" -> navigateToSystemHome()
                     "errorSound" -> notificationUtil?.errorSound()
                 }
@@ -114,13 +114,13 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
     }
 
     // 初始化扫码器
-    private fun initScanner() {
+    private fun initScanner():Boolean {
         if (initFlag) {
-            return
+            return false
         }
         if (activity?.applicationContext != null) {
             // 初始化扫码管理器
-            try {
+            return try {
                 codeEmitterManager = CodeEmitterManager.initCodeEmitterManager(
                     activity!!,
                     methodChannel!!
@@ -128,11 +128,14 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
                 // 开启扫码器
                 codeEmitterManager?.open()
                 initFlag = true
+                true
             } catch (ex: Throwable) {
                 Log.e(LOG_TAG, "初始化扫码器出错：$ex")
+                false
             }
         } else {
             Log.e(LOG_TAG, "activity对象为空！")
+            return false
         }
     }
 

@@ -1,6 +1,6 @@
 name: pda_scanner
 description: "一个能支持多种PDA扫码的Flutter插件"
-version: 1.0.3
+version: 1.0.4
 homepage: https://gitee.com/zengxingshun/flutter_plugin_pda_scanner
 
 environment:
@@ -8,7 +8,7 @@ environment:
   flutter: '>=3.3.0'
 
 dependencies:
-  visibility_detector: ^0.4.0+2
+  audioplayers: 5.2.1
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
@@ -24,3 +24,5 @@ flutter:
       android:
         package: org.jerome.pda_scanner
         pluginClass: PdaScannerPlugin
+  assets:
+    - assets/audio/

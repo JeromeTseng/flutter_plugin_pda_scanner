@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
     return PopScope(
       canPop: false,
       onPopInvoked: (_){
-        PdaUtils.instance.navigateToSystemHome();
+        PdaUtils.navigateToSystemHome();
       },
       child: Scaffold(
         appBar: buildHomeAppBar(),
@@ -23,9 +23,10 @@ class HomePage extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           backgroundColor: Colors.blueGrey[900],
           onPressed: () {
-            PdaUtils.instance.getInitLogList().forEach((element) {
+            PdaUtils.getInitLogList().forEach((element) {
               log('$element');
             });
+            PdaUtils.successSoundHumanVoice();
             // 如果是跟路由 跳转页面时取消监听扫码事件 在该回调函数中重新监听事件
             // Get.toNamed(DeviceInfoPage.routeName)?.then((value) {
             //   print("监听到返回首页...");
@@ -145,7 +146,8 @@ class _HomeBodyState extends State<HomeBody> {
   Widget buildScanSupported() {
     return GFListTile(
       onTap: (){
-        PdaUtils.instance.errorSound();
+        // PdaUtils.errorSoundDudu();
+        PdaUtils.errorSoundHumanVoice();
       },
       margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
       avatar: GFAvatar(
@@ -164,9 +166,9 @@ class _HomeBodyState extends State<HomeBody> {
   }
 
   Future<void> initEquipmentInfo() async {
-    String androidVersion = await PdaUtils.instance.getPlatformVersion();
-    String modelName = await PdaUtils.instance.getPDAModel();
-    bool isScanSupported = await PdaUtils.instance.isThisPDASupported();
+    String androidVersion = await PdaUtils.getPlatformVersion();
+    String modelName = await PdaUtils.getPDAModel();
+    bool isScanSupported = await PdaUtils.isThisPDASupported();
     setState(() {
       _androidVersion = androidVersion;
       _modelName = modelName;
@@ -251,7 +253,7 @@ class _BarcodeListViewState extends State<BarcodeListView> {
 
   // 监听扫码事件
   void listen() {
-    PdaUtils.instance.on(
+    PdaUtils.on(
       HomePage.routeName,
       (barcode) {
         addCode(barcode);
