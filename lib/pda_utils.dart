@@ -15,10 +15,10 @@ abstract class PdaUtils {
   static const _methodChannel = MethodChannel("org.jerome/pda_scanner");
 
   // 扫码成功音频资源
-  static ByteData? _scanSuccessAudioResource;
+  static final AudioPlayer _scanSuccessAudioPlayer = AudioPlayer();
 
   // 扫码失败音频资源
-  static ByteData? _scanFailureAudioResource;
+  static final AudioPlayer _scanFailureAudioPlayer = AudioPlayer();
 
   // PDA是否进行过初始化
   static bool _initFlag = false;
@@ -32,10 +32,8 @@ abstract class PdaUtils {
   // 日志集合
   static final List<InitLogModel> _logList = [];
 
-  static ByteData? resource;
-
   /// 初始化PDA扫码枪
-  static void init() async {
+  static Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
     if (!Platform.isAndroid) {
       throw Exception(['PDA插件只支持安卓系统设备！']);
@@ -53,7 +51,7 @@ abstract class PdaUtils {
       log('PDA扫码器初始化结束',name: logTag);
     }
     // 设置音频
-    loadScanAudioPlayer();
+    _loadScanAudioPlayer();
   }
 
   /// 设置通道回调
@@ -91,51 +89,70 @@ abstract class PdaUtils {
     });
   }
 
+  /// 检测是否调用过初始化方法
+  static void _checkIsInit(){
+    if(!_initFlag){
+      throw Exception(['请先在main方法之前使用PdaUtils.init()方法初始化PDA_Scanner插件！']);
+    }
+  }
+
   /// 设置音频
-  static void loadScanAudioPlayer() async {
+  static void _loadScanAudioPlayer() async {
     // 设置成功音频资源
-    _scanSuccessAudioResource = await rootBundle
+    var scanSuccessAudioResource = await rootBundle
         .load('packages/pda_scanner/assets/audio/scan_success.wav');
+    _scanSuccessAudioPlayer.setReleaseMode(ReleaseMode.stop);
+    _scanSuccessAudioPlayer.setSource(BytesSource(scanSuccessAudioResource.buffer.asUint8List()));
     // 设置失败音频资源
-    _scanFailureAudioResource = await rootBundle
+    var scanFailureAudioResource = await rootBundle
         .load('packages/pda_scanner/assets/audio/scan_failure.wav');
+    _scanFailureAudioPlayer.setReleaseMode(ReleaseMode.stop);
+    _scanFailureAudioPlayer.setSource(BytesSource(scanFailureAudioResource.buffer.asUint8List()));
     log('扫码音频资源加载成功！', name: logTag);
   }
 
-  // 查询该PDA是否支持扫码
+  /// 查询该PDA是否支持扫码
   static Future<bool> isThisPDASupported() async {
+    _checkIsInit();
     return await _methodChannel.invokeMethod('isPDASupported') ?? false;
   }
 
-  // 获取PDA设备型号
+  /// 获取PDA设备型号
   static Future<String> getPDAModel() async {
+    _checkIsInit();
     return await _methodChannel.invokeMethod('getPDAModel') ?? '未知';
   }
 
+  /// 获取安卓系统版本
   static Future<String> getPlatformVersion() async {
+    _checkIsInit();
     return await _methodChannel.invokeMethod<String>('getPlatformVersion') ??
         '未知系统版本';
   }
 
   /// 订阅扫码事件
   static void on(String tag, Callback emitterCallback) {
+    _checkIsInit();
     _callback[tag] = emitterCallback;
   }
 
   /// 根据tag取消扫码订阅
   static void off(String tag) {
+    _checkIsInit();
     _callback.remove(tag);
     log("取消监听tag: $tag", name: logTag);
   }
 
   /// 取消全部扫码订阅
   static void offAll() {
+    _checkIsInit();
     _callback.clear();
     log('取消所有tag监听', name: logTag);
   }
 
   /// 嘟嘟错误提示音
   static void errorSoundDudu() {
+    _checkIsInit();
     _methodChannel.invokeMethod('errorSound');
   }
 
@@ -143,46 +160,30 @@ abstract class PdaUtils {
   /// 考虑到扫码频率快 如果使用单例audioplayer则必须等待上一次音频播放完成才能播放下一个
   /// 导致音频播放节奏跟不上扫码速度 不太符合实际场景 故每次播放都新建一个audioplayer
   static void successSoundHumanVoice() async {
-    if (_scanSuccessAudioResource == null) {
-      log('音频资源未加载成功！', name: logTag);
-      return;
-    }
-    var audioPlayer = AudioPlayer();
-    await audioPlayer
-        .play(BytesSource(_scanSuccessAudioResource!.buffer.asUint8List()));
-    // 延迟1.5s丢弃资源
-    Future.delayed(const Duration(seconds: 1, milliseconds: 500), () {
-      audioPlayer.dispose();
-    });
+    _checkIsInit();
+    await _scanSuccessAudioPlayer.resume();
   }
 
   /// 扫码失败的人声
   /// 考虑到扫码频率快 如果使用单例audioplayer则必须等待上一次音频播放完成才能播放下一个
   /// 导致音频播放节奏跟不上扫码速度 不太符合实际场景 故每次播放都新建一个audioplayer
   static void errorSoundHumanVoice({bool playErrorSoundDudu = true}) async {
-    if (_scanFailureAudioResource == null) {
-      log('音频资源未加载成功！', name: logTag);
-      return;
-    }
-    var audioPlayer = AudioPlayer();
-    await audioPlayer
-        .play(BytesSource(_scanFailureAudioResource!.buffer.asUint8List()));
+    _checkIsInit();
+    await _scanFailureAudioPlayer.resume();
     if (playErrorSoundDudu) {
       errorSoundDudu();
     }
-    // 延迟1.5s丢弃资源
-    Future.delayed(const Duration(seconds: 1, milliseconds: 500), () {
-      audioPlayer.dispose();
-    });
   }
 
   /// 获取订阅的tag列表
   static List<String> getOnTagList() {
+    _checkIsInit();
     return _callback.keys.toList();
   }
 
   /// 获取初始化日志
   static List<InitLogModel> getInitLogList() {
+    _checkIsInit();
     if (_logList.isEmpty) {
       log('日志列表为空！', name: logTag);
     }
@@ -191,10 +192,12 @@ abstract class PdaUtils {
 
   /// 返回系统桌面
   static void navigateToSystemHome() {
+    _checkIsInit();
     _methodChannel.invokeMethod('navigateToSystemHome');
   }
 }
 
+/// 日志实体类
 class InitLogModel {
   InitLogModel({
     String? type,

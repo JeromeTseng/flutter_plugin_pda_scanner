@@ -31,8 +31,8 @@ import 'package:pda_scanner/pda_utils.dart';
 
 ```dart
 // 请在main函数的runApp调用之前初始化
-void main(){
-  PdaUtils.init();
+void main() async {
+  await PdaUtils.init();
   runApp(const MyApp());
 }
     
@@ -44,6 +44,22 @@ PdaUtils.on("tag", (barcode) {
 // 取消tag上的监听
 PdaUtils.off("tag");
 ```
+### Api详情
+api | 说明 | 调用示例
+----- | ----- | -----
+init|<div style="width:220px">初始化PDA插件，在runApp方法之前调用，注意：该方法内有大量异步操作，请结合await等待init操作完成。</div>|await PdaUtils.init();
+getInitLogList|获取初始化日志 |PdaUtils.getInitLogList();
+isThisPDASupported|该PDA设备是否支持扫码 |PdaUtils.isThisPDASupported();
+getPDAModel|获取设备型号名称|PdaUtils.getPDAModel();
+getPlatformVersion|获取安卓系统版本|PdaUtils.getPlatformVersion();
+on|<div style="width:220px">监听扫码事件，每次扫码事件传入tag字符串作为独立监听标识</div>|PdaUtils.on('tag',(barcode){...});
+getOnTagList|获取订阅的tag标识列表|PdaUtils.getOnTagList();
+off|取消对tag上的监听|PdaUtils.off('tag');
+offAll|取消所有监听事件|PdaUtils.offAll();
+errorSoundDudu|嘟嘟警告提示音|PdaUtils.errorSoundDudu();
+successSoundHumanVoice|扫码成功的人声提示|PdaUtils.successSoundHumanVoice();
+errorSoundHumanVoice|<div style="width:220px">扫码失败的人声提示，可传入bool类型参数playErrorSoundDudu，即播放失败人声时是否播放嘟嘟警告提示音，该参数默认为true</div>|PdaUtils.errorSoundHumanVoice();
+navigateToSystemHome|<div style="width:220px">返回系统桌面，原生返回系统桌面后再进入app时会重启app，返回系统桌面时拦截调用该方法后不会有该情况</div>|PdaUtils.navigateToSystemHome();
 
 ### PDA扫码示例
 
@@ -51,9 +67,9 @@ PdaUtils.off("tag");
 import 'package:flutter/material.dart';
 import 'package:pda_scanner/pda_utils.dart';
 
-void main() {
-  // 初始化PDA扫码
-  PdaUtils.init();
+void main() async {
+  // 初始化PDA扫码 加上await关键字等待初始化完成
+  await PdaUtils.init();
   runApp(MaterialApp(
     title: 'PDA扫码示例',
     theme: ThemeData(
