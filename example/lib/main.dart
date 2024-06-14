@@ -4,8 +4,8 @@ import 'package:pda_scanner/pda_utils.dart';
 import 'package:pda_scanner_example/pages/device_info_page.dart';
 import 'package:pda_scanner_example/pages/home_page.dart';
 
-void main(){
-  PdaUtils.init();
+void main() async {
+  await PdaUtils.init();
   runApp(const MyApp(title: "PDA扫码示例"));
 }
 
