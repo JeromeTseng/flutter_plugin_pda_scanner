@@ -1,4 +1,4 @@
-package org.jerome.pda_scanner.pda_type
+package io.github.jerometseng.pdascanner.pda_type
 
 import android.content.Context
 import android.util.Log
@@ -10,10 +10,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.jerome.pda_scanner.pda_type.hikivision.HikvisionConfig
-import org.jerome.pda_scanner.pda_type.invengo.InvengoConfig
-import org.jerome.pda_scanner.pda_type.speedata.SpeedataConfig
-import org.jerome.pda_scanner.pda_type.zebra.ZebraConfig
+import io.github.jerometseng.pdascanner.pda_type.hikivision.HikvisionConfig
+import io.github.jerometseng.pdascanner.pda_type.invengo.InvengoConfig
+import io.github.jerometseng.pdascanner.pda_type.speedata.SpeedataConfig
+import io.github.jerometseng.pdascanner.pda_type.zebra.ZebraConfig
 import java.util.Date
 
 /**

@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-  package="org.jerome.pda_scanner">
+  package="io.github.jerometseng.pdascanner">
     <uses-permission android:name="com.symbol.emdk.permission.EMDK"/>
     <queries>
         <package android:name="com.zebra.zebracontentprovider" />

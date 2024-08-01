@@ -1,12 +1,8 @@
-package org.jerome.pda_scanner
+package io.github.jerometseng.pdascanner
 
 import android.app.Activity
-import android.app.Application
 import android.content.Intent
 import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -14,13 +10,13 @@ import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodChannel
-import org.jerome.pda_scanner.pda_type.CodeEmitterManager
-import org.jerome.pda_scanner.pda_type.CodeEmitterManager.Companion.CODE_EMITTER_CHANNEL
-import org.jerome.pda_scanner.pda_type.CodeEmitterManager.Companion.GET_PDA_MODEL
-import org.jerome.pda_scanner.pda_type.CodeEmitterManager.Companion.INIT_SCANNER
-import org.jerome.pda_scanner.pda_type.CodeEmitterManager.Companion.IS_PDA_SUPPORTED
-import org.jerome.pda_scanner.pda_type.CodeEmitterManager.Companion.LOG_TAG
-import org.jerome.pda_scanner.util.NotificationUtil
+import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager
+import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.CODE_EMITTER_CHANNEL
+import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.GET_PDA_MODEL
+import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.INIT_SCANNER
+import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.IS_PDA_SUPPORTED
+import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.LOG_TAG
+import io.github.jerometseng.pdascanner.util.NotificationUtil
 
 
 /**

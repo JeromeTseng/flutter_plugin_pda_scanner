@@ -1,4 +1,4 @@
-group 'org.jerome.pda_scanner'
+group 'io.github.jerometseng.pdascanner'
 version '1.0'
 
 buildscript {
@@ -46,7 +46,7 @@ apply plugin: 'kotlin-android'
 
 android {
     if (project.android.hasProperty("namespace")) {
-        namespace 'org.jerome.pda_scanner'
+        namespace 'io.github.jerometseng.pdascanner'
     }
 
     compileSdkVersion 33

@@ -1,4 +1,4 @@
-package org.jerome.pda_scanner
+package io.github.jerometseng.pdascanner
 
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel

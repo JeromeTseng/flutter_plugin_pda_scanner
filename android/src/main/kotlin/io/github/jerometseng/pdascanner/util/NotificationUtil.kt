@@ -1,4 +1,4 @@
-package org.jerome.pda_scanner.util
+package io.github.jerometseng.pdascanner.util
 
 import android.annotation.TargetApi
 import android.media.AudioManager

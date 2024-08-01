@@ -1,4 +1,4 @@
-package org.jerome.pda_scanner.pda_type.zebra
+package io.github.jerometseng.pdascanner.pda_type.zebra
 
 import android.content.Context
 import com.symbol.emdk.EMDKManager
@@ -19,7 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.jerome.pda_scanner.pda_type.CodeEmitterManager
+import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager
 
 class ZebraConfig (
     private val context: Context,

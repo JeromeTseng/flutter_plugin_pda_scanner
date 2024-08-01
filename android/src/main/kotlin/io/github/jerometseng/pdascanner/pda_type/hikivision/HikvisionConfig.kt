@@ -1,4 +1,4 @@
-package org.jerome.pda_scanner.pda_type.hikivision
+package io.github.jerometseng.pdascanner.pda_type.hikivision
 
 import android.annotation.TargetApi
 import android.content.BroadcastReceiver
@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.IntentFilter
 import android.os.Build
 import io.flutter.plugin.common.MethodChannel
-import org.jerome.pda_scanner.pda_type.CodeEmitterManager
+import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager
 
 class HikvisionConfig(
     // 上下文

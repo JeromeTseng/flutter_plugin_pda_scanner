@@ -1,10 +1,10 @@
-package org.jerome.pda_scanner.pda_type.speedata
+package io.github.jerometseng.pdascanner.pda_type.speedata
 
 import android.content.Context
 import com.scandecode.ScanDecode
 import com.scandecode.inf.ScanInterface.OnScanListener
 import io.flutter.plugin.common.MethodChannel
-import org.jerome.pda_scanner.pda_type.CodeEmitterManager
+import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager
 
 class SpeedataConfig(
     // 上下文

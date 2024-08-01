@@ -1,4 +1,4 @@
-package org.jerome.pda_scanner.pda_type
+package io.github.jerometseng.pdascanner.pda_type
 
 import android.os.Build
 

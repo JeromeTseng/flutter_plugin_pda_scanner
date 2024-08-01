@@ -1,4 +1,4 @@
-package org.jerome.pda_scanner.pda_type.hikivision
+package io.github.jerometseng.pdascanner.pda_type.hikivision
 
 import android.content.ComponentName
 import android.content.Context

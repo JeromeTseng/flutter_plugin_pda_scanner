@@ -1,4 +1,4 @@
-package org.jerome.pda_scanner.pda_type.chainway
+package io.github.jerometseng.pdascanner.pda_type.chainway
 
 import android.annotation.TargetApi
 import android.content.BroadcastReceiver
@@ -7,7 +7,7 @@ import android.content.IntentFilter
 import android.os.Build
 import com.rscja.scanner.utility.ScannerUtility
 import io.flutter.plugin.common.MethodChannel
-import org.jerome.pda_scanner.pda_type.CodeEmitterManager
+import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager
 
 class ChainwayConfig(
     // 上下文
