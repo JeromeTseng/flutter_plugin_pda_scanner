@@ -17,25 +17,27 @@ class HomePage extends StatelessWidget {
       onPopInvoked: (_){
         PdaUtils.navigateToSystemHome();
       },
-      child: Scaffold(
-        appBar: buildHomeAppBar(),
-        body: const HomeBody(),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Colors.blueGrey[900],
-          onPressed: () {
-            PdaUtils.getInitLogList().forEach((element) {
-              log('$element');
-            });
-            PdaUtils.successSoundHumanVoice();
-            // 如果是跟路由 跳转页面时取消监听扫码事件 在该回调函数中重新监听事件
-            // Get.toNamed(DeviceInfoPage.routeName)?.then((value) {
-            //   print("监听到返回首页...");
-            // });
-          },
-          child: const Icon(
-            Icons.fingerprint_rounded,
-            color: Colors.white,
-            size: 40,
+      child: SafeArea(
+        child: Scaffold(
+          appBar: buildHomeAppBar(),
+          body: const HomeBody(),
+          floatingActionButton: FloatingActionButton(
+            backgroundColor: Colors.blueGrey[900],
+            onPressed: () {
+              PdaUtils.getInitLogList().forEach((element) {
+                log('$element');
+              });
+              PdaUtils.successSoundHumanVoice();
+              // 如果是跟路由 跳转页面时取消监听扫码事件 在该回调函数中重新监听事件
+              // Get.toNamed(DeviceInfoPage.routeName)?.then((value) {
+              //   print("监听到返回首页...");
+              // });
+            },
+            child: const Icon(
+              Icons.fingerprint_rounded,
+              color: Colors.white,
+              size: 40,
+            ),
           ),
         ),
       ),

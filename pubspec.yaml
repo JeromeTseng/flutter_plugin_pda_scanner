@@ -22,7 +22,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: org.jerome.pda_scanner
+        package: io.github.jerometseng.pdascanner
         pluginClass: PdaScannerPlugin
   assets:
     - assets/audio/

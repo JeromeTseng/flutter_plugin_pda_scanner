@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import io.github.jerometseng.pdascanner.pda_type.hikivision.HikvisionConfig
 import io.github.jerometseng.pdascanner.pda_type.invengo.InvengoConfig
+import io.github.jerometseng.pdascanner.pda_type.seuic.Cruise5GConfig
 import io.github.jerometseng.pdascanner.pda_type.speedata.SpeedataConfig
 import io.github.jerometseng.pdascanner.pda_type.zebra.ZebraConfig
 import java.util.Date
@@ -65,6 +66,9 @@ abstract class CodeEmitterManager(private val context: Context,private val metho
             } else if (DeviceDetect.isHikvisionDevice()) {
                 // 海康威视扫码器
                 HikvisionConfig(context, methodChannel)
+            } else if(DeviceDetect.isSeuicCruise5G()){
+                // 东集酷路泽扫码器
+                Cruise5GConfig(context,methodChannel)
             } else {
                 null
             }

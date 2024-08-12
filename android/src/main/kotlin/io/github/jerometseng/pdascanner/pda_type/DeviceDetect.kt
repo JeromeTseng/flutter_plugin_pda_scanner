@@ -57,6 +57,14 @@ class DeviceDetect {
         }
 
         /**
+         * 是否为东集Cruise5G设备
+         */
+        fun isSeuicCruise5G() : Boolean{
+            return mutableListOf("CRUISE2 5G")
+                .contains(Build.MODEL.uppercase())
+        }
+
+        /**
          * 判断设备是否支持扫码
          * @author 曾兴顺  2024/02/04
          */
@@ -64,7 +72,8 @@ class DeviceDetect {
             return isSpeedataDevice() ||
                     isZebraDevice() ||
                     isInvengoDevice() ||
-                    isHikvisionDevice()
+                    isHikvisionDevice() ||
+                    isSeuicCruise5G()
         }
     }
 }
