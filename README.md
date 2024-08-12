@@ -9,6 +9,7 @@
   海康威视(Hikivision)：DS-MDT201
   远望谷：不明确
   思必拓：T60
+  东集seuic：CRUISE2 5G
   ```
 ## 安装
 
