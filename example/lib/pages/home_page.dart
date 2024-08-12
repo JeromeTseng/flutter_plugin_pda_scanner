@@ -18,6 +18,7 @@ class HomePage extends StatelessWidget {
         PdaUtils.navigateToSystemHome();
       },
       child: SafeArea(
+        bottom: true,
         child: Scaffold(
           appBar: buildHomeAppBar(),
           body: const HomeBody(),
