@@ -4,40 +4,28 @@ version '1.0'
 buildscript {
     ext.kotlin_version = '1.7.10'
     repositories {
-        maven {
-            allowInsecureProtocol = true
-            url 'http://43.254.3.211:8081/nexus/repository/androidRepostory/'
-            credentials {
-                username 'zxs'
-                password 'china@1234'
-            }
-        }
         maven { url 'https://maven.aliyun.com/repository/central' }
         maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        mavenCentral()
+        google()
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath 'com.android.tools.build:gradle:7.3.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
 rootProject.allprojects {
     repositories {
-        maven {
-            allowInsecureProtocol = true
-            url 'http://43.254.3.211:8081/nexus/repository/androidRepostory/'
-            credentials {
-                username 'zxs'
-                password 'china@1234'
-            }
-        }
         maven { url 'https://maven.aliyun.com/repository/central' }
         maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
         maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
+        mavenCentral()
+        google()
     }
 }
 
@@ -49,7 +37,7 @@ android {
         namespace 'io.github.jerometseng.pdascanner'
     }
 
-    compileSdkVersion 33
+    compileSdk 34
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -95,6 +83,7 @@ android {
         implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
         implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$kotlin_coroutines_version"
         implementation "org.jetbrains.kotlinx:kotlinx-coroutines-rx2:$kotlin_coroutines_version"
+        implementation "androidx.annotation:annotation:1.8.2"
         // flutter 开发时依赖
         compileOnly files("$flutterRoot/bin/cache/artifacts/engine/android-arm/flutter.jar")
     }

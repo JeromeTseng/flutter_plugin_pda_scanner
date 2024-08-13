@@ -1,6 +1,7 @@
 package io.github.jerometseng.pdascanner.pda_type.zebra
 
 import android.content.Context
+import androidx.annotation.Keep
 import com.symbol.emdk.EMDKManager
 import com.symbol.emdk.EMDKResults
 import com.symbol.emdk.barcode.BarcodeManager
@@ -21,6 +22,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager
 
+/**
+ * 加上keep注解是为了不让gradle打包时丢掉该类
+ */
+@Keep
 class ZebraConfig (
     private val context: Context,
     private val methodChannel: MethodChannel
