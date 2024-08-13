@@ -24,7 +24,7 @@ if (flutterVersionName == null) {
 
 android {
     namespace "org.jerome.pda_scanner_example"
-    compileSdkVersion flutter.compileSdkVersion
+    compileSdkVersion 34
     ndkVersion flutter.ndkVersion
 
     compileOptions {
