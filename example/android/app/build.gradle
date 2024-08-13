@@ -79,5 +79,5 @@ flutter {
 
 dependencies {
     // 斑马PDA的扫码插件
-    compileOnly files ('libs/zebra/emdk-11.0.129.jar')
+    // compileOnly files ('libs/zebra/emdk-11.0.129.jar')
 }

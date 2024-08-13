@@ -11,14 +11,6 @@ pluginManagement {
     includeBuild("${settings.ext.flutterSdkPath}/packages/flutter_tools/gradle")
 
     repositories {
-        maven {
-            allowInsecureProtocol = true
-            url 'http://43.254.3.211:8081/nexus/repository/androidRepostory/'
-            credentials {
-                username 'zxs'
-                password 'china@1234'
-            }
-        }
         maven { url 'https://maven.aliyun.com/repository/central' }
         maven { url 'https://maven.aliyun.com/repository/public' }
         maven { url 'https://maven.aliyun.com/repository/google' }
