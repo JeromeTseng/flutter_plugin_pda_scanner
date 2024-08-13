@@ -161,8 +161,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
 如图
 
-<img src='./photos/pic_01.png' width="60%">
-<img src='./photos/pic_02.png' width="60%">
+<img src='/photos/pic_01.png' width="60%">
+<img src='/photos/pic_02.png' width="60%">
 
 
 ## 例外：ZEBRA的PDA需要做以下额外配置，否则可能会引起闪退或其他意外情况。
