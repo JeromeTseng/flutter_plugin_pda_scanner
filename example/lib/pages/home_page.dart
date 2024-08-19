@@ -46,8 +46,9 @@ class HomeBody extends StatefulWidget {
 }
 
 class _HomeBodyState extends State<HomeBody> {
-  var actionController = TextEditingController(text: "android.intent.action.BARCODEDATA");
-  var labelController = TextEditingController(text: "barcode_result");
+  var actionController = TextEditingController()
+    ..text = "android.intent.action.BARCODEDATA";
+  var labelController = TextEditingController()..text = "barcode_result";
   GetStorage? box;
   String? _androidVersion = "unknown";
   String? _modelName = "unknown";
@@ -107,7 +108,9 @@ class _HomeBodyState extends State<HomeBody> {
                                   children: [
                                     const Text(
                                       '请注意大小写',
-                                      style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold),
+                                      style: TextStyle(
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                     BrnTextInputFormItem(
                                       controller: actionController,
@@ -128,13 +131,14 @@ class _HomeBodyState extends State<HomeBody> {
                                 onConfirm: () async {
                                   var action = actionController.text;
                                   var label = labelController.text;
-                                  if(action.isNotEmpty && label.isNotEmpty){
+                                  if (action.isNotEmpty && label.isNotEmpty) {
                                     box?.write("action", action);
                                     box?.write("label", label);
                                     PdaUtils.initByCustom(action, label);
                                     Get.back();
-                                  }else{
-                                    BrnToast.show("action 或 label 设置有误！", context);
+                                  } else {
+                                    BrnToast.show(
+                                        "action 或 label 设置有误！", context);
                                   }
                                 },
                                 onCancel: Get.back,
