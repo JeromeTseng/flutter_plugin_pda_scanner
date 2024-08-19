@@ -11,11 +11,17 @@ import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodChannel
 import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager
+import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.CLOSE_SCANNER
 import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.CODE_EMITTER_CHANNEL
+import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.ERROR_SOUND
 import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.GET_PDA_MODEL
+import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.GET_PLATFORM_VERSION
 import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.INIT_SCANNER
+import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.INIT_SCANNER_CUSTOM
 import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.IS_PDA_SUPPORTED
 import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.LOG_TAG
+import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.NAVIGATE_TO_SYSTEM_HOME
+import io.github.jerometseng.pdascanner.pda_type.custom.CustomConfig
 import io.github.jerometseng.pdascanner.util.NotificationUtil
 
 
@@ -50,12 +56,30 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
                 MethodChannel(flutterPluginBinding.binaryMessenger, CODE_EMITTER_CHANNEL)
             methodChannel?.setMethodCallHandler { methodCall, result ->
                 when (methodCall.method) {
+                    // PDA是否支持扫码
                     IS_PDA_SUPPORTED -> result.success(CodeEmitterManager.isPDASupported())
+                    // 获取PDA型号
                     GET_PDA_MODEL -> result.success(Build.MODEL)
-                    "getPlatformVersion" -> result.success("Android ${Build.VERSION.RELEASE}")
+                    // 获取系统版本
+                    GET_PLATFORM_VERSION -> result.success("Android ${Build.VERSION.RELEASE}")
+                    // 自动初始化PDA
                     INIT_SCANNER -> result.success(initScanner())
-                    "navigateToSystemHome" -> navigateToSystemHome()
-                    "errorSound" -> notificationUtil?.errorSound()
+                    // 根据广播action和label初始化PDA
+                    INIT_SCANNER_CUSTOM -> {
+                        val action = methodCall.argument<String>("action")
+                        val label = methodCall.argument<String>("label")
+                        if(action.isNullOrBlank() && label.isNullOrBlank()){
+                            Log.e(LOG_TAG, "请传入正确的action地址和正确的label标签")
+                        }else{
+                            result.success(initScannerCustom(action!!,label!!))
+                        }
+                    }
+                    // 关闭扫描器
+                    CLOSE_SCANNER -> this.codeEmitterManager?.close()
+                    // 返回桌面的方法
+                    NAVIGATE_TO_SYSTEM_HOME -> navigateToSystemHome()
+                    // 嘟嘟错误提示音
+                    ERROR_SOUND -> notificationUtil?.errorSound()
                 }
             }
         } catch (ex: Exception) {
@@ -110,7 +134,7 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
     }
 
     // 初始化扫码器
-    private fun initScanner():Boolean {
+    private fun initScanner(): Boolean {
         if (initFlag) {
             return true
         }
@@ -127,6 +151,27 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
                 true
             } catch (ex: Throwable) {
                 Log.e(LOG_TAG, "初始化扫码器出错：$ex")
+                false
+            }
+        } else {
+            Log.e(LOG_TAG, "activity对象为空！")
+            return false
+        }
+    }
+
+    // 自定义扫描器初始化(广播)
+    private fun initScannerCustom(action:String,label:String): Boolean {
+        if (activity?.applicationContext != null) {
+            // 初始化扫码管理器
+            return try {
+                this.codeEmitterManager?.close()
+                codeEmitterManager = CustomConfig(action,label,activity!!,methodChannel!!)
+                // 开启扫码器
+                codeEmitterManager?.open()
+                initFlag = true
+                true
+            } catch (ex: Throwable) {
+                Log.e(LOG_TAG, "initScannerCustom出错：$ex")
                 false
             }
         } else {

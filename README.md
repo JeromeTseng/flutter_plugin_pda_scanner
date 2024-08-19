@@ -10,6 +10,8 @@
   远望谷：不明确
   思必拓：T60
   东集seuic：CRUISE2 5G
+  ...
+  同时支持根据广播行为手动注册广播监听PDA扫码
   ```
 ## 安装
 
@@ -45,10 +47,29 @@ PdaUtils.on("tag", (barcode) {
 // 取消tag上的监听
 PdaUtils.off("tag");
 ```
+## 二、手动初始化
+
+```dart
+// 传入广播action 和要获取的数据标签 label
+await PdaUtils.initByCustom("com.action.scannersrvice....","data");
+
+// 监听事件 可以监听多个事件 用tag进行区分
+PdaUtils.on("tag", (barcode) {
+  // 接收回调的条码...
+});
+
+// 取消tag上的监听
+PdaUtils.off("tag");
+```
+
+
+
 ### Api详情
+
 api | 说明 | 调用示例
 ----- | ----- | -----
 init|<div style="width:220px">初始化PDA插件，在runApp方法之前调用，注意：该方法内有大量异步操作，请结合await等待init操作完成。</div>|await PdaUtils.init();
+initByCustom|<div style="width:220px">手动初始化PDA插件<br>action：广播行为<br>label：扫码内容获取标签</div>|await PdaUtils.initByCustom(action,label);
 getInitLogList|获取初始化日志 |PdaUtils.getInitLogList();
 isThisPDASupported|该PDA设备是否支持扫码 |PdaUtils.isThisPDASupported();
 getPDAModel|获取设备型号名称|PdaUtils.getPDAModel();
@@ -61,6 +82,7 @@ errorSoundDudu|嘟嘟警告提示音|PdaUtils.errorSoundDudu();
 successSoundHumanVoice|扫码成功的人声提示|PdaUtils.successSoundHumanVoice();
 errorSoundHumanVoice|<div style="width:220px">扫码失败的人声提示，可传入bool类型参数playErrorSoundDudu，即播放失败人声时是否播放嘟嘟警告提示音，该参数默认为true</div>|PdaUtils.errorSoundHumanVoice();
 navigateToSystemHome|<div style="width:220px">返回系统桌面，原生返回系统桌面后再进入app时会重启app，返回系统桌面时拦截调用该方法后不会有该情况</div>|PdaUtils.navigateToSystemHome();
+closeScanner|手动关闭扫码器|PdaUtils.closeScanner();
 
 ### PDA扫码示例
 
@@ -165,7 +187,7 @@ class _MyHomePageState extends State<MyHomePage> {
 <img src='/photos/pic_02.png' width="60%">
 
 
-## 例外：ZEBRA的PDA需要做以下额外配置，否则可能会引起闪退或其他意外情况。
+## 例外：ZEBRA（斑马）的PDA发生闪退或其他情况则需要做以下额外配置。
 
 您需要在您Flutter项目的安卓目录下的 <span style="color:red;font-weight:bold">  AndroidManifest.xml </span>中加入以下内容
 ### 1、在 `manifest` 节点下加入

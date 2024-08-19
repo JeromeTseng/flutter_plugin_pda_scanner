@@ -29,6 +29,8 @@ dependencies:
   bruno: ^3.4.3
   # getwidget 组件库
   getwidget: ^4.0.0
+  # get_storage使用
+  get_storage: ^2.1.1
   flutter:
     sdk: flutter
 

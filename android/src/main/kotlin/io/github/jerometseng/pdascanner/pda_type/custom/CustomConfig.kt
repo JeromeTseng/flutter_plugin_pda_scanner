@@ -1,4 +1,4 @@
-package io.github.jerometseng.pdascanner.pda_type.seuic
+package io.github.jerometseng.pdascanner.pda_type.custom
 
 import android.annotation.TargetApi
 import android.content.BroadcastReceiver
@@ -7,19 +7,26 @@ import android.content.IntentFilter
 import android.os.Build
 import io.flutter.plugin.common.MethodChannel
 import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager
+import io.github.jerometseng.pdascanner.pda_type.seuic.Cruise5GBroadCastReceiver
 
-class Cruise5GConfig(
+/**
+ * 自定义扫描器配置（广播）
+ * @author 曾兴顺
+ */
+class CustomConfig(
+    // 广播行为
+    private val action: String,
+    // 数据标签
+    private val label:String,
     // 上下文
     private val context: Context,
     // 与flutter通信的通道
     private val methodChannel: MethodChannel
 ) : CodeEmitterManager(context,methodChannel)  {
 
-    private val TAG = "Seuic:Cruise";
+    private val TAG = "CUSTOM";
 
     private var broadcastReceiver: BroadcastReceiver? = null
-
-    private val action = "com.android.server.scannerservice.broadcast"
 
     @TargetApi(Build.VERSION_CODES.TIRAMISU)
     override fun open() {
@@ -27,7 +34,7 @@ class Cruise5GConfig(
             if (this.broadcastReceiver == null) {
                 val intentFilter = IntentFilter()
                 intentFilter.addAction(action)
-                this.broadcastReceiver = Cruise5GBroadCastReceiver(methodChannel)
+                this.broadcastReceiver = CustomBroadCastReceiver(action,label,methodChannel)
                 context.registerReceiver(
                     this.broadcastReceiver, intentFilter,
                     Context.RECEIVER_EXPORTED,

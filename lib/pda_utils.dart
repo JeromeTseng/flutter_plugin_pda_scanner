@@ -48,7 +48,33 @@ abstract class PdaUtils {
     bool? initSuccess = await _methodChannel.invokeMethod<bool>('initScanner');
     if (initSuccess ?? false) {
       _initFlag = true;
-      log('PDA扫码器初始化结束',name: logTag);
+      log('PDA扫码器初始化结束', name: logTag);
+    }
+    // 设置音频
+    _loadScanAudioPlayer();
+  }
+
+  /// 自定义初始化扫码枪
+  /// action: 广播行为
+  /// label: 获取数据的标签
+  static Future<void> initByCustom(String action, String label) async {
+    WidgetsFlutterBinding.ensureInitialized();
+    if (!Platform.isAndroid) {
+      throw Exception(['PDA插件只支持安卓系统设备！']);
+    }
+    // 设置通道回调
+    _setMethodCallback();
+    // 调用安卓初始化PDA方法 标记PDA已进行过初始化
+    bool? initSuccess = await _methodChannel.invokeMethod<bool>(
+      'initScannerCustom',
+      {
+        'action': action,
+        'label': label,
+      },
+    );
+    if (initSuccess ?? false) {
+      _initFlag = true;
+      log('PDA扫码器初始化结束', name: logTag);
     }
     // 设置音频
     _loadScanAudioPlayer();
@@ -90,9 +116,9 @@ abstract class PdaUtils {
   }
 
   /// 检测是否调用过初始化方法
-  static void _checkIsInit(){
-    if(!_initFlag){
-      throw Exception(['请先在main方法之前使用PdaUtils.init()方法初始化PDA_Scanner插件！']);
+  static void _checkIsInit() {
+    if (!_initFlag) {
+      throw Exception(['请在合适的时机使用\nPdaUtils.init()\t或\nPdaUtils.initByCustom(action,label)\n方法初始化 pda_scanner 插件！']);
     }
   }
 
@@ -102,12 +128,14 @@ abstract class PdaUtils {
     var scanSuccessAudioResource = await rootBundle
         .load('packages/pda_scanner/assets/audio/scan_success.wav');
     _scanSuccessAudioPlayer.setReleaseMode(ReleaseMode.stop);
-    _scanSuccessAudioPlayer.setSource(BytesSource(scanSuccessAudioResource.buffer.asUint8List()));
+    _scanSuccessAudioPlayer
+        .setSource(BytesSource(scanSuccessAudioResource.buffer.asUint8List()));
     // 设置失败音频资源
     var scanFailureAudioResource = await rootBundle
         .load('packages/pda_scanner/assets/audio/scan_failure.wav');
     _scanFailureAudioPlayer.setReleaseMode(ReleaseMode.stop);
-    _scanFailureAudioPlayer.setSource(BytesSource(scanFailureAudioResource.buffer.asUint8List()));
+    _scanFailureAudioPlayer
+        .setSource(BytesSource(scanFailureAudioResource.buffer.asUint8List()));
     log('扫码音频资源加载成功！', name: logTag);
   }
 
@@ -194,6 +222,11 @@ abstract class PdaUtils {
   static void navigateToSystemHome() {
     _checkIsInit();
     _methodChannel.invokeMethod('navigateToSystemHome');
+  }
+
+  /// 关闭扫码器
+  static void closeScanner(){
+    _methodChannel.invokeMethod('closeScanner');
   }
 }
 

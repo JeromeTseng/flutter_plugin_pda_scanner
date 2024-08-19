@@ -23,7 +23,7 @@ class DeviceDetect {
          * @author 曾兴顺  2024/02/24
          */
         fun isZebraDevice(): Boolean {
-            return mutableListOf(
+            return "ZEBRA" == Build.BRAND.uppercase() && mutableListOf(
                 "CC5000-10", "CC600/CC6000", "EC30", "EC50/EC55",
                 "ET40", "ET45", "ET51", "ET56", "ET5X", "MC18", "MC20",
                 "MC2200", "MC27", "MC32", "MC33", "MC33AX", "MC3300X", "MC3330 RFID",
@@ -59,9 +59,10 @@ class DeviceDetect {
         /**
          * 是否为东集Cruise5G设备
          */
-        fun isSeuicCruise5G() : Boolean{
-            return mutableListOf("CRUISE2 5G")
-                .contains(Build.MODEL.uppercase())
+        fun isSeuicCruise5G(): Boolean {
+            return "SEUIC" == Build.BRAND.uppercase() && mutableListOf(
+                "CRUISE2 5G"
+            ).contains(Build.MODEL.uppercase())
         }
 
         /**

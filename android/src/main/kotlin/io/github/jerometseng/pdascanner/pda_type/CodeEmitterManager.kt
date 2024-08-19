@@ -36,11 +36,26 @@ abstract class CodeEmitterManager(private val context: Context,private val metho
         // 查询 PDA 是否支持扫码
         const val IS_PDA_SUPPORTED = "isPDASupported"
 
+        // 查询系统版本
+        const val GET_PLATFORM_VERSION = "getPlatformVersion"
+
         // 查询设备型号
         const val GET_PDA_MODEL = "getPDAModel"
 
         // 初始化扫码器
         const val INIT_SCANNER = "initScanner"
+
+        // 自定义广播初始化
+        const val INIT_SCANNER_CUSTOM = "initScannerCustom"
+
+        // 手动关闭
+        const val CLOSE_SCANNER = "closeScanner"
+
+        // 正常返回系统桌面 不退出程序
+        const val NAVIGATE_TO_SYSTEM_HOME = "navigateToSystemHome"
+
+        // 错误提示音
+        const val ERROR_SOUND = "errorSound"
 
         // 设置日志标识
         const val LOG_TAG = "JEROME#"

@@ -1,9 +1,10 @@
-import 'dart:developer';
-
 import 'package:bruno/bruno.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:pda_scanner/pda_utils.dart';
+import 'package:pda_scanner_example/pages/device_info_page.dart';
 
 class HomePage extends StatelessWidget {
   static const String routeName = "/HomePage";
@@ -14,7 +15,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (_){
+      onPopInvoked: (_) {
         PdaUtils.navigateToSystemHome();
       },
       child: SafeArea(
@@ -22,24 +23,6 @@ class HomePage extends StatelessWidget {
         child: Scaffold(
           appBar: buildHomeAppBar(),
           body: const HomeBody(),
-          floatingActionButton: FloatingActionButton(
-            backgroundColor: Colors.blueGrey[900],
-            onPressed: () {
-              PdaUtils.getInitLogList().forEach((element) {
-                log('$element');
-              });
-              PdaUtils.successSoundHumanVoice();
-              // 如果是跟路由 跳转页面时取消监听扫码事件 在该回调函数中重新监听事件
-              // Get.toNamed(DeviceInfoPage.routeName)?.then((value) {
-              //   print("监听到返回首页...");
-              // });
-            },
-            child: const Icon(
-              Icons.fingerprint_rounded,
-              color: Colors.white,
-              size: 40,
-            ),
-          ),
         ),
       ),
     );
@@ -63,6 +46,9 @@ class HomeBody extends StatefulWidget {
 }
 
 class _HomeBodyState extends State<HomeBody> {
+  var actionController = TextEditingController(text: "android.intent.action.BARCODEDATA");
+  var labelController = TextEditingController(text: "barcode_result");
+  GetStorage? box;
   String? _androidVersion = "unknown";
   String? _modelName = "unknown";
   bool? _isScanSupported = false;
@@ -75,86 +61,215 @@ class _HomeBodyState extends State<HomeBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        BrnNoticeBar(
-          leftWidget: const Icon(
-            Icons.notifications_active_outlined,
-            color: Color(0xFFFF7F00),
+    return Container(
+      color: Colors.white,
+      child: Column(
+        children: [
+          BrnNoticeBar(
+            leftWidget: const Icon(
+              Icons.notifications_active_outlined,
+              color: Color(0xFFFF7F00),
+            ),
+            content: '请扫码看底部是否显示条码内容',
+            noticeStyle: NoticeStyles.runningWithArrow,
+            showRightIcon: false,
+            backgroundColor: const Color(0xFFFDFBEC),
+            textColor: const Color(0xFFFF7F00),
           ),
-          content: '请扫码看底部是否显示条码内容',
-          noticeStyle: NoticeStyles.runningWithArrow,
-          showRightIcon: false,
-          backgroundColor: const Color(0xFFFDFBEC),
-          textColor: const Color(0xFFFF7F00),
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10.0),
-          child: SizedBox(
-            height: 190,
-            child: ListView(
-              children: [
-                buildAndroidVersion(), // 安卓版本
-                buildModelName(), // 设备型号
-                buildScanSupported(), // 是否支持扫码
-              ],
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            child: SizedBox(
+              height: 220,
+              child: Row(
+                children: [
+                  Expanded(
+                    child: ListView(
+                      children: [
+                        buildAndroidVersion(), // 安卓版本
+                        buildModelName(), // 设备型号
+                        buildScanSupported(), // 是否支持扫码
+                        const SizedBox(
+                          height: 2.5,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                          child: BrnSmallMainButton(
+                            title: '手动设置PDA',
+                            bgColor: Colors.blueGrey[900],
+                            onTap: () => {
+                              BrnDialogManager.showConfirmDialog(
+                                context,
+                                barrierDismissible: false,
+                                title: "手动设置PDA",
+                                cancel: '取消',
+                                confirm: '确定',
+                                messageWidget: Column(
+                                  children: [
+                                    const Text(
+                                      '请注意大小写',
+                                      style: TextStyle(color: Colors.red,fontWeight: FontWeight.bold),
+                                    ),
+                                    BrnTextInputFormItem(
+                                      controller: actionController,
+                                      isRequire: true,
+                                      isEdit: true,
+                                      title: " action：",
+                                      hint: "请输入广播地址",
+                                    ),
+                                    BrnTextInputFormItem(
+                                      controller: labelController,
+                                      isRequire: true,
+                                      isEdit: true,
+                                      title: " label：",
+                                      hint: "请输入数据标签",
+                                    ),
+                                  ],
+                                ),
+                                onConfirm: () async {
+                                  var action = actionController.text;
+                                  var label = labelController.text;
+                                  if(action.isNotEmpty && label.isNotEmpty){
+                                    box?.write("action", action);
+                                    box?.write("label", label);
+                                    PdaUtils.initByCustom(action, label);
+                                    Get.back();
+                                  }else{
+                                    BrnToast.show("action 或 label 设置有误！", context);
+                                  }
+                                },
+                                onCancel: Get.back,
+                              )
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            BrnSmallMainButton(
+                              title: '警告提示音',
+                              bgColor: Colors.blueGrey[900],
+                              onTap: PdaUtils.errorSoundDudu,
+                            ),
+                            const SizedBox(height: 3),
+                            BrnSmallMainButton(
+                              title: '扫码成功提示音',
+                              bgColor: Colors.blueGrey[900],
+                              onTap: PdaUtils.successSoundHumanVoice,
+                            ),
+                            const SizedBox(height: 3),
+                            BrnSmallMainButton(
+                              title: '扫码失败提示音',
+                              bgColor: Colors.blueGrey[900],
+                              onTap: PdaUtils.errorSoundHumanVoice,
+                            ),
+                            const SizedBox(height: 3),
+                            BrnSmallMainButton(
+                              title: '初始化日志',
+                              bgColor: Colors.blueGrey[900],
+                              onTap: () => {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (_) {
+                                    return BrnScrollableTextDialog(
+                                      title: "PDA初始化日志",
+                                      contentText: PdaUtils.getInitLogList()
+                                          .join("")
+                                          .replaceFirst("\n", ""),
+                                      isShowOperateWidget: false,
+                                    );
+                                  },
+                                )
+                              },
+                            ),
+                            const SizedBox(height: 3),
+                            BrnSmallMainButton(
+                              title: '监听的tag',
+                              bgColor: Colors.blueGrey[900],
+                              onTap: () => {
+                                showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (_) {
+                                    return BrnScrollableTextDialog(
+                                      title: "监听的tag",
+                                      contentText:
+                                          PdaUtils.getOnTagList().join("\n"),
+                                      isShowOperateWidget: false,
+                                    );
+                                  },
+                                )
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-        const Expanded(
-          child: BarcodeListView(),
-        )
-      ],
+          const Expanded(
+            child: BarcodeListView(),
+          )
+        ],
+      ),
     );
   }
 
   // 安卓版本
   Widget buildAndroidVersion() {
     return GFListTile(
-        margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
-        avatar: GFAvatar(
-          size: 25,
-          backgroundColor: Colors.blueGrey[900],
-          child: const Icon(
-            Icons.android,
-            color: Colors.white,
-            size: 22,
-          ),
+      margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+      avatar: GFAvatar(
+        size: 20,
+        backgroundColor: Colors.blueGrey[900],
+        child: const Icon(
+          Icons.android,
+          color: Colors.white,
+          size: 20,
         ),
-        titleText: '安卓版本',
-        subTitleText: _androidVersion);
+      ),
+      title: _buildTitle('安卓版本'),
+      subTitle: _buildSubTitle(_androidVersion),
+    );
   }
 
   //设备型号
   Widget buildModelName() {
     return GFListTile(
-      onTap: (){
+      onTap: () {
+        Get.toNamed(DeviceInfoPage.routeName);
       },
       margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
       avatar: GFAvatar(
-        size: 25,
+        size: 20,
         backgroundColor: Colors.blueGrey[900],
         child: const Icon(
           Icons.phone_android_rounded,
           color: Colors.white,
-          size: 22,
+          size: 20,
         ),
       ),
-      titleText: '设备型号',
-      subTitleText: _modelName,
+      title: _buildTitle('设备型号'),
+      subTitle: _buildSubTitle(_modelName),
     );
   }
 
   // 是否支持扫码
   Widget buildScanSupported() {
     return GFListTile(
-      onTap: (){
-        // PdaUtils.errorSoundDudu();
-        PdaUtils.errorSoundHumanVoice();
-      },
       margin: const EdgeInsets.symmetric(vertical: 0, horizontal: 0),
       avatar: GFAvatar(
-        size: 25,
+        size: 20,
         backgroundColor: Colors.blueGrey[900],
         child: const Icon(
           Icons.document_scanner_rounded,
@@ -162,9 +277,9 @@ class _HomeBodyState extends State<HomeBody> {
           size: 20,
         ),
       ),
-      titleText: '是否支持扫码',
-      subTitleText:
-          (_isScanSupported != null && _isScanSupported!) ? '支持' : '未知，请测试。',
+      title: _buildTitle('支持扫码？'),
+      subTitle: _buildSubTitle(
+          (_isScanSupported != null && _isScanSupported!) ? '支持' : '未知，请测试。'),
     );
   }
 
@@ -172,11 +287,34 @@ class _HomeBodyState extends State<HomeBody> {
     String androidVersion = await PdaUtils.getPlatformVersion();
     String modelName = await PdaUtils.getPDAModel();
     bool isScanSupported = await PdaUtils.isThisPDASupported();
+    await GetStorage.init();
+    box = GetStorage();
+    actionController.text = (box?.read("action")) ?? '';
+    labelController.text = (box?.read("label")) ?? '';
     setState(() {
       _androidVersion = androidVersion;
       _modelName = modelName;
       _isScanSupported = isScanSupported;
     });
+  }
+
+  Widget _buildTitle(String content) {
+    return Text(
+      content,
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+    );
+  }
+
+  Widget _buildSubTitle(String? content) {
+    return Text(
+      content ?? '',
+      overflow: TextOverflow.ellipsis,
+      maxLines: 1,
+      style: const TextStyle(
+        color: Color(0xFF595959),
+      ),
+    );
   }
 }
 
@@ -208,9 +346,11 @@ class _BarcodeListViewState extends State<BarcodeListView> {
 
   Widget buildBarcodeList() {
     return barcodes.isEmpty
-        ? BrnAbnormalStateWidget(
-            title: '', // 给个空字符串撑开距离
-            content: '目前没有扫描过的条码',
+        ? FittedBox(
+            child: BrnAbnormalStateWidget(
+              title: '', // 给个空字符串撑开距离
+              content: '目前没有扫描过的条码',
+            ),
           )
         : ListView.builder(
             controller: controller,
@@ -264,7 +404,7 @@ class _BarcodeListViewState extends State<BarcodeListView> {
     );
   }
 
-  void addCode(String barcode){
+  void addCode(String barcode) {
     // 展示条码
     setState(() {
       barcodes.add({
@@ -274,7 +414,7 @@ class _BarcodeListViewState extends State<BarcodeListView> {
     });
     Future.delayed(
       const Duration(milliseconds: 120),
-          () {
+      () {
         controller.animateTo(
           controller.position.maxScrollExtent,
           duration: const Duration(milliseconds: 200),
