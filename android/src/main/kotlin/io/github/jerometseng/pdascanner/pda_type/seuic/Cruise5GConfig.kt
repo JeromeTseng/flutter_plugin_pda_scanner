@@ -15,7 +15,7 @@ class Cruise5GConfig(
     private val methodChannel: MethodChannel
 ) : CodeEmitterManager(context,methodChannel)  {
 
-    private val TAG = "Seuic:Cruise";
+    private val TAG = "Seuic:Cruise"
 
     private var broadcastReceiver: BroadcastReceiver? = null
 

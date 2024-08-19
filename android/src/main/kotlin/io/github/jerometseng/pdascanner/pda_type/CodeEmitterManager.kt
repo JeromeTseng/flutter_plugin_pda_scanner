@@ -2,8 +2,6 @@ package io.github.jerometseng.pdascanner.pda_type
 
 import android.content.Context
 import android.util.Log
-import com.symbol.emdk.barcode.ScanDataCollection
-import com.symbol.emdk.barcode.ScannerResults
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
@@ -134,7 +132,7 @@ abstract class CodeEmitterManager(private val context: Context,private val metho
     }
 
     // 发送初始化日志给flutter
-    fun sendLogMessage(logDesc: String) {
+    private fun sendLogMessage(logDesc: String) {
         methodChannel.invokeMethod(CODE_LOG_METHOD, logDesc)
     }
 

@@ -15,7 +15,7 @@ class ChainwayConfig(
     // 与flutter通信的通道
     private val methodChannel: MethodChannel
 ) : CodeEmitterManager(context,methodChannel) {
-    private val TAG = "CHAINWAY";
+    private val TAG = "CHAINWAY"
 
 
     private var scannerUtility: ScannerUtility? = null

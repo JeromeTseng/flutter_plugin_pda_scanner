@@ -36,7 +36,7 @@ class HikvisionBroadcastReceiver(
                 if(barcode == ""){
                     barcode = intent.extras?.getString(action_01_label02)
                 }
-            }else if(action_02.equals(action_02_label)){
+            }else if(action_02.equals(action,ignoreCase = true)){
                 barcode = intent.getStringExtra(action_02_label)
             }
             if(barcode != null){

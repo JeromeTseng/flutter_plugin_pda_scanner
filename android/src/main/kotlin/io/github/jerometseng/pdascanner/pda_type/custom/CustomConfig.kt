@@ -7,7 +7,6 @@ import android.content.IntentFilter
 import android.os.Build
 import io.flutter.plugin.common.MethodChannel
 import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager
-import io.github.jerometseng.pdascanner.pda_type.seuic.Cruise5GBroadCastReceiver
 
 /**
  * 自定义扫描器配置（广播）
@@ -24,7 +23,7 @@ class CustomConfig(
     private val methodChannel: MethodChannel
 ) : CodeEmitterManager(context,methodChannel)  {
 
-    private val TAG = "CUSTOM";
+    private val TAG = "CUSTOM"
 
     private var broadcastReceiver: BroadcastReceiver? = null
 
