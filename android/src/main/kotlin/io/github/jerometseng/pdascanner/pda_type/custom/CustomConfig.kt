@@ -1,10 +1,8 @@
 package io.github.jerometseng.pdascanner.pda_type.custom
 
-import android.annotation.TargetApi
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
-import android.os.Build
 import io.flutter.plugin.common.MethodChannel
 import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager
 
@@ -27,7 +25,6 @@ class CustomConfig(
 
     private var broadcastReceiver: BroadcastReceiver? = null
 
-    @TargetApi(Build.VERSION_CODES.TIRAMISU)
     override fun open() {
         try {
             if (this.broadcastReceiver == null) {
@@ -35,8 +32,7 @@ class CustomConfig(
                 intentFilter.addAction(action)
                 this.broadcastReceiver = CustomBroadCastReceiver(action,label,methodChannel)
                 context.registerReceiver(
-                    this.broadcastReceiver, intentFilter,
-                    Context.RECEIVER_EXPORTED,
+                    this.broadcastReceiver, intentFilter
                 )
                 logInfo("${TAG}：扫码事件广播已监听...[$action]")
             }
