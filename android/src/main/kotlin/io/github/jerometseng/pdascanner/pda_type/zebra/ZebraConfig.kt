@@ -123,7 +123,7 @@ class ZebraConfig (
                 }
             }
         } catch (ex: Exception) {
-            logError(ex.toString())
+            logError("onDataError：$ex")
         }
     }
 
@@ -134,13 +134,13 @@ class ZebraConfig (
                 when (statusData.state) {
                     StatusData.ScannerStates.IDLE -> {
                         Thread.sleep(100)
-                        this.scanner!!.read()
+                        this.scanner?.read()
                     }
                     else -> {}
                 }
             }
         } catch (ex: Exception) {
-            logError(ex.toString())
+            logError("onStatusError：$ex")
         }
     }
 
@@ -194,17 +194,17 @@ class ZebraConfig (
     private fun initScanner(){
         try {
             if(scanner == null){
-                scanner = barcodeManager!!.getDevice(BarcodeManager.DeviceIdentifier.DEFAULT)
+                scanner = barcodeManager?.getDevice(BarcodeManager.DeviceIdentifier.DEFAULT)
                 if(scanner == null){
-                    logInfo("扫描仪获取失败！！！")
+                    logInfo("扫描仪获取失败！")
                 }else{
-                    logInfo("扫描仪获取成功！！！")
+                    logInfo("扫描仪获取成功！")
                 }
                 if(scanner != null){
-                    scanner!!.addDataListener(this)
-                    scanner!!.addStatusListener(this)
+                    scanner?.addDataListener(this)
+                    scanner?.addStatusListener(this)
                     try{
-                        scanner!!.enable()
+                        scanner?.enable()
                         logInfo("ZEBRA：数据监听器和状态监听器添加成功！")
                     }catch (e:ScannerException){
                         logError("ZEBRA：initScanner ${e.message}")

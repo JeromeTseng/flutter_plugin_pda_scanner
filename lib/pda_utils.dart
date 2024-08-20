@@ -24,7 +24,7 @@ abstract class PdaUtils {
   static bool _initFlag = false;
 
   // 日志标签
-  static const String logTag = "PdaUtils";
+  static const String logTag = "PDA_SCANNER#";
 
   // 扫码触发的回调函数
   static final Map<String, Callback> _callback = {};

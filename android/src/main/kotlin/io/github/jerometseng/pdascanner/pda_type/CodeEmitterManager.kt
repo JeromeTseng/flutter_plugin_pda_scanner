@@ -56,7 +56,7 @@ abstract class CodeEmitterManager(private val context: Context,private val metho
         const val ERROR_SOUND = "errorSound"
 
         // 设置日志标识
-        const val LOG_TAG = "JEROME#"
+        const val LOG_TAG = "PDA_SCANNER#"
 
         /**
          * 初始化扫描管理器
