@@ -1,11 +1,11 @@
 <img src="./photos/LOGO.png" alt="flutter_plugin_pda_scanner" style="zoom: 67%;" />
 
-<h2 align="center" style="font-weight: bold;">flutter_plugin_pda_scanner v2.0.2</h1>
+<h2 align="center" style="font-weight: bold;">flutter_plugin_pda_scanner v2.0.3</h1>
 
 <h4 align="center">一款基于Flutter开发的支持多种PDA扫码的插件</h4>
 
 <p align="center">
-	<a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner"><img src="https://img.shields.io/badge/pda_scanner-v2.0.2-brightgreen.svg"></a>
+	<a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner"><img src="https://img.shields.io/badge/pda_scanner-v2.0.3-brightgreen.svg"></a>
 	<a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/LICENSE"><img src="https://img.shields.io/github/license/mashape/apistatus.svg"></a>
     <a href=""><img src="https://img.shields.io/badge/微信-1340756449-blue.svg"></a>
     <a href="https://gitee.com/zengxingshun"><img src="https://img.shields.io/badge/author-Jerome-08979c"></a>
@@ -44,7 +44,7 @@
 同时支持根据广播行为手动注册广播监听PDA扫码
 ```
 
-**_可先 [下载](https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/releases/download/V2.0.2/pda_scanner-V2.0.2.apk) 示例 app 进行测试，如需要集成 native 方式扫码的 PDA，请加我微信反馈，欢迎 fork 及 pr 。_**
+**_可先 [下载](https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/releases/download/V2.0.3/pda_scanner-V2.0.3.apk) 示例 app 进行测试，如需要集成 native 方式扫码的 PDA，请加我微信反馈，欢迎 fork 及 pr 。_**
 
 | <img src="./photos/home.jpg" style="zoom: 67%;" /> | <img src="./photos/model_page.jpg" style="zoom: 67%;" /> | <img src="./photos/set_broadcast.jpg" style="zoom: 67%;" /> |
 | :------------------------------------------------: | :------------------------------------------------------: | :---------------------------------------------------------: |
