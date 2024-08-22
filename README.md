@@ -1,7 +1,5 @@
 <img src="./photos/LOGO.png" alt="flutter_plugin_pda_scanner" style="zoom: 67%;" />
 
-<h1 align="center">🏅🏅🏅</h1>
-
 <h2 align="center" style="font-weight: bold;">flutter_plugin_pda_scanner v2.0.2</h1>
 
 <h4 align="center">一款基于Flutter开发的支持多种PDA扫码的插件</h4>
