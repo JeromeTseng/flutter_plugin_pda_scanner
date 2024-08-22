@@ -11,8 +11,25 @@
     <a href="https://gitee.com/zengxingshun"><img src="https://img.shields.io/badge/author-Jerome-08979c"></a>
     <a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/LICENSE"><img src="https://img.shields.io/badge/language-dart%20/%20kotlin-red.svg"></a>
 </p>
-
 # 一、介绍 ✨
+
+这是一款专为Flutter开发者设计的PDA扫码插件，支持多种品牌和型号的PDA设备，包括但不限于斑马、海康威视、远望谷、思必拓和东集seuic等。插件提供了自动和手动两种初始化方式，以适应不同的开发需求和场景。
+
+### 特点：
+
+- **多设备支持**：经过测试，兼容多款主流PDA设备。
+- **广播监听**：支持通过广播行为手动注册监听PDA扫码。
+- **事件监听**：通过tag区分，可以同时监听多个扫码事件。
+- **API丰富**：提供多种API，包括初始化、监听、关闭扫码器等。
+- **声音提示**：包含成功、失败的声音提示功能。
+
+### 使用方法：
+
+1. **安装**：通过`pubspec.yaml`添加依赖。
+2. **导入**：在Flutter项目中导入`pda_scanner`包。
+3. **初始化**：在`main`函数中初始化插件，并使用`await`等待完成。
+4. **监听事件**：通过`on`方法设置事件监听，使用tag作为标识。
+5. **取消监听**：使用`off`方法取消特定tag的监听或`offAll`取消所有监听。
 
 已测试的型号有：	
 
