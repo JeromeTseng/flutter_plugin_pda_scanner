@@ -11,6 +11,7 @@
     <a href="https://gitee.com/zengxingshun"><img src="https://img.shields.io/badge/author-Jerome-08979c"></a>
     <a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/LICENSE"><img src="https://img.shields.io/badge/language-dart%20/%20kotlin-red.svg"></a>
 </p>
+
 # 一、介绍 ✨
 
 这是一款专为Flutter开发者设计的PDA扫码插件，支持多种品牌和型号的PDA设备，包括但不限于斑马、海康威视、远望谷、思必拓和东集seuic等。插件提供了自动和手动两种初始化方式，以适应不同的开发需求和场景。
