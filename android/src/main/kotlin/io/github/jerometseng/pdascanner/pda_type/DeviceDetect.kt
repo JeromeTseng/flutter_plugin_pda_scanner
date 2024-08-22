@@ -2,6 +2,10 @@ package io.github.jerometseng.pdascanner.pda_type
 
 import android.os.Build
 
+/**
+ * 设备检测
+ * @author 曾兴顺
+ */
 class DeviceDetect {
 
     companion object {
@@ -52,7 +56,8 @@ class DeviceDetect {
          */
         fun isHikvisionDevice(): Boolean {
             return mutableListOf(
-                "DS-MDT201-5G-YC", "DS-MDT201", "DSMDT201"
+                "DS-MDT201-5G-YC", "DS-MDT201", "DSMDT201",
+                "DS-MDT006", "DS-MDT200", "DS-MDT102"
             ).contains(Build.MODEL.uppercase())
         }
 
@@ -61,7 +66,8 @@ class DeviceDetect {
          */
         fun isSeuicCruise5G(): Boolean {
             return "SEUIC" == Build.BRAND.uppercase() && mutableListOf(
-                "CRUISE2 5G"
+                "CRUISE2 5G", "CRUISE2", "CRUISE Ge2", "CRUISE Ge",
+                "CRUISE2-HC", "CRUISE2 5G-HC", "CRUISE Ge-HC"
             ).contains(Build.MODEL.uppercase())
         }
 
