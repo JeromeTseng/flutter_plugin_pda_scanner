@@ -1,8 +1,8 @@
 <img src="./photos/LOGO.png" alt="flutter_plugin_pda_scanner" style="zoom: 67%;" />
 
-<h2 align="center" style="font-weight: bold;margin-top:10px">flutter_plugin_pda_scanner v3.0.0</h1>
+<h2 align="center" style="font-weight: bold;margin-top:-20px">flutter_plugin_pda_scanner v3.0.0</h1>
 
-<h4 align="center" style="margin-top:10px">一款基于Flutter开发的支持多种PDA扫码的插件</h4>
+<h4 align="center" style="margin-top: -5px">一款基于Flutter开发的支持多种PDA扫码的插件</h4>
 
 <p align="center">
 	<a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner"><img src="https://img.shields.io/badge/pda_scanner-v3.0.0-brightgreen.svg" alt=""></a>
