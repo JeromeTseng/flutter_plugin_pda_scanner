@@ -3,14 +3,12 @@ package io.github.jerometseng.pdascanner.pda_type
 import android.content.Context
 import android.util.Log
 import io.flutter.plugin.common.MethodChannel
+import io.github.jerometseng.pdascanner.pda_type.common.CommonConfig
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import io.github.jerometseng.pdascanner.pda_type.hikivision.HikvisionConfig
-import io.github.jerometseng.pdascanner.pda_type.invengo.InvengoConfig
-import io.github.jerometseng.pdascanner.pda_type.seuic.Cruise5GConfig
 import io.github.jerometseng.pdascanner.pda_type.speedata.SpeedataConfig
 import io.github.jerometseng.pdascanner.pda_type.zebra.ZebraConfig
 import java.util.Date
@@ -19,11 +17,11 @@ import java.util.Date
  * 扫码管理器
  * @author 曾兴顺  2024/01/16
  */
-abstract class CodeEmitterManager(private val context: Context,private val methodChannel: MethodChannel) {
+abstract class CodeEmitterManager(private val methodChannel: MethodChannel) {
 
     companion object {
         // 与 flutter 通信的管道
-        const val CODE_EMITTER_CHANNEL = "org.jerome/pda_scanner"
+        const val CODE_EMITTER_CHANNEL = "io.github.jerometseng/pda_scanner"
 
         // 与 flutter 通信的方法 发送接收到的条码数据
         const val CODE_EMITTER_METHOD = "sendBarcodeToFlutter"
@@ -60,12 +58,13 @@ abstract class CodeEmitterManager(private val context: Context,private val metho
 
         /**
          * 初始化扫描管理器
-         * @author 曾兴顺  2024/01/16
+         * 如果型号匹配 则加载对应配置，如果没有对应型号，则默认加载通用广播
+         * @author 曾兴顺  2024/08/22
          */
         fun initCodeEmitterManager(
             context: Context,
             methodChannel: MethodChannel,
-        ): CodeEmitterManager? {
+        ): CodeEmitterManager {
             // 初始化扫码器
             return if (DeviceDetect.isSpeedataDevice()) {
                 // 思必拓扫码器
@@ -73,17 +72,9 @@ abstract class CodeEmitterManager(private val context: Context,private val metho
             } else if (DeviceDetect.isZebraDevice()) {
                 // 斑马扫码器
                 ZebraConfig(context, methodChannel)
-            } else if (DeviceDetect.isInvengoDevice()) {
-                // 远望谷扫码器
-                InvengoConfig(context, methodChannel)
-            } else if (DeviceDetect.isHikvisionDevice()) {
-                // 海康威视扫码器
-                HikvisionConfig(context, methodChannel)
-            } else if(DeviceDetect.isSeuicCruise5G()){
-                // 东集酷路泽扫码器
-                Cruise5GConfig(context,methodChannel)
-            } else {
-                null
+            }else {
+                // 通用配置扫码器
+                CommonConfig(context,methodChannel)
             }
         }
 

@@ -12,13 +12,12 @@ class SpeedataConfig(
     // 与flutter通信的通道
     private val methodChannel: MethodChannel
 
-) : CodeEmitterManager(context,methodChannel) {
+) : CodeEmitterManager(methodChannel) {
 
-    private val TAG = "SPEEDATA"
+    private val logTag = "SPEEDATA"
 
     // 是否要触发扫码
     var flag: Boolean = false
-
 
     // Speedata扫码器
     private lateinit var scanCode: ScanDecode
@@ -44,9 +43,9 @@ class SpeedataConfig(
                 }
 
             })
-            logInfo("$TAG：扫码监听器已添加...")
+            logInfo("$logTag：扫码监听器已添加...")
         }catch (ex:Exception){
-            logError("$TAG：扫码器开启失败：$ex")
+            logError("$logTag：扫码器开启失败：$ex")
         }
     }
 
@@ -60,7 +59,7 @@ class SpeedataConfig(
 
     override fun close() {
         this.scanCode.stopScan()
-        log("info","$TAG：扫码事件已停止")
+        log("info","$logTag：扫码事件已停止")
     }
 
 }

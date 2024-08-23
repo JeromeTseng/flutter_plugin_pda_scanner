@@ -1,22 +1,22 @@
 <img src="./photos/LOGO.png" alt="flutter_plugin_pda_scanner" style="zoom: 67%;" />
 
-<h2 align="center" style="font-weight: bold;">flutter_plugin_pda_scanner v2.0.3</h1>
+<h2 align="center" style="font-weight: bold;margin-top:10px">flutter_plugin_pda_scanner v3.0.0</h1>
 
-<h4 align="center">一款基于Flutter开发的支持多种PDA扫码的插件</h4>
+<h4 align="center" style="margin-top:10px">一款基于Flutter开发的支持多种PDA扫码的插件</h4>
 
 <p align="center">
-	<a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner"><img src="https://img.shields.io/badge/pda_scanner-v2.0.3-brightgreen.svg"></a>
-	<a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/LICENSE"><img src="https://img.shields.io/github/license/mashape/apistatus.svg"></a>
-    <a href=""><img src="https://img.shields.io/badge/微信-1340756449-blue.svg"></a>
-    <a href="https://gitee.com/zengxingshun"><img src="https://img.shields.io/badge/author-Jerome-08979c"></a>
-    <a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/LICENSE"><img src="https://img.shields.io/badge/language-dart%20/%20kotlin-red.svg"></a>
+	<a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner"><img src="https://img.shields.io/badge/pda_scanner-v3.0.0-brightgreen.svg" alt=""></a>
+	<a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/LICENSE"><img src="https://img.shields.io/github/license/mashape/apistatus.svg" alt=""></a>
+    <a href=""><img src="https://img.shields.io/badge/微信-1340756449-blue.svg" alt=""></a>
+    <a href="https://gitee.com/zengxingshun"><img src="https://img.shields.io/badge/author-Jerome-08979c" alt=""></a>
+    <a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/LICENSE"><img src="https://img.shields.io/badge/language-dart%20/%20kotlin-red.svg" alt=""></a>
 </p>
 
 # 一、介绍 ✨
 
 这是一款专为Flutter开发者设计的PDA扫码插件，支持多种品牌和型号的PDA设备，包括但不限于斑马、海康威视、远望谷、思必拓和东集seuic等。插件提供了自动和手动两种初始化方式，以适应不同的开发需求和场景。
 
-### 特点：
+### 🔹特点：
 
 - **多设备支持**：经过测试，兼容多款主流PDA设备。
 - **广播监听**：支持通过广播行为手动注册监听PDA扫码。
@@ -24,7 +24,7 @@
 - **API丰富**：提供多种API，包括初始化、监听、关闭扫码器等。
 - **声音提示**：包含成功、失败的声音提示功能。
 
-### 使用方法：
+### 🔹使用方法：
 
 1. **安装**：通过`pubspec.yaml`添加依赖。
 2. **导入**：在Flutter项目中导入`pda_scanner`包。
@@ -44,7 +44,7 @@
 同时支持根据广播行为手动注册广播监听PDA扫码
 ```
 
-**_可先 [下载](https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/releases/download/V2.0.3/pda_scanner-V2.0.3.apk) 示例 app 进行测试，如需要集成 native 方式扫码的 PDA，请加我微信反馈，欢迎 fork 及 pr 。_**
+**_可先 [下载](https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/releases/download/V3.0.0/pda_scanner-V3.0.0.apk) 示例 app 进行测试，如需要集成 native 方式扫码的 PDA，请加我微信反馈，欢迎 fork 及 pr 。_**
 
 | <img src="./photos/home.jpg" style="zoom: 67%;" /> | <img src="./photos/model_page.jpg" style="zoom: 67%;" /> | <img src="./photos/set_broadcast.jpg" style="zoom: 67%;" /> |
 | :------------------------------------------------: | :------------------------------------------------------: | :---------------------------------------------------------: |
@@ -106,27 +106,29 @@ PdaUtils.on("tag", (barcode) {
 PdaUtils.off("tag");
 ```
 
-**_这里的tag相当于一个id，每个界面定义一个唯一的标识，相当于标记哪个界面监听了扫码事件，页面销毁时也根据这个id取消监听，避免内存泄漏。_**
+🔷 **_这里的tag相当于一个id，每个界面定义一个唯一的标识，相当于标记哪个界面监听了扫码事件，页面销毁时也根据这个id取消监听，避免内存泄漏。_**
+
+🔷 **_条码内容会经过处理，首尾的空白字符（换行符、制表符、空格）都会被替换成空字符串，但是字符中间的空白字符不会替换_**
 
 ## 4. Api详情
 
-api | 说明 | 调用示例
------ | ----- | -----
-init|<div style="width:220px">初始化PDA插件，在runApp方法之前调用，注意：该方法内有大量异步操作，请结合await等待init操作完成。</div>|await PdaUtils.init();
-initByCustom|<div style="width:220px">手动初始化PDA插件<br>action：广播行为<br>label：扫码内容获取标签</div>|await PdaUtils.initByCustom(action,label);
-getInitLogList|获取初始化日志 |PdaUtils.getInitLogList();
-isThisPDASupported|该PDA设备是否支持扫码 |PdaUtils.isThisPDASupported();
-getPDAModel|获取设备型号名称|PdaUtils.getPDAModel();
-getPlatformVersion|获取安卓系统版本|PdaUtils.getPlatformVersion();
-on|<div style="width:220px">监听扫码事件，每次扫码事件传入tag字符串作为独立监听标识</div>|PdaUtils.on('tag',(barcode){...});
-getOnTagList|获取订阅的tag标识列表|PdaUtils.getOnTagList();
-off|取消对tag上的监听|PdaUtils.off('tag');
-offAll|取消所有监听事件|PdaUtils.offAll();
-errorSoundDudu|嘟嘟警告提示音|PdaUtils.errorSoundDudu();
-successSoundHumanVoice|扫码成功的人声提示|PdaUtils.successSoundHumanVoice();
-errorSoundHumanVoice|<div style="width:220px">扫码失败的人声提示，可传入bool类型参数playErrorSoundDudu，即播放失败人声时是否播放嘟嘟警告提示音，该参数默认为true</div>|PdaUtils.errorSoundHumanVoice();
-navigateToSystemHome|<div style="width:220px">返回系统桌面，原生返回系统桌面后再进入app时会重启app，返回系统桌面时拦截调用该方法后不会有该情况</div>|PdaUtils.navigateToSystemHome();
-closeScanner|手动关闭扫码器|PdaUtils.closeScanner();
+| api                    | 说明                                                                                                    | 调用示例                                       |
+|------------------------|-------------------------------------------------------------------------------------------------------|--------------------------------------------|
+| init                   | <div style="width:220px">初始化PDA插件，在runApp方法之前调用，注意：该方法内有大量异步操作，请结合await等待init操作完成。</div>              | await PdaUtils.init();                     |
+| initByCustom           | <div style="width:220px">手动初始化PDA插件<br>action：广播行为<br>label：扫码内容获取标签</div>                            | await PdaUtils.initByCustom(action,label); |
+| getInitLogList         | 获取初始化日志                                                                                               | PdaUtils.getInitLogList();                 |
+| isThisPDASupported     | 该PDA设备是否支持扫码                                                                                          | PdaUtils.isThisPDASupported();             |
+| getPDAModel            | 获取设备型号名称                                                                                              | PdaUtils.getPDAModel();                    |
+| getPlatformVersion     | 获取安卓系统版本                                                                                              | PdaUtils.getPlatformVersion();             |
+| on                     | <div style="width:220px">监听扫码事件，每次扫码事件传入tag字符串作为独立监听标识</div>                                          | PdaUtils.on('tag',(barcode){...});         |
+| getOnTagList           | 获取订阅的tag标识列表                                                                                          | PdaUtils.getOnTagList();                   |
+| off                    | 取消对tag上的监听                                                                                            | PdaUtils.off('tag');                       |
+| offAll                 | 取消所有监听事件                                                                                              | PdaUtils.offAll();                         |
+| errorSoundDudu         | 嘟嘟警告提示音                                                                                               | PdaUtils.errorSoundDudu();                 |
+| successSoundHumanVoice | 扫码成功的人声提示                                                                                             | PdaUtils.successSoundHumanVoice();         |
+| errorSoundHumanVoice   | <div style="width:220px">扫码失败的人声提示，可传入bool类型参数playErrorSoundDudu，即播放失败人声时是否播放嘟嘟警告提示音，该参数默认为true</div> | PdaUtils.errorSoundHumanVoice();           |
+| navigateToSystemHome   | <div style="width:220px">返回系统桌面，原生返回系统桌面后再进入app时会重启app，返回系统桌面时拦截调用该方法后不会有该情况</div>                    | PdaUtils.navigateToSystemHome();           |
+| closeScanner           | 手动关闭扫码器                                                                                               | PdaUtils.closeScanner();                   |
 
 ## 5. PDA扫码示例
 

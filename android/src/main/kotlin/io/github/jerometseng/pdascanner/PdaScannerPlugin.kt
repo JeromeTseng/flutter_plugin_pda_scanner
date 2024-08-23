@@ -22,6 +22,7 @@ import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.IS
 import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.LOG_TAG
 import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.NAVIGATE_TO_SYSTEM_HOME
 import io.github.jerometseng.pdascanner.pda_type.custom.CustomConfig
+import io.github.jerometseng.pdascanner.util.DataUtil
 import io.github.jerometseng.pdascanner.util.NotificationUtil
 
 
@@ -68,10 +69,11 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
                     INIT_SCANNER_CUSTOM -> {
                         val action = methodCall.argument<String>("action")
                         val label = methodCall.argument<String>("label")
-                        if(action.isNullOrBlank() && label.isNullOrBlank()){
+                        val dataType = methodCall.argument<String>("dataType") ?: "STRING"
+                        if (action.isNullOrBlank() && label.isNullOrBlank()) {
                             Log.e(LOG_TAG, "请传入正确的action地址和正确的label标签")
-                        }else{
-                            result.success(initScannerCustom(action!!,label!!))
+                        } else {
+                            result.success(initScannerCustom(action!!, label!!, dataType))
                         }
                     }
                     // 关闭扫描器
@@ -160,12 +162,18 @@ class PdaScannerPlugin : FlutterPlugin, ActivityAware {
     }
 
     // 自定义扫描器初始化(广播)
-    private fun initScannerCustom(action:String,label:String): Boolean {
+    private fun initScannerCustom(action: String, label: String, dataTypeStr: String): Boolean {
         if (activity?.applicationContext != null) {
             // 初始化扫码管理器
             return try {
                 this.codeEmitterManager?.close()
-                codeEmitterManager = CustomConfig(action,label,activity!!,methodChannel!!)
+                codeEmitterManager = CustomConfig(
+                    action,
+                    label,
+                    activity!!,
+                    methodChannel!!,
+                    DataUtil.IntentDataType.valueOf(dataTypeStr)
+                )
                 // 开启扫码器
                 codeEmitterManager?.open()
                 initFlag = true

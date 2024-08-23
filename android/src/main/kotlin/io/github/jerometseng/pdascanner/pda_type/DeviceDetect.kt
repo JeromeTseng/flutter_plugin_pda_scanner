@@ -3,18 +3,31 @@ package io.github.jerometseng.pdascanner.pda_type
 import android.os.Build
 
 /**
- * 设备检测
+ * 非广播类型PDA设备检测
  * @author 曾兴顺
  */
 class DeviceDetect {
 
     companion object {
+
+        /**
+         * key：品牌名称 与 Build.BRAND 对应
+         * value：型号集合，与 Build.MODEL 对应
+         * 请全部转成大写
+         */
+        private val testedDevice = mapOf(
+            /* 远望谷 */
+            "ALPS" to listOf("K71V1_64_BSP"),
+            /* 东集 */
+            "SEUIC" to listOf("CRUISE2 5G", "CRUISE2", "CRUISE GE2", "CRUISE GE")
+        )
+
         /**
          * 判断是否为 Speedata 类型的设备
          * @author 曾兴顺  2024/02/24
          */
         fun isSpeedataDevice(): Boolean {
-            return mutableListOf(
+            return listOf(
                 "SC40G", "FG40-4G/5G", "SC55G", "FG50-4G/5G",
                 "HT35", "SD60", "FG60-4G/5G", "ST55G", "FG50RT-4G/5G",
                 "ST55RT", "FG60RT-4G/5G", "KT50-UHF", "SD50RT", "T60",
@@ -27,7 +40,7 @@ class DeviceDetect {
          * @author 曾兴顺  2024/02/24
          */
         fun isZebraDevice(): Boolean {
-            return "ZEBRA" == Build.BRAND.uppercase() && mutableListOf(
+            return "ZEBRA" == Build.BRAND.uppercase() && listOf(
                 "CC5000-10", "CC600/CC6000", "EC30", "EC50/EC55",
                 "ET40", "ET45", "ET51", "ET56", "ET5X", "MC18", "MC20",
                 "MC2200", "MC27", "MC32", "MC33", "MC33AX", "MC3300X", "MC3330 RFID",
@@ -41,35 +54,16 @@ class DeviceDetect {
         }
 
         /**
-         * 判断是否为 Invengo 类型的设备
-         * @author 曾兴顺  2024/02/24
+         * 已测试过的设备
+         * @author 曾兴顺
          */
-        fun isInvengoDevice(): Boolean {
-            return mutableListOf(
-                "K71V1_64_BSP"
-            ).contains(Build.MODEL.uppercase())
+        private fun testedDevice(): Boolean {
+            val brand = Build.BRAND.uppercase()
+            val model = Build.MODEL.uppercase()
+            val testedModels = testedDevice[brand]
+            return testedModels != null && testedModels.contains(model)
         }
 
-        /**
-         * 判断是否为 海康类型的设备
-         * @author 曾兴顺  2024/02/24
-         */
-        fun isHikvisionDevice(): Boolean {
-            return mutableListOf(
-                "DS-MDT201-5G-YC", "DS-MDT201", "DSMDT201",
-                "DS-MDT006", "DS-MDT200", "DS-MDT102"
-            ).contains(Build.MODEL.uppercase())
-        }
-
-        /**
-         * 是否为东集Cruise5G设备
-         */
-        fun isSeuicCruise5G(): Boolean {
-            return "SEUIC" == Build.BRAND.uppercase() && mutableListOf(
-                "CRUISE2 5G", "CRUISE2", "CRUISE Ge2", "CRUISE Ge",
-                "CRUISE2-HC", "CRUISE2 5G-HC", "CRUISE Ge-HC"
-            ).contains(Build.MODEL.uppercase())
-        }
 
         /**
          * 判断设备是否支持扫码
@@ -78,9 +72,7 @@ class DeviceDetect {
         fun isThisDeviceSupported(): Boolean {
             return isSpeedataDevice() ||
                     isZebraDevice() ||
-                    isInvengoDevice() ||
-                    isHikvisionDevice() ||
-                    isSeuicCruise5G()
+                    testedDevice()
         }
     }
 }

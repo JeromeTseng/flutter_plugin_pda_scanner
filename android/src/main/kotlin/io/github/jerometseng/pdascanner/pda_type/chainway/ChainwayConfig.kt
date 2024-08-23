@@ -14,7 +14,7 @@ class ChainwayConfig(
     private val context: Context,
     // 与flutter通信的通道
     private val methodChannel: MethodChannel
-) : CodeEmitterManager(context,methodChannel) {
+) : CodeEmitterManager(methodChannel) {
     private val TAG = "CHAINWAY"
 
 

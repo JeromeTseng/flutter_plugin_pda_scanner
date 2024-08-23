@@ -134,7 +134,7 @@ class _HomeBodyState extends State<HomeBody> {
                                   if (action.isNotEmpty && label.isNotEmpty) {
                                     box?.write("action", action);
                                     box?.write("label", label);
-                                    PdaUtils.initByCustom(action, label);
+                                    PdaUtils.initByCustom(action, label,dataType: PdaDataType.STRING);
                                     Get.back();
                                   } else {
                                     BrnToast.show(
@@ -359,15 +359,10 @@ class _BarcodeListViewState extends State<BarcodeListView> {
         : ListView.builder(
             controller: controller,
             itemCount: barcodes.length,
-            itemExtent: 70,
             itemBuilder: (ctx, index) {
               Map<String, String> barcode = barcodes[index];
               return ListTile(
-                title: Text(
-                  "条码：${barcode['barcode']}",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
+                title: Text("条码：${barcode['barcode']}"),
                 subtitle: Text("扫码时间：${barcode['time']}"),
               );
             },

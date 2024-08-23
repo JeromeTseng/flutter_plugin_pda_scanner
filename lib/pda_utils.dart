@@ -12,7 +12,8 @@ typedef Callback = void Function(String barcode);
 /// PDA工具类
 abstract class PdaUtils {
   // 方法通道
-  static const _methodChannel = MethodChannel("org.jerome/pda_scanner");
+  static const _methodChannel =
+      MethodChannel("io.github.jerometseng/pda_scanner");
 
   // 扫码成功音频资源
   static final AudioPlayer _scanSuccessAudioPlayer = AudioPlayer();
@@ -48,7 +49,7 @@ abstract class PdaUtils {
     bool? initSuccess = await _methodChannel.invokeMethod<bool>('initScanner');
     if (initSuccess ?? false) {
       _initFlag = true;
-      log('PDA扫码器初始化结束', name: logTag);
+      log('PDA扫码器初始化完成', name: logTag);
     }
     // 设置音频
     _loadScanAudioPlayer();
@@ -57,7 +58,11 @@ abstract class PdaUtils {
   /// 自定义初始化扫码枪
   /// action: 广播行为
   /// label: 获取数据的标签
-  static Future<void> initByCustom(String action, String label) async {
+  static Future<void> initByCustom(
+    String action,
+    String label, {
+    PdaDataType dataType = PdaDataType.STRING,
+  }) async {
     WidgetsFlutterBinding.ensureInitialized();
     if (!Platform.isAndroid) {
       throw Exception(['PDA插件只支持安卓系统设备！']);
@@ -70,11 +75,12 @@ abstract class PdaUtils {
       {
         'action': action,
         'label': label,
+        'dataType':dataType.name
       },
     );
     if (initSuccess ?? false) {
       _initFlag = true;
-      log('PDA扫码器初始化结束', name: logTag);
+      log('PDA扫码器初始化完成', name: logTag);
     }
     // 设置音频
     _loadScanAudioPlayer();
@@ -118,7 +124,9 @@ abstract class PdaUtils {
   /// 检测是否调用过初始化方法
   static void _checkIsInit() {
     if (!_initFlag) {
-      throw Exception(['请在合适的时机使用\nPdaUtils.init()\t或\nPdaUtils.initByCustom(action,label)\n方法初始化 pda_scanner 插件！']);
+      throw Exception([
+        '请在合适的时机使用\nPdaUtils.init()\t或\nPdaUtils.initByCustom(action,label)\n方法初始化 pda_scanner 插件！'
+      ]);
     }
   }
 
@@ -225,7 +233,7 @@ abstract class PdaUtils {
   }
 
   /// 关闭扫码器
-  static void closeScanner(){
+  static void closeScanner() {
     _methodChannel.invokeMethod('closeScanner');
   }
 }
@@ -251,3 +259,5 @@ class InitLogModel {
     return '\n类型：$_type\n内容：$_content\n时间：${DateTime.fromMillisecondsSinceEpoch(_time ?? 0)}';
   }
 }
+
+enum PdaDataType { STRING, BYTE_ARRAY }

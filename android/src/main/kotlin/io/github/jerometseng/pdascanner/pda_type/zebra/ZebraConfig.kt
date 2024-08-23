@@ -29,14 +29,14 @@ import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager
 class ZebraConfig (
     private val context: Context,
     private val methodChannel: MethodChannel
-): CodeEmitterManager(context,methodChannel),
+): CodeEmitterManager(methodChannel),
     EMDKManager.EMDKListener,
     Scanner.DataListener,
     Scanner.StatusListener,
     ScannerConnectionListener {
 
 
-    private val tag = "ZEBRA"
+    private val logTag = "ZEBRA"
 
     // emdk 管理器
     private var emdkManager: EMDKManager? = null
@@ -52,12 +52,12 @@ class ZebraConfig (
         try {
             val emdkResults = EMDKManager.getEMDKManager(context, this)
             if (emdkResults.statusCode == EMDKResults.STATUS_CODE.SUCCESS) {
-                logInfo("${tag}：EMDK实例获取成功！")
+                logInfo("${logTag}：EMDK实例获取成功！")
             }else{
-                logError("${tag}：获取EMDK实例失败！")
+                logError("${logTag}：获取EMDK实例失败！")
             }
         } catch (ex: Exception) {
-            logError("${tag}：获取EMDK实例错误: $ex")
+            logError("${logTag}：获取EMDK实例错误: $ex")
         }
     }
 
@@ -75,15 +75,17 @@ class ZebraConfig (
                 this.startScan()
             }
         } catch (ex: Exception) {
-            logError("${tag}：EMDKListener.onOpened: $ex")
+            logError("${logTag}：EMDKListener.onOpened: $ex")
         }
 
     }
 
     override fun detach() {
+        this.close()
     }
 
     override fun reConnect() {
+        this.open()
     }
 
     override fun close() {
@@ -91,7 +93,7 @@ class ZebraConfig (
         this.barcodeManager?.removeConnectionListener(this)
         this.barcodeManager = null
         this.emdkManager?.release(EMDKManager.FEATURE_TYPE.BARCODE)
-        log("info","$tag：扫码事件已停止...")
+        log("info","$logTag：扫码事件已停止...")
     }
 
 
@@ -101,9 +103,9 @@ class ZebraConfig (
             this.barcodeManager = null
             this.emdkManager?.release(EMDKManager.FEATURE_TYPE.BARCODE)
             this.emdkManager = null
-            logInfo("${tag}：资源已释放")
+            logInfo("${logTag}：资源已释放")
         } catch (ex: Exception) {
-            logError("${tag}：onClosed时发生错误！${ex.message}")
+            logError("${logTag}：onClosed时发生错误！${ex.message}")
         }
     }
     // =======================
