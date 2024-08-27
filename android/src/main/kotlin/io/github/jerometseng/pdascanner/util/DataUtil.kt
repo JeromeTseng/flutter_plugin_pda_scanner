@@ -3,7 +3,7 @@ package io.github.jerometseng.pdascanner.util
 import android.content.Intent
 import android.util.Log
 import io.flutter.plugin.common.MethodChannel
-import io.github.jerometseng.pdascanner.core.BroadCastTag
+import io.github.jerometseng.pdascanner.core.BroadcastTag
 import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager
 import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager.Companion.LOG_TAG
 import java.nio.charset.Charset
@@ -33,7 +33,7 @@ class DataUtil {
          */
         fun sendDataFromIntent(
             intent: Intent?,
-            broadCastTag: List<BroadCastTag>?,
+            broadCastTag: List<BroadcastTag>?,
             methodChannel: MethodChannel
         ) {
             val action = intent?.action ?: "未知广播"

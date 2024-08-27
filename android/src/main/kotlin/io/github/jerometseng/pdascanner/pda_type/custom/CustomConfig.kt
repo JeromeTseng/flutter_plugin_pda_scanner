@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
 import io.flutter.plugin.common.MethodChannel
-import io.github.jerometseng.pdascanner.core.BroadCastTag
+import io.github.jerometseng.pdascanner.core.BroadcastTag
 import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager
 import io.github.jerometseng.pdascanner.util.DataUtil
 
@@ -35,7 +35,7 @@ class CustomConfig(
             val intentFilter = IntentFilter()
             intentFilter.addAction(action)
             this.broadcastReceiver =
-                CustomBroadCastReceiver(listOf(BroadCastTag(label,dataType)), methodChannel)
+                CustomBroadcastReceiver(listOf(BroadcastTag(label,dataType)), methodChannel)
             context.registerReceiver(
                 this.broadcastReceiver, intentFilter
             )

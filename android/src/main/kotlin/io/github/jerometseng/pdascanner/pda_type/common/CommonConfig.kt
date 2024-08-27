@@ -29,7 +29,7 @@ class CommonConfig(
                 broadCastActionAndDataLabelMap.keys.forEach{
                     intentFilter.addAction(it)
                 }
-                this.broadcastReceiver = CommonBroadCastReceiver(methodChannel)
+                this.broadcastReceiver = CommonBroadcastReceiver(methodChannel)
                 context.registerReceiver(
                     this.broadcastReceiver, intentFilter
                 )

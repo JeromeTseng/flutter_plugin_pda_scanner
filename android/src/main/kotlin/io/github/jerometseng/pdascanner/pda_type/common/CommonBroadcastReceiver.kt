@@ -11,7 +11,7 @@ import io.github.jerometseng.pdascanner.util.DataUtil
  * 通用广播
  * @author 曾兴顺
  */
-class CommonBroadCastReceiver(
+class CommonBroadcastReceiver(
     private val methodChannel: MethodChannel
 ) : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
