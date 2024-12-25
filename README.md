@@ -1,11 +1,11 @@
-<img src="./photos/LOGO.png" alt="flutter_plugin_pda_scanner" style="zoom: 67%;" />
+<img src="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/raw/master/photos/LOGO.png" alt="flutter_plugin_pda_scanner" style="zoom: 67%;" />
 
-<h2 align="center" style="font-weight: bold;margin-top:-20px">flutter_plugin_pda_scanner v3.0.2</h2>
+<h2 align="center" style="font-weight: bold;margin-top:-20px">flutter_plugin_pda_scanner v3.0.4</h2>
 
 <h4 align="center" style="margin-top: -5px;">一款基于Flutter开发的支持多种PDA扫码的插件</h4>
 
 <p align="center">
-	<a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner"><img src="https://img.shields.io/badge/pda_scanner-v3.0.2-brightgreen.svg" alt=""></a>
+	<a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner"><img src="https://img.shields.io/badge/pda_scanner-v3.0.4-brightgreen.svg" alt=""></a>
 	<a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/LICENSE"><img src="https://img.shields.io/github/license/mashape/apistatus.svg" alt=""></a>
     <a href=""><img src="https://img.shields.io/badge/微信-1340756449-blue.svg" alt=""></a>
     <a href="https://gitee.com/zengxingshun"><img src="https://img.shields.io/badge/author-Jerome-08979c" alt=""></a>
@@ -29,7 +29,7 @@
 ### 🔹使用方法：
 
 1. **安装**：通过`pubspec.yaml`添加依赖。
-2. **导入**：在Flutter项目中导入`pda_scanner`包。
+2. **导入**：在Flutter项目中导入`flutter_plugin_pda_scanner`包。
 3. **初始化**：在`main`函数中初始化插件，并使用`await`等待完成。
 4. **监听事件**：通过`on`方法设置事件监听，使用tag作为标识。
 5. **取消监听**：使用`off`方法取消特定tag的监听或`offAll`取消所有监听。
@@ -46,9 +46,9 @@
 同时支持根据广播行为手动注册广播监听PDA扫码
 ```
 
-**_可先 [下载](https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/releases/download/V3.0.2/pda_scanner-V3.0.2.apk) 示例 app 进行测试，如需要集成 native 方式扫码的 PDA，请加我微信反馈，欢迎 fork 及 pr 。_**
+**_可先 [下载](https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/releases/download/V3.0.4/pda_scanner-V3.0.4.apk) 示例 app 进行测试，如需要集成 native 方式扫码的 PDA，请加我微信反馈，欢迎 fork 及 pr 。_**
 
-| <img src="./photos/home.jpg" style="zoom: 67%;" /> | <img src="./photos/model_page.jpg" style="zoom: 67%;" /> | <img src="./photos/set_broadcast.jpg" style="zoom: 67%;" /> |
+| <img src="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/raw/master/photos/home.jpg" style="zoom: 67%;" /> | <img src="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/raw/master/photos/model_page.jpg" style="zoom: 67%;" /> | <img src="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/raw/master/photos/set_broadcast.jpg" style="zoom: 67%;" /> |
 |:--------------------------------------------------:|:--------------------------------------------------------:|:-----------------------------------------------------------:|
 
 ➡ **如果是集成蓝牙扫码枪/USB扫码枪，请移步至另一个优秀开源库：[liyufengrex/flutter_scan_gun: flutter：usb 即插款扫码枪通用方案。](https://github.com/liyufengrex/flutter_scan_gun)**
@@ -61,15 +61,13 @@
 
 ```yaml
 dependencies:
-  pda_scanner:
-    git:
-      url: https://gitee.com/zengxingshun/flutter_plugin_pda_scanner.git
+  flutter_plugin_pda_scanner: ^3.0.4
 ```
 
 ## 2. 导入
 
 ```dart
-import 'package:pda_scanner/pda_utils.dart';
+import 'package:flutter_plugin_pda_scanner/pda_utils.dart';
 ```
 
 ## 3. 初始化
@@ -135,7 +133,7 @@ PdaUtils.off("tag");
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:pda_scanner/pda_utils.dart';
+import 'package:flutter_plugin_pda_scanner/pda_utils.dart';
 
 void main() async {
   // 初始化PDA扫码 加上await关键字等待初始化完成
@@ -221,7 +219,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
 # 三、额外说明【斑马ZEBRA】 ⚡
 
-**_ZEBRA（斑马）的PDA发生闪退或其他情况则需要做以下额外配置，您需要在您Flutter项目的安卓目录下的 <span style="color:red;font-weight:bold">
+**_ZEBRA（斑马）的 PDA 发生闪退或其他情况则需要做以下额外配置，您需要在您Flutter项目的安卓目录下的 <span style="color:red;font-weight:bold">
 AndroidManifest.xml</span> 中加入以下内容_**
 
 ### 1、在 `manifest` 节点下加入
@@ -284,4 +282,4 @@ FAILURE: Build failed with an exception.
 
 如图：
 
-<img src="./photos/r8mix.png" style="zoom: 80%;" />
+<img src="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/raw/master/photos/r8mix.png" style="zoom: 80%;" />

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pda_scanner/pda_utils.dart';
+import 'package:flutter_plugin_pda_scanner/pda_utils.dart';
 import 'package:pda_scanner_example/pages/device_info_page.dart';
 import 'package:pda_scanner_example/pages/home_page.dart';
 

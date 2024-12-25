@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:getwidget/getwidget.dart';
-import 'package:pda_scanner/pda_utils.dart';
+import 'package:flutter_plugin_pda_scanner/pda_utils.dart';
 import 'package:pda_scanner_example/pages/device_info_page.dart';
 
 class HomePage extends StatelessWidget {

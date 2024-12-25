@@ -4,7 +4,7 @@ description: "Demonstrates how to use the pda_scanner plugin."
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 3.0.2
+version: 3.0.4
 environment:
   sdk: '>=3.2.3 <4.0.0'
 
@@ -34,7 +34,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  pda_scanner:
+  flutter_plugin_pda_scanner:
     path: ../
 
   cupertino_icons: ^1.0.2

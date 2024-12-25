@@ -13,7 +13,7 @@ typedef Callback = void Function(String barcode);
 abstract class PdaUtils {
   // 方法通道
   static const _methodChannel =
-      MethodChannel("io.github.jerometseng/pda_scanner");
+      MethodChannel("io.github.jerometseng/flutter_plugin_pda_scanner");
 
   // 扫码成功音频资源
   static final AudioPlayer _scanSuccessAudioPlayer = AudioPlayer();
@@ -125,7 +125,7 @@ abstract class PdaUtils {
   static void _checkIsInit() {
     if (!_initFlag) {
       throw Exception([
-        '请在合适的时机使用\nPdaUtils.init()\t或\nPdaUtils.initByCustom(action,label)\n方法初始化 pda_scanner 插件！'
+        '请在合适的时机使用\nPdaUtils.init()\t或\nPdaUtils.initByCustom(action,label)\n方法初始化 flutter_plugin_pda_scanner 插件！'
       ]);
     }
   }
@@ -134,13 +134,13 @@ abstract class PdaUtils {
   static void _loadScanAudioPlayer() async {
     // 设置成功音频资源
     var scanSuccessAudioResource = await rootBundle
-        .load('packages/pda_scanner/assets/audio/scan_success.wav');
+        .load('packages/flutter_plugin_pda_scanner/assets/audio/scan_success.wav');
     _scanSuccessAudioPlayer.setReleaseMode(ReleaseMode.stop);
     _scanSuccessAudioPlayer
         .setSource(BytesSource(scanSuccessAudioResource.buffer.asUint8List()));
     // 设置失败音频资源
     var scanFailureAudioResource = await rootBundle
-        .load('packages/pda_scanner/assets/audio/scan_failure.wav');
+        .load('packages/flutter_plugin_pda_scanner/assets/audio/scan_failure.wav');
     _scanFailureAudioPlayer.setReleaseMode(ReleaseMode.stop);
     _scanFailureAudioPlayer
         .setSource(BytesSource(scanFailureAudioResource.buffer.asUint8List()));

@@ -21,7 +21,7 @@ abstract class CodeEmitterManager(private val methodChannel: MethodChannel) {
 
     companion object {
         // 与 flutter 通信的管道
-        const val CODE_EMITTER_CHANNEL = "io.github.jerometseng/pda_scanner"
+        const val CODE_EMITTER_CHANNEL = "io.github.jerometseng/flutter_plugin_pda_scanner"
 
         // 与 flutter 通信的方法 发送接收到的条码数据
         const val CODE_EMITTER_METHOD = "sendBarcodeToFlutter"
