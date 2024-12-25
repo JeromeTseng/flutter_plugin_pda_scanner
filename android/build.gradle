@@ -2,7 +2,8 @@ group 'io.github.jerometseng.pdascanner'
 version '1.0'
 
 buildscript {
-    ext.kotlin_version = '1.7.10'
+    // ext.kotlin_version = '1.7.10'
+    ext.kotlin_version = '1.9.0'
     repositories {
         maven { url 'https://maven.aliyun.com/repository/central' }
         maven { url 'https://maven.aliyun.com/repository/public' }
@@ -74,9 +75,9 @@ android {
     ext.kotlin_coroutines_version = "1.7.1" // 1.3.0
     dependencies {
         // 思必拓PDA的扫码插件
-        implementation files ('libs/speedata/classes.jar')
+        implementation files('libs/speedata/classes.jar')
         // 斑马PDA的扫码插件
-        compileOnly files ('libs/zebra/emdk-11.0.129.jar')
+        compileOnly files('libs/zebra/emdk-11.0.129.jar')
         // 长城PDA的扫码插件
         implementation fileTree(dir: 'libs/chainway', include: ['*.jar'])
         // flutter协程依赖
@@ -94,9 +95,9 @@ android {
             useJUnitPlatform()
 
             testLogging {
-               events "passed", "skipped", "failed", "standardOut", "standardError"
-               outputs.upToDateWhen {false}
-               showStandardStreams = true
+                events "passed", "skipped", "failed", "standardOut", "standardError"
+                outputs.upToDateWhen { false }
+                showStandardStreams = true
             }
         }
     }
