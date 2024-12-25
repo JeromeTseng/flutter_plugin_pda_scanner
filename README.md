@@ -1,10 +1,11 @@
 <img src="./photos/LOGO.png" alt="flutter_plugin_pda_scanner" style="zoom: 67%;" />
 
-<h2 align="center" style="font-weight: bold;margin-top:-20px">flutter_plugin_pda_scanner v3.0.0</h1>
+<h2 style="text-align:center;font-weight: bold;margin-top:-20px">flutter_plugin_pda_scanner
+v3.0.0</h1>
 
-<h4 align="center" style="margin-top: -5px">一款基于Flutter开发的支持多种PDA扫码的插件</h4>
+<h4 style="margin-top: -5px;text-align:center;">一款基于Flutter开发的支持多种PDA扫码的插件</h4>
 
-<p align="center">
+<p style="text-align:center">
 	<a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner"><img src="https://img.shields.io/badge/pda_scanner-v3.0.0-brightgreen.svg" alt=""></a>
 	<a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/LICENSE"><img src="https://img.shields.io/github/license/mashape/apistatus.svg" alt=""></a>
     <a href=""><img src="https://img.shields.io/badge/微信-1340756449-blue.svg" alt=""></a>
@@ -32,7 +33,7 @@
 4. **监听事件**：通过`on`方法设置事件监听，使用tag作为标识。
 5. **取消监听**：使用`off`方法取消特定tag的监听或`offAll`取消所有监听。
 
-已测试的型号有：	
+已测试的型号有：
 
 ```text
 斑马：MC3300x
@@ -47,11 +48,9 @@
 **_可先 [下载](https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/releases/download/V3.0.0/pda_scanner-V3.0.0.apk) 示例 app 进行测试，如需要集成 native 方式扫码的 PDA，请加我微信反馈，欢迎 fork 及 pr 。_**
 
 | <img src="./photos/home.jpg" style="zoom: 67%;" /> | <img src="./photos/model_page.jpg" style="zoom: 67%;" /> | <img src="./photos/set_broadcast.jpg" style="zoom: 67%;" /> |
-| :------------------------------------------------: | :------------------------------------------------------: | :---------------------------------------------------------: |
+|:--------------------------------------------------:|:--------------------------------------------------------:|:-----------------------------------------------------------:|
 
 ➡ **如果是集成蓝牙扫码枪/USB扫码枪，请移步至另一个优秀开源库：[liyufengrex/flutter_scan_gun: flutter：usb 即插款扫码枪通用方案。](https://github.com/liyufengrex/flutter_scan_gun)**
-
-
 
 # 二、使用方式 📔
 
@@ -62,8 +61,8 @@
 ```yaml
 dependencies:
   pda_scanner:
-   git:
-    url: https://gitee.com/zengxingshun/flutter_plugin_pda_scanner.git
+    git:
+      url: https://gitee.com/zengxingshun/flutter_plugin_pda_scanner.git
 ```
 
 ## 2. 导入
@@ -82,15 +81,16 @@ void main() async {
   await PdaUtils.init();
   runApp(const MyApp());
 }
-    
+
 // 监听事件 可以监听多个事件 用tag进行区分
 PdaUtils.on("tag", (barcode) {
-  // 接收回调的条码...
+// 接收回调的条码...
 });
 
 // 取消tag上的监听
 PdaUtils.off("tag");
 ```
+
 * ### 手动初始化
 
 ```dart
@@ -99,7 +99,7 @@ await PdaUtils.initByCustom("com.action.scannersrvice....","data");
 
 // 监听事件 可以监听多个事件 用tag进行区分
 PdaUtils.on("tag", (barcode) {
-  // 接收回调的条码...
+// 接收回调的条码...
 });
 
 // 取消tag上的监听
@@ -165,7 +165,10 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        backgroundColor: Theme
+            .of(context)
+            .colorScheme
+            .inversePrimary,
         title: Text(widget.title),
       ),
       body: Center(
@@ -215,35 +218,36 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 ```
 
+# 三、额外说明【斑马ZEBRA】 ⚡
 
-
-# 三、额外说明 ⚠
-
-**_ZEBRA（斑马）的PDA发生闪退或其他情况则需要做以下额外配置，您需要在您Flutter项目的安卓目录下的 <span style="color:red;font-weight:bold">  AndroidManifest.xml </span>中加入以下内容_**
+**_ZEBRA（斑马）的PDA发生闪退或其他情况则需要做以下额外配置，您需要在您Flutter项目的安卓目录下的 <span style="color:red;font-weight:bold">
+AndroidManifest.xml</span> 中加入以下内容_**
 
 ### 1、在 `manifest` 节点下加入
+
 ```xml
-<uses-permission android:name="com.symbol.emdk.permission.EMDK"/>
+<uses-permission android:name="com.symbol.emdk.permission.EMDK" />
 <queries>
-    <package android:name="com.symbol.emdk.emdkservice" />
+	<package android:name="com.symbol.emdk.emdkservice" />
 </queries>
 ```
+
 ### 2、在 `application` 节点下加入
 
 ```xml
-<uses-library android:name="com.symbol.emdk" android:required="false"/>
-<uses-library android:name="com.rscja.scanner" android:required="false"/>
+<uses-library android:name="com.symbol.emdk" android:required="false" />
+<uses-library android:name="com.rscja.scanner" android:required="false" />
 ```
 
 ### 3、在项目\android\app下新建 libs 文件夹
 
-将  `emdk-11.0.129.jar` 放入该文件夹中，可在zebra官方进行下载  或者在我提供的assets中进行下载。
+将  `emdk-11.0.129.jar` 放入该文件夹中，可在zebra官方进行下载 或者在我提供的assets中进行下载。
 
 在项目app下的build.gradle文件的dependencies下添加
 
 ```groovy
 // 斑马PDA
-compileOnly files ('libs/emdk-11.0.129.jar')
+compileOnly files('libs/emdk-11.0.129.jar')
 ```
 
 以下为Zebra相关问题：
@@ -253,3 +257,30 @@ compileOnly files ('libs/emdk-11.0.129.jar')
 [Zebra EMDK Setup - TechDocs](https://techdocs.zebra.com/emdk-for-android/latest/guide/setup/)
 
 [Basic Scanning with Barcode API - TechDocs (zebra.com)](https://techdocs.zebra.com/emdk-for-android/11-0/tutorial/tutbasicscanningapi/)
+
+# 四、打包异常说明 💥
+
+**如果在运行 `flutter build apk`出现如下异常**
+
+```text
+ERROR: Missing classes detected while running R8. Please add the missing classes or apply additional keep rules that are generated in [your_flutter_project]\build\app\outputs\mapping\release\missing_rules.txt.
+ERROR: R8: Missing class com.symbol.emdk.EMDKBase (referenced from: void io.github.jerometseng.pdascanner.pda_type.zebra.ZebraConfig.onOpened(com.symbol.emdk.EMDKManager))
+Missing class com.symbol.emdk.EMDKManager$EMDKListener (referenced from: void io.github.jerometseng.pdascanner.pda_type.zebra.ZebraConfig.open() and 1 other context)
+Missing class com.symbol.emdk.EMDKManager$FEATURE_TYPE (referenced from: void io.github.jerometseng.pdascanner.pda_type.zebra.ZebraConfig.close() and 2 other contexts)
+Missing class com.symbol.emdk.EMDKManager (referenced from: com.symbol.emdk.EMDKManager io.github.jerometseng.pdascanner.pda_type.zebra.ZebraConfig.emdkManager and 4 other contexts)
+Missing class com.symbol.emdk.EMDKResults$STATUS_CODE (referenced from: void io.github.jerometseng.pdascanner.pda_type.zebra.ZebraConfig.open())
+Missing class com.symbol.emdk.EMDKResults (referenced from: void io.github.jerometseng.pdascanner.pda_type.zebra.ZebraConfig.open())
+......
+
+FAILURE: Build failed with an exception.
+```
+
+**请在` [your_flutter_project]\android\app\proguard-rules.pro  ` 文件中添加如下内容：**
+
+```
+-dontwarn com.symbol.emdk.**
+```
+
+如图：
+
+<img src="./photos/r8mix.png" style="zoom: 80%;" />
