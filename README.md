@@ -46,7 +46,7 @@
 同时支持根据广播行为手动注册广播监听PDA扫码
 ```
 
-**_可先 [下载](https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/releases/download/V3.0.0/pda_scanner-V3.0.0.apk) 示例 app 进行测试，如需要集成 native 方式扫码的 PDA，请加我微信反馈，欢迎 fork 及 pr 。_**
+**_可先 [下载](https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/releases/download/V3.0.2/pda_scanner-V3.0.2.apk) 示例 app 进行测试，如需要集成 native 方式扫码的 PDA，请加我微信反馈，欢迎 fork 及 pr 。_**
 
 | <img src="./photos/home.jpg" style="zoom: 67%;" /> | <img src="./photos/model_page.jpg" style="zoom: 67%;" /> | <img src="./photos/set_broadcast.jpg" style="zoom: 67%;" /> |
 |:--------------------------------------------------:|:--------------------------------------------------------:|:-----------------------------------------------------------:|
