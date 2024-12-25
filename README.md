@@ -29,7 +29,7 @@
 ### 🔹使用方法：
 
 1. **安装**：通过`pubspec.yaml`添加依赖。
-2. **导入**：在Flutter项目中导入`pda_scanner`包。
+2. **导入**：在Flutter项目中导入`flutter_plugin_pda_scanner`包。
 3. **初始化**：在`main`函数中初始化插件，并使用`await`等待完成。
 4. **监听事件**：通过`on`方法设置事件监听，使用tag作为标识。
 5. **取消监听**：使用`off`方法取消特定tag的监听或`offAll`取消所有监听。
@@ -61,15 +61,13 @@
 
 ```yaml
 dependencies:
-  pda_scanner:
-    git:
-      url: https://gitee.com/zengxingshun/flutter_plugin_pda_scanner.git
+  flutter_plugin_pda_scanner: ^3.0.2
 ```
 
 ## 2. 导入
 
 ```dart
-import 'package:pda_scanner/pda_utils.dart';
+import 'package:flutter_plugin_pda_scanner/pda_utils.dart';
 ```
 
 ## 3. 初始化
@@ -135,7 +133,7 @@ PdaUtils.off("tag");
 
 ```dart
 import 'package:flutter/material.dart';
-import 'package:pda_scanner/pda_utils.dart';
+import 'package:flutter_plugin_pda_scanner/pda_utils.dart';
 
 void main() async {
   // 初始化PDA扫码 加上await关键字等待初始化完成

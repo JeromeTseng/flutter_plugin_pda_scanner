@@ -34,7 +34,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  pda_scanner:
+  flutter_plugin_pda_scanner:
     path: ../
 
   cupertino_icons: ^1.0.2
