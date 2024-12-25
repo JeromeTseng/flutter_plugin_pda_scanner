@@ -3,6 +3,7 @@ package io.github.jerometseng.pdascanner.pda_type.custom
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
+import android.os.Build
 import io.flutter.plugin.common.MethodChannel
 import io.github.jerometseng.pdascanner.core.BroadcastTag
 import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager
@@ -36,9 +37,26 @@ class CustomConfig(
             intentFilter.addAction(action)
             this.broadcastReceiver =
                 CustomBroadcastReceiver(listOf(BroadcastTag(label,dataType)), methodChannel)
-            context.registerReceiver(
-                this.broadcastReceiver, intentFilter
-            )
+
+            // 标记广播是否注册成功
+            var registerSuccess = false
+            // android 13 以上用该方法注册广播
+            try {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    context.registerReceiver(
+                        this.broadcastReceiver, intentFilter,
+                        Context.RECEIVER_EXPORTED
+                    )
+                    registerSuccess = true
+                }
+            } catch (ignored: Exception) {
+            }
+            // 如果没有注册成功 [ android 13 以下用该方法注册广播]
+            if(!registerSuccess){
+                context.registerReceiver(
+                    this.broadcastReceiver, intentFilter
+                )
+            }
             logInfo("${logTag}：扫码广播已监听：[$action]\t数据标签：[$label]\t数据类型：${dataType.name}")
         } catch (ex: Exception) {
             logError("${logTag}：设备初始化失败：${ex}")
