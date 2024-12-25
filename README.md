@@ -45,16 +45,12 @@ v3.0.0</h1>
 同时支持根据广播行为手动注册广播监听PDA扫码
 ```
 
-**
-_可先 [下载](https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/releases/download/V3.0.0/pda_scanner-V3.0.0.apk)
-示例 app 进行测试，如需要集成 native 方式扫码的 PDA，请加我微信反馈，欢迎 fork 及 pr 。_**
+**_可先 [下载](https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/releases/download/V3.0.0/pda_scanner-V3.0.0.apk) 示例 app 进行测试，如需要集成 native 方式扫码的 PDA，请加我微信反馈，欢迎 fork 及 pr 。_**
 
 | <img src="./photos/home.jpg" style="zoom: 67%;" /> | <img src="./photos/model_page.jpg" style="zoom: 67%;" /> | <img src="./photos/set_broadcast.jpg" style="zoom: 67%;" /> |
 |:--------------------------------------------------:|:--------------------------------------------------------:|:-----------------------------------------------------------:|
 
-➡ *
-*如果是集成蓝牙扫码枪/USB扫码枪，请移步至另一个优秀开源库：[liyufengrex/flutter_scan_gun: flutter：usb 即插款扫码枪通用方案。](https://github.com/liyufengrex/flutter_scan_gun)
-**
+➡ **如果是集成蓝牙扫码枪/USB扫码枪，请移步至另一个优秀开源库：[liyufengrex/flutter_scan_gun: flutter：usb 即插款扫码枪通用方案。](https://github.com/liyufengrex/flutter_scan_gun)**
 
 # 二、使用方式 📔
 
@@ -87,10 +83,7 @@ void main() async {
 }
 
 // 监听事件 可以监听多个事件 用tag进行区分
-PdaUtils.on
-("tag
-"
-, (barcode) {
+PdaUtils.on("tag", (barcode) {
 // 接收回调的条码...
 });
 
@@ -102,15 +95,7 @@ PdaUtils.off("tag");
 
 ```dart
 // 传入广播action 和要获取的数据标签 label
-await
-PdaUtils.initByCustom
-("com.action.scannersrvice....
-"
-,
-"
-data
-"
-);
+await PdaUtils.initByCustom("com.action.scannersrvice....","data");
 
 // 监听事件 可以监听多个事件 用tag进行区分
 PdaUtils.on("tag", (barcode) {
@@ -121,13 +106,9 @@ PdaUtils.on("tag", (barcode) {
 PdaUtils.off("tag");
 ```
 
-🔷 **
-_这里的tag相当于一个id，每个界面定义一个唯一的标识，相当于标记哪个界面监听了扫码事件，页面销毁时也根据这个id取消监听，避免内存泄漏。_
-**
+🔷 **_这里的tag相当于一个id，每个界面定义一个唯一的标识，相当于标记哪个界面监听了扫码事件，页面销毁时也根据这个id取消监听，避免内存泄漏。_**
 
-🔷 **
-_条码内容会经过处理，首尾的空白字符（换行符、制表符、空格）都会被替换成空字符串，但是字符中间的空白字符不会替换_
-**
+🔷 **_条码内容会经过处理，首尾的空白字符（换行符、制表符、空格）都会被替换成空字符串，但是字符中间的空白字符不会替换_**
 
 ## 4. Api详情
 
@@ -239,25 +220,23 @@ class _MyHomePageState extends State<MyHomePage> {
 
 # 三、额外说明【斑马ZEBRA】 ⚡
 
-**
-_ZEBRA（斑马）的PDA发生闪退或其他情况则需要做以下额外配置，您需要在您Flutter项目的安卓目录下的 <span style="color:red;font-weight:bold">
-AndroidManifest.xml</span>中加入以下内容_**
+**_ZEBRA（斑马）的PDA发生闪退或其他情况则需要做以下额外配置，您需要在您Flutter项目的安卓目录下的 <span style="color:red;font-weight:bold">
+AndroidManifest.xml</span> 中加入以下内容_**
 
 ### 1、在 `manifest` 节点下加入
 
 ```xml
-
-<uses-permission android:name="com.symbol.emdk.permission.EMDK" /><queries>
-<package android:name="com.symbol.emdk.emdkservice" />
+<uses-permission android:name="com.symbol.emdk.permission.EMDK" />
+<queries>
+	<package android:name="com.symbol.emdk.emdkservice" />
 </queries>
 ```
 
 ### 2、在 `application` 节点下加入
 
 ```xml
-
-<uses-library android:name="com.symbol.emdk" android:required="false" /><uses-library
-android:name="com.rscja.scanner" android:required="false" />
+<uses-library android:name="com.symbol.emdk" android:required="false" />
+<uses-library android:name="com.rscja.scanner" android:required="false" />
 ```
 
 ### 3、在项目\android\app下新建 libs 文件夹
