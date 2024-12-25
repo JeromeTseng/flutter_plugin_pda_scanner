@@ -11,7 +11,7 @@ class ActionContainer {
     companion object {
         /**
          * 广播行为和数据标签容器
-         * 如果已经集成的型号匹配不上 则加载该扫码配置，加入一下所有广播
+         * 如果已经集成的型号匹配不上 则加载该扫码配置，加入以下所有广播
          */
         val broadCastActionAndDataLabelMap = mapOf(
             // ChainWay 广播
@@ -32,26 +32,35 @@ class ActionContainer {
             "barcode_broadcast" to listOf(BroadcastTag("scannerdata")),
             // 优博讯广播
             "android.intent.ACTION_DECODE_DATA" to listOf(
+                BroadcastTag("value"),
                 BroadcastTag("barcode_string"),
-                BroadcastTag("barcode")
+                BroadcastTag("barcode"),
+                BroadcastTag("scannerdata")
             ),
             "android.senraise.scan" to listOf(BroadcastTag("result")),
-            // SUNMI商米广播分
+            // SUNMI商米广播
             "com.sunmi.scanner.ACTION_DATA_CODE_RECEIVED" to listOf(BroadcastTag("data")),
             // NewBland
-            "nlscan.action.SCANNER_RESULT" to listOf(BroadcastTag("SCAN_BARCODE1")),
+            "nlscan.action.SCANNER_RESULT" to listOf(
+                BroadcastTag("SCAN_BARCODE1"),
+                BroadcastTag("android.intent.extra.SCAN_BROADCAST_DATA")
+            ),
             // IDATA 盈达
             "android.intent.action.SCANRESULT" to listOf(BroadcastTag("value")),
             // MOBYDATA
             "com.android.decodewedge.decode_action" to listOf(BroadcastTag("com.android.decode.intentwedge.barcode_string")),
             // JOYREE 巨历
             "android.intent.action.BARCODEDATA" to listOf(BroadcastTag("barcode_result")),
-            // "N60"
+            // N60
             "scan.rcv.message" to listOf(
                 BroadcastTag("barcodeData"),
                 BroadcastTag("barocode", dataType = DataUtil.IntentDataType.BYTE_ARRAY)
             ),
-            // "ALPS"
+            // ALPS
+            "android.intent.action.RECEIVE_SCANDATA_BROADCAST" to listOf(
+                BroadcastTag("SCAN_BARCODE1"),
+                BroadcastTag("android.intent.extra.SCAN_BROADCAST_DATA")
+            ),
             "com.barcode.sendBroadcast" to listOf(BroadcastTag("BARCODE")),
             // SHINIOW
             "com.android.server.scannerservice.shinow" to listOf(BroadcastTag("scannerdata")),
@@ -59,6 +68,9 @@ class ActionContainer {
             "com.ehsy.warehouse.action.BARCODE_DATA" to listOf(BroadcastTag("data")),
             // 霍尼韦尔
             "com.honeywell.decode.intent.action.EDIT_DATA" to listOf(BroadcastTag("data")),
+            "com.honeywell.scan.broadcast" to listOf(BroadcastTag("data")),
+            // 凯立
+            "com.android.receive_scan_action" to listOf(BroadcastTag("data"))
         )
     }
 }
