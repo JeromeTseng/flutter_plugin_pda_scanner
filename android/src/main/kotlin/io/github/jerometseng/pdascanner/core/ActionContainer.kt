@@ -18,8 +18,16 @@ class ActionContainer {
             "com.scanner.broadcast" to listOf(BroadcastTag("data")),
             // 海康广播
             "com.service.scanner.data" to listOf(BroadcastTag("ScanCode")),
-            "android.intent.action.SCANNER_SERVICE" to listOf(BroadcastTag("data")),
-            "android.intent.ACTION_SCAN_OUTPUT" to listOf(BroadcastTag("data")),
+            "android.intent.action.SCANNER_SERVICE" to listOf(
+                BroadcastTag("barcode"),
+                BroadcastTag("barcode_string"),
+                BroadcastTag("data")
+            ),
+            "android.intent.ACTION_SCAN_OUTPUT" to listOf(
+                BroadcastTag("barcode"),
+                BroadcastTag("barcode_string"),
+                BroadcastTag("data")
+            ),
             // 远望谷广播
             "com.rfid.SCAN" to listOf(
                 BroadcastTag(
