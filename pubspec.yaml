@@ -1,6 +1,6 @@
 name: flutter_plugin_pda_scanner
 description: "一个能支持多种PDA扫码的Flutter插件"
-version: 3.0.4
+version: 3.0.5
 homepage: https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/README.md
 repository: https://gitee.com/zengxingshun/flutter_plugin_pda_scanner
 

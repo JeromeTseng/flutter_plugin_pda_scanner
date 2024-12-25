@@ -36,6 +36,7 @@ class ActionContainer {
                 )
             ),
             // 东集SEUIC广播
+            "com.android.scanner.service_settings" to listOf(BroadcastTag("scannerdata")),
             "com.android.server.scannerservice.broadcast" to listOf(BroadcastTag("scannerdata")),
             "barcode_broadcast" to listOf(BroadcastTag("scannerdata")),
             // 优博讯广播
