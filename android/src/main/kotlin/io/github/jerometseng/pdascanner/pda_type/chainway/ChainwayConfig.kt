@@ -1,6 +1,5 @@
 package io.github.jerometseng.pdascanner.pda_type.chainway
 
-import android.annotation.TargetApi
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
@@ -21,7 +20,6 @@ class ChainwayConfig(
     private var scannerUtility: ScannerUtility? = null
     private var barcodeDataReceiver: BroadcastReceiver? = null
 
-    @TargetApi(Build.VERSION_CODES.TIRAMISU)
     override fun open() {
         try {
             if (this.scannerUtility == null) {
@@ -46,12 +44,25 @@ class ChainwayConfig(
                 val intentFilter = IntentFilter("com.scanner.broadcast")
 
                 this.barcodeDataReceiver = ChainwayBroadcastReceiver(methodChannel)
-
-                context.registerReceiver(
-                    this.barcodeDataReceiver,
-                    intentFilter,
-                    Context.RECEIVER_EXPORTED
-                )
+// 标记广播是否注册成功
+                var registerSuccess = false
+                // android 13 以上用该方法注册广播
+                try {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        context.registerReceiver(
+                            this.barcodeDataReceiver, intentFilter,
+                            Context.RECEIVER_EXPORTED
+                        )
+                        registerSuccess = true
+                    }
+                } catch (ignored: Exception) {
+                }
+                // 如果没有注册成功 [ android 13 以下用该方法注册广播]
+                if(!registerSuccess){
+                    context.registerReceiver(
+                        this.barcodeDataReceiver, intentFilter
+                    )
+                }
                 logInfo("${TAG}：扫码事件广播已监听...[com.scanner.broadcast]")
             }
         } catch (ex: Exception) {

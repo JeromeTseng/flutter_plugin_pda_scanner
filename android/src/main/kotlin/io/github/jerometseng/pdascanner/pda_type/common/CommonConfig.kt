@@ -3,6 +3,7 @@ package io.github.jerometseng.pdascanner.pda_type.common
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.IntentFilter
+import android.os.Build
 import io.flutter.plugin.common.MethodChannel
 import io.github.jerometseng.pdascanner.core.ActionContainer.Companion.broadCastActionAndDataLabelMap
 import io.github.jerometseng.pdascanner.pda_type.CodeEmitterManager
@@ -26,13 +27,29 @@ class CommonConfig(
         try {
             if (this.broadcastReceiver == null) {
                 val intentFilter = IntentFilter()
-                broadCastActionAndDataLabelMap.keys.forEach{
+                broadCastActionAndDataLabelMap.keys.forEach {
                     intentFilter.addAction(it)
                 }
                 this.broadcastReceiver = CommonBroadcastReceiver(methodChannel)
-                context.registerReceiver(
-                    this.broadcastReceiver, intentFilter
-                )
+                // 标记广播是否注册成功
+                var registerSuccess = false
+                // android 13 以上用该方法注册广播
+                try {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        context.registerReceiver(
+                            this.broadcastReceiver, intentFilter,
+                            Context.RECEIVER_EXPORTED
+                        )
+                        registerSuccess = true
+                    }
+                } catch (ignored: Exception) {
+                }
+                // 如果没有注册成功 [ android 13 以下用该方法注册广播]
+                if(!registerSuccess){
+                    context.registerReceiver(
+                        this.broadcastReceiver, intentFilter
+                    )
+                }
                 logInfo("${logTag}：已加载通用广播...")
             }
         } catch (ex: Exception) {
