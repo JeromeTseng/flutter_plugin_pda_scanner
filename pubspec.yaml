@@ -1,15 +1,15 @@
 name: flutter_plugin_pda_scanner
-description: "一个能支持多种PDA扫码的Flutter插件"
+description: 'A PDA barcode scanning plugin, supporting multiple brands and models of PDA devices, including but not limited to Zebra, Hikvision, Invengo, Speedata, and Seuic.'
 version: 3.0.5+2
-homepage: https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/README.md
-repository: https://gitee.com/zengxingshun/flutter_plugin_pda_scanner
+homepage: https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/README_en.md
+repository: https://github.com/JeromeTseng/flutter_plugin_pda_scanner
 
 environment:
   sdk: '>=3.2.3 <4.0.0'
   flutter: '>=3.3.0'
 
 dependencies:
-  audioplayers: 5.2.1
+  audioplayers: 6.1.0
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.1.8
