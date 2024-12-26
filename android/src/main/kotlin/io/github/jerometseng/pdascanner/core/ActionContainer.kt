@@ -79,7 +79,11 @@ class ActionContainer {
             "com.honeywell.decode.intent.action.EDIT_DATA" to listOf(BroadcastTag("data")),
             "com.honeywell.scan.broadcast" to listOf(BroadcastTag("data")),
             // 凯立
-            "com.android.receive_scan_action" to listOf(BroadcastTag("data"))
+            "com.android.receive_scan_action" to listOf(BroadcastTag("data")),
+            // ZKC
+            "com.zkc.scancode" to listOf(BroadcastTag("code")),
+            // blue bird
+            "kr.co.bluebird.android.bbapi.action.BARCODE_CALLBACK_DECODING_DATA" to listOf(BroadcastTag("EXTRA_BARCODE_DECODING_DATA", dataType = DataUtil.IntentDataType.BYTE_ARRAY))
         )
     }
 }
