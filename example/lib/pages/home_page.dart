@@ -15,7 +15,7 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (_) {
+      onPopInvokedWithResult: (didPop, result) {
         PdaUtils.navigateToSystemHome();
       },
       child: SafeArea(
@@ -134,7 +134,8 @@ class _HomeBodyState extends State<HomeBody> {
                                   if (action.isNotEmpty && label.isNotEmpty) {
                                     box?.write("action", action);
                                     box?.write("label", label);
-                                    PdaUtils.initByCustom(action, label,dataType: PdaDataType.STRING);
+                                    PdaUtils.initByCustom(action, label,
+                                        dataType: PdaDataType.string);
                                     Get.back();
                                   } else {
                                     BrnToast.show(

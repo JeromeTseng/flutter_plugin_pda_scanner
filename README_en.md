@@ -1,4 +1,4 @@
-<img src="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/raw/master/photos/LOGO.png" alt="flutter_plugin_pda_scanner" style="zoom: 67%;" />
+<div align=center><img src="https://github.com/JeromeTseng/flutter_plugin_pda_scanner/blob/master/photos/LOGO.png?raw=true" alt="flutter_plugin_pda_scanner" style="zoom: 67%;" /></div>
 
 <h2 align="center" style="font-weight: bold;margin-top:-20px">flutter_plugin_pda_scanner v3.0.5</h2>
 
@@ -12,8 +12,7 @@
     <a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/LICENSE"><img src="https://img.shields.io/badge/language-dart%20/%20kotlin-red.svg" alt=""></a>
 </p>
 
-
-
+#### [中文文档](https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/README.md)
 
 # Introduction  ✨
 
@@ -47,9 +46,9 @@ Seuic: CRUISE2 5G
 Also supports manual registration of broadcast listeners for PDA barcode scanning based on broadcast behavior.
 ```
 
-**You can  [download](https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/releases/download/V3.0.5/pda_scanner-V3.0.5.apk)  the sample app for testing first. If you need to integrate native scanning of PDAs, please add me on WeChat for feedback, and welcome to fork and contribute._**
+**You can  [download](https://github.com/JeromeTseng/flutter_plugin_pda_scanner/releases/download/V3.0.5/pda_scanner-V3.0.5.apk)  the sample app for testing first. If you need to integrate native scanning of PDAs, please add me on WeChat for feedback, and welcome to fork and contribute._**
 
-| <img src="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/raw/master/photos/home.jpg" style="zoom: 67%;" /> | <img src="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/raw/master/photos/model_page.jpg" style="zoom: 67%;" /> | <img src="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/raw/master/photos/set_broadcast.jpg" style="zoom: 67%;" /> |
+| <img src="https://github.com/JeromeTseng/flutter_plugin_pda_scanner/blob/master/photos/home.jpg?raw=true" style="zoom: 67%;" /> | <img src="https://github.com/JeromeTseng/flutter_plugin_pda_scanner/blob/master/photos/model_page.jpg?raw=true" style="zoom: 67%;" /> | <img src="https://github.com/JeromeTseng/flutter_plugin_pda_scanner/blob/master/photos/set_broadcast.jpg?raw=true" style="zoom: 67%;" /> |
 |:--------------------------------------------------:|:--------------------------------------------------------:|:-----------------------------------------------------------:|
 
 ➡ **For integrating Bluetooth scanning guns/USB scanning guns, please refer to another excellent open-source library: [liyufengrex/flutter_scan_gun: flutter：usb 即插款扫码枪通用方案。](https://github.com/liyufengrex/flutter_scan_gun).**
@@ -283,4 +282,4 @@ FAILURE: Build failed with an exception.
 
 As shown in the figure：
 
-<img src="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/raw/master/photos/r8mix.png" style="zoom: 80%;" />
+<img src="https://github.com/JeromeTseng/flutter_plugin_pda_scanner/blob/master/photos/r8mix.png?raw=true" style="zoom: 80%;"  alt=""/>

@@ -61,7 +61,7 @@ abstract class PdaUtils {
   static Future<void> initByCustom(
     String action,
     String label, {
-    PdaDataType dataType = PdaDataType.STRING,
+    PdaDataType dataType = PdaDataType.string,
   }) async {
     WidgetsFlutterBinding.ensureInitialized();
     if (!Platform.isAndroid) {
@@ -75,7 +75,7 @@ abstract class PdaUtils {
       {
         'action': action,
         'label': label,
-        'dataType':dataType.name
+        'dataType': _getPdaDataTypeStr(dataType)
       },
     );
     if (initSuccess ?? false) {
@@ -236,6 +236,19 @@ abstract class PdaUtils {
   static void closeScanner() {
     _methodChannel.invokeMethod('closeScanner');
   }
+
+  /// 获取设备条码数据类型
+  static String _getPdaDataTypeStr(PdaDataType dataType){
+    switch (dataType) {
+      case PdaDataType.string:
+        return 'STRING';
+      case PdaDataType.byteArray:
+        return 'BYTE_ARRAY';
+      default:
+        return 'UNKNOWN';
+    }
+  }
+
 }
 
 /// 日志实体类
@@ -258,6 +271,10 @@ class InitLogModel {
   String toString() {
     return '\n类型：$_type\n内容：$_content\n时间：${DateTime.fromMillisecondsSinceEpoch(_time ?? 0)}';
   }
+
 }
 
-enum PdaDataType { STRING, BYTE_ARRAY }
+enum PdaDataType {
+  string, byteArray
+}
+

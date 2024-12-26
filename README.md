@@ -1,4 +1,4 @@
-<img src="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/raw/master/photos/LOGO.png" alt="flutter_plugin_pda_scanner" style="zoom: 67%;" />
+<div align=center><img src="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/raw/master/photos/LOGO.png" alt="flutter_plugin_pda_scanner" style="zoom: 67%;" /></div>
 
 <h2 align="center" style="font-weight: bold;margin-top:-20px">flutter_plugin_pda_scanner v3.0.5</h2>
 
@@ -12,7 +12,7 @@
     <a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/LICENSE"><img src="https://img.shields.io/badge/language-dart%20/%20kotlin-red.svg" alt=""></a>
 </p>
 
-#### [README DOCS FOR ENGLISH](https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/README_en.md)
+#### [README DOCS FOR ENGLISH](https://github.com/JeromeTseng/flutter_plugin_pda_scanner/blob/master/README_en.md)
 
 # 一、介绍 ✨
 

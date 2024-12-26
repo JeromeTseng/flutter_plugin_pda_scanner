@@ -1,35 +1,35 @@
 ## 1.0.0
-* 初步集成
+* Preliminary integration.
 ## 1.0.1
-* 集成斑马扫码
+* Integrated ZEBRA PDA.
 ## 1.0.2
-* 集成蓝牙扫码枪扫码
+* Integrated Bluetooth scanning gun.
 ## 1.0.4
-* 修缮
+* Fix some bugs.
 ## 1.0.6
-* 对斑马PDA引入方式进行优化，无需再重复引入EMDK。
-* 增加东集CRUISE2 5G PDA支持。
+* The introduction method of zebra PDA is optimized, and there is no need to introduce EMDK again.
+* Added SEUIC CRUISE2 5G PDA support.
 ## 2.0.0
-* 新增手动初始化PDA的方法，根据广播行为action、扫码内容获取标签label初始化PDA。
-* 新增关闭PDAScanner的方法。
+* Added the method of manually initializing PDA. The PDA is initialized by obtaining the label based on the broadcast action and code scanning content.
+* Added a method to disable PDAScanner.
 ## 2.0.1
-* Android6 设备上添加广播报错修复
+* Added broadcast error fix on Android6 devices.
 ## 2.0.2
-* 修复潜在空指针问题
+* Fixed potential null pointer issues.
 ## 2.0.3
-* 增加部分新型号
+* Added some new models.
 ## 3.0.0
-* 对代码进行重构，增加部分新的机型广播。
+* Refactoring the code and adding some new model broadcasts.
 ## 3.0.1
-* 增加部分新的机型广播。
+* Added some new models to the broadcast.
 ## 3.0.2
-* 修复android13以上机型广播注册报错问题
+* Fix android13 and above models broadcast registration error.
 ## 3.0.3
-* 增加部分新的机型广播。
+* Added some new models to the broadcast.
 ## 3.0.4
-* 调整版本
+* Adjusted version
 ## 3.0.5
-* 增加东集PDA广播类型
+* Added SEUIC PDA broadcast type
 ## 3.0.5+1
 * Complete README
 ## 3.0.5+2
