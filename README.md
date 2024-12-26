@@ -11,8 +11,7 @@
     <a href="https://gitee.com/zengxingshun"><img src="https://img.shields.io/badge/author-Jerome-08979c" alt=""></a>
     <a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/LICENSE"><img src="https://img.shields.io/badge/language-dart%20/%20kotlin-red.svg" alt=""></a>
 </p>
-
-
+#### [README DOCS FOR ENGLISH](https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/README_en.md)
 
 # 一、介绍 ✨
 
@@ -94,7 +93,7 @@ PdaUtils.off("tag");
 
 ```dart
 // 传入广播action 和要获取的数据标签 label
-await PdaUtils.initByCustom("com.action.scannersrvice....","data");
+await PdaUtils.initByCustom("com.action.scannersrvice...","data");
 
 // 监听事件 可以监听多个事件 用tag进行区分
 PdaUtils.on("tag", (barcode) {
