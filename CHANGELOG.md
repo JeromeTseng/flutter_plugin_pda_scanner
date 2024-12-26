@@ -30,3 +30,7 @@
 * 调整版本
 ## 3.0.5
 * 增加东集PDA广播类型
+## 3.0.5+1
+* Complete README
+## 3.0.5+2
+* Complete README

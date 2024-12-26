@@ -11,6 +11,7 @@
     <a href="https://gitee.com/zengxingshun"><img src="https://img.shields.io/badge/author-Jerome-08979c" alt=""></a>
     <a href="https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/LICENSE"><img src="https://img.shields.io/badge/language-dart%20/%20kotlin-red.svg" alt=""></a>
 </p>
+
 #### [README DOCS FOR ENGLISH](https://gitee.com/zengxingshun/flutter_plugin_pda_scanner/blob/master/README_en.md)
 
 # 一、介绍 ✨
