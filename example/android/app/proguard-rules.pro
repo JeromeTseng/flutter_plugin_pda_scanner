@@ -1,0 +1,2 @@
+-dontwarn com.symbol.emdk.**
+-dontwarn java.lang.invoke.StringConcatFactory

@@ -70,6 +70,9 @@ android {
             signingConfig signingConfigs.release
         }
     }
+    dexOptions {
+        javaMaxHeapSize '4g'
+    }
 
 }
 

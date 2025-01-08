@@ -20,11 +20,11 @@ dependencies:
   # 路径管理器
   path_provider: ^2.1.2
   # 嵌入式数据库
-  sqflite: ^2.3.0
+  sqflite: ^2.4.1
   # 状态管理
   get: ^4.6.6
   # 获取设备信息
-  device_info_plus: ^9.1.1
+  device_info_plus: ^11.2.0
   # 贝壳组件库
   bruno: ^3.4.3
   # getwidget 组件库
