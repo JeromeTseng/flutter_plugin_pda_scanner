@@ -133,14 +133,14 @@ abstract class PdaUtils {
   /// 设置音频
   static void _loadScanAudioPlayer() async {
     // 设置成功音频资源
-    var scanSuccessAudioResource = await rootBundle
-        .load('packages/flutter_plugin_pda_scanner/assets/audio/scan_success.wav');
+    var scanSuccessAudioResource = await rootBundle.load(
+        'packages/flutter_plugin_pda_scanner/assets/audio/scan_success.wav');
     _scanSuccessAudioPlayer.setReleaseMode(ReleaseMode.stop);
     _scanSuccessAudioPlayer
         .setSource(BytesSource(scanSuccessAudioResource.buffer.asUint8List()));
     // 设置失败音频资源
-    var scanFailureAudioResource = await rootBundle
-        .load('packages/flutter_plugin_pda_scanner/assets/audio/scan_failure.wav');
+    var scanFailureAudioResource = await rootBundle.load(
+        'packages/flutter_plugin_pda_scanner/assets/audio/scan_failure.wav');
     _scanFailureAudioPlayer.setReleaseMode(ReleaseMode.stop);
     _scanFailureAudioPlayer
         .setSource(BytesSource(scanFailureAudioResource.buffer.asUint8List()));
@@ -238,17 +238,14 @@ abstract class PdaUtils {
   }
 
   /// 获取设备条码数据类型
-  static String _getPdaDataTypeStr(PdaDataType dataType){
+  static String _getPdaDataTypeStr(PdaDataType dataType) {
     switch (dataType) {
       case PdaDataType.string:
         return 'STRING';
       case PdaDataType.byteArray:
         return 'BYTE_ARRAY';
-      default:
-        return 'UNKNOWN';
     }
   }
-
 }
 
 /// 日志实体类
@@ -271,10 +268,6 @@ class InitLogModel {
   String toString() {
     return '\n类型：$_type\n内容：$_content\n时间：${DateTime.fromMillisecondsSinceEpoch(_time ?? 0)}';
   }
-
 }
 
-enum PdaDataType {
-  string, byteArray
-}
-
+enum PdaDataType { string, byteArray }
