@@ -30,9 +30,11 @@ pluginManagement {
             maven { url 'https://maven.aliyun.com/repository/gradle-plugin' }
             maven { url 'https://storage.googleapis.com/r8-releases/raw' }
             mavenCentral()
+            google()
         }
         dependencies {
-            classpath("com.android.tools:r8:8.2.24")
+            classpath 'com.android.tools.build:gradle:8.2.1'
+            classpath 'com.android.tools:r8:8.2.24'
         }
     }
 }
