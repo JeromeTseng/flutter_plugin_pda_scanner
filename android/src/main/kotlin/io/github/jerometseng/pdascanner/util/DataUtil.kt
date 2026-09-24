@@ -39,13 +39,12 @@ class DataUtil {
             val action = intent?.action ?: "未知广播"
             broadCastTag?.forEach {
                 try {
-                    var data = if (it.dataType == IntentDataType.BYTE_ARRAY) {
-                        val dataByteArray = intent?.getByteArrayExtra(it.label)
-                        if (dataByteArray != null && dataByteArray.isNotEmpty()) {
-                            String(dataByteArray, Charset.forName("UTF8"))
-                        } else ""
-                    } else {
-                        intent?.extras?.getString(it.label) ?: ""
+                    var data = when (val raw = intent?.extras?.get(it.label)) {
+                        null -> ""
+                        is String -> raw
+                        is ByteArray -> if (raw.isNotEmpty()) String(raw, Charset.forName("UTF8")) else ""
+                        // 其他类型兜底：不抛异常，尽量转成字符串
+                        else -> raw.toString()
                     }
                     data = data.trim()
                     if (data.isNotBlank() && isNotConflict(data)) {
